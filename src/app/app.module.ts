@@ -12,6 +12,7 @@ import {
   ScreenTrackingService,
   UserTrackingService,
 } from '@angular/fire/analytics';
+import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { provideMessaging, getMessaging } from '@angular/fire/messaging';
@@ -50,7 +51,7 @@ import { DataProvider } from './providers/data.provider';
     ScreenTrackingService,
     UserTrackingService,
     ComponentsModule,
-    DataProvider,
+    DataProvider
   ],
   bootstrap: [AppComponent],
 })
