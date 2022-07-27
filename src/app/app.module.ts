@@ -35,6 +35,7 @@ import { DataProvider } from './providers/data.provider';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
     provideFirestore(() => getFirestore()),
+    provideAuth(()=> getAuth()),
     provideFunctions(() => getFunctions()),
     provideMessaging(() => getMessaging()),
     providePerformance(() => getPerformance()),
