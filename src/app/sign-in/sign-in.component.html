@@ -1,0 +1,41 @@
+<app-header></app-header>
+<section>
+  <aside>
+    <img src="assets/images/auth-aside.png" />
+  </aside>
+  <div id="content">
+    <h2>Sign In</h2>
+    <div id="taglines">
+      <p>The Food Plaza</p>
+      <p>Breakfast | Lunch | Dinner</p>
+    </div>
+    <form>
+      <div id="form-controls">
+        <mat-form-field appearance="fill">
+          <mat-label>Email Address</mat-label>
+          <input matInput type="email" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" />
+        </mat-form-field>
+        <button
+          type="button"
+          class="secondary-button"
+          id="forgot-password-button"
+        >
+          Forgot your password?
+        </button>
+      </div>
+      <button type="submit" class="primary-button">Sign in</button>
+    </form>
+    <button
+      type="button"
+      class="secondary-button"
+      id="dont-have-account-button"
+      routerLink="/sign-up"
+    >
+      Don't have account? Sign up
+    </button>
+  </div>
+</section>
