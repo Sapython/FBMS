@@ -10,17 +10,17 @@ const routes: Routes = [
   {
     path: 'sign-in',
     loadChildren: () =>
-      import('./sign-in/sign-in.module').then((m) => m.SignInModule),
+      import('./pages/sign-in/sign-in.module').then((m) => m.SignInModule),
   },
   {
     path: 'sign-up',
     loadChildren: () =>
-      import('./sign-up/sign-up.module').then((m) => m.SignUpModule),
+      import('./pages/sign-up/sign-up.module').then((m) => m.SignUpModule),
   },
   {
     path: 'admin',
     loadChildren: () =>
-      import('./admin/admin.module').then((m) => m.AdminModule),
+      import('./pages/admin/admin.module').then((m) => m.AdminModule),
   },
 ];
 

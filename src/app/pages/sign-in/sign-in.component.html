@@ -9,15 +9,15 @@
       <p>The Food Plaza</p>
       <p>Breakfast | Lunch | Dinner</p>
     </div>
-    <form>
+    <form [formGroup]="signInForm" (ngSubmit)="submit()">
       <div id="form-controls">
         <mat-form-field appearance="fill">
           <mat-label>Email Address</mat-label>
-          <input matInput type="email" />
+          <input matInput type="email" formControlName="email" />
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Password</mat-label>
-          <input matInput type="password" />
+          <input matInput type="password" formControlName="password" />
         </mat-form-field>
         <button
           type="button"
