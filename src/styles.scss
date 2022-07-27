@@ -1,7 +1,6 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -20,20 +19,67 @@ $FBMS-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$FBMS-theme: mat.define-light-theme((
-  color: (
-    primary: $FBMS-primary,
-    accent: $FBMS-accent,
-    warn: $FBMS-warn,
+$FBMS-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $FBMS-primary,
+      accent: $FBMS-accent,
+      warn: $FBMS-warn,
+    ),
   )
-));
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($FBMS-theme);
 
-/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:wght@500&display=swap");
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  --primary-color: #ea7c69;
+  --primary-contrast-color: #FAF9FF;
+  --secondary-color: #505050;
+
+  --primary-font: "Barlow", sans-serif;
+
+  --xlarge: 26px;
+  --large: 22px;
+  --medium: 18px;
+  --small: 16px;
+  --xsmall:  14px;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.primary-button, .secondary-button {
+  font-family: var(--primary-font);
+  font-size: var(--medium);
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all .3s;
+
+  &:hover, &:focus {
+    transform: scale(1.02);
+  }
+}
+
+.primary-button {
+  background-color: var(--primary-color);
+  color: var(--primary-contrast-color);
+  padding: .5em;
+}
+
+.secondary-button {
+  background: none;
+  color: var(--primary-color);
+}

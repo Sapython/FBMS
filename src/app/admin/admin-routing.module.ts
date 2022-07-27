@@ -1,0 +1,80 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AdminComponent } from './admin.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: AdminComponent,
+    children: [
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+      },
+      {
+        path: 'inventory',
+        loadChildren: () =>
+          import('./inventory/inventory.module').then((m) => m.InventoryModule),
+      },
+      {
+        path: 'table',
+        loadChildren: () =>
+          import('./table/table.module').then((m) => m.TableModule),
+      },
+      {
+        path: 'menu',
+        loadChildren: () =>
+          import('./menu/menu.module').then((m) => m.MenuModule),
+      },
+      {
+        path: 'order',
+        loadChildren: () =>
+          import('./order/order.module').then((m) => m.OrderModule),
+      },
+      {
+        path: 'event',
+        loadChildren: () =>
+          import('./event/event.module').then((m) => m.EventModule),
+      },
+      {
+        path: 'billing',
+        loadChildren: () =>
+          import('./billing/billing.module').then((m) => m.BillingModule),
+      },
+      {
+        path: 'customer',
+        loadChildren: () =>
+          import('./customer/customer.module').then((m) => m.CustomerModule),
+      },
+      {
+        path: 'hrms',
+        loadChildren: () =>
+          import('./hrms/hrms.module').then((m) => m.HrmsModule),
+      },
+      {
+        path: 'vendor',
+        loadChildren: () =>
+          import('./vendor/vendor.module').then((m) => m.VendorModule),
+      },
+      {
+        path: 'housekeeping',
+        loadChildren: () =>
+          import('./housekeeping/housekeeping.module').then(
+            (m) => m.HousekeepingModule
+          ),
+      },
+      {
+        path: 'feedback',
+        loadChildren: () =>
+          import('./feedback/feedback.module').then((m) => m.FeedbackModule),
+      },
+    ],
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class AdminRoutingModule {}
