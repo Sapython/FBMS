@@ -8,6 +8,11 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
         path: 'dashboard',
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
@@ -18,7 +23,7 @@ const routes: Routes = [
           import('./inventory/inventory.module').then((m) => m.InventoryModule),
       },
       {
-        path: 'table',
+        path: 'tables',
         loadChildren: () =>
           import('./table/table.module').then((m) => m.TableModule),
       },
@@ -28,12 +33,12 @@ const routes: Routes = [
           import('./menu/menu.module').then((m) => m.MenuModule),
       },
       {
-        path: 'order',
+        path: 'orders',
         loadChildren: () =>
           import('./order/order.module').then((m) => m.OrderModule),
       },
       {
-        path: 'event',
+        path: 'events',
         loadChildren: () =>
           import('./event/event.module').then((m) => m.EventModule),
       },
@@ -43,7 +48,7 @@ const routes: Routes = [
           import('./billing/billing.module').then((m) => m.BillingModule),
       },
       {
-        path: 'customer',
+        path: 'customers',
         loadChildren: () =>
           import('./customer/customer.module').then((m) => m.CustomerModule),
       },
@@ -53,7 +58,7 @@ const routes: Routes = [
           import('./hrms/hrms.module').then((m) => m.HrmsModule),
       },
       {
-        path: 'vendor',
+        path: 'vendors',
         loadChildren: () =>
           import('./vendor/vendor.module').then((m) => m.VendorModule),
       },

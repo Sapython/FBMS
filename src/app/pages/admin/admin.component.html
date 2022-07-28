@@ -1,1 +1,70 @@
-<p>admin works!</p>
+<app-header></app-header>
+<div id="wrapper">
+  <aside>
+    <ul>
+      <li>
+        <button routerLink="/admin/dashboard" routerLinkActive="active">
+          <mat-icon aria-hidden>dashboard</mat-icon>Dashboard
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/inventory" routerLinkActive="active">
+          <mat-icon aria-hidden>inventory</mat-icon>Inventory
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/tables" routerLinkActive="active">
+          <mat-icon aria-hidden>table_restaurant</mat-icon>Tables
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/menu" routerLinkActive="active">
+          <mat-icon aria-hidden>menu_book</mat-icon>Menu
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/orders" routerLinkActive="active">
+          <mat-icon aria-hidden>receipt_long</mat-icon>Orders
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/events" routerLinkActive="active">
+          <mat-icon aria-hidden>event</mat-icon>Events
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/billing" routerLinkActive="active">
+          <mat-icon aria-hidden>payments</mat-icon>Billing & Payment
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/customers" routerLinkActive="active">
+          <mat-icon aria-hidden>group</mat-icon>Customers
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/hrms" routerLinkActive="active">
+          <mat-icon aria-hidden>badge</mat-icon>HRMS
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/vendors" routerLinkActive="active">
+          <mat-icon aria-hidden>storefront</mat-icon>Vendors
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/housekeeping" routerLinkActive="active">
+          <mat-icon aria-hidden>cleaning_services</mat-icon>Housekeeping
+        </button>
+      </li>
+      <li>
+        <button routerLink="/admin/feedback" routerLinkActive="active">
+          <mat-icon aria-hidden>reviews</mat-icon>Feedback & Reviews
+        </button>
+      </li>
+    </ul>
+  </aside>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>

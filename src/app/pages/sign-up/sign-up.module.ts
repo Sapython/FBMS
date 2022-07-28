@@ -6,6 +6,7 @@ import { SignUpComponent } from './sign-up.component';
 import { ComponentsModule } from '../../components/components.module';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [SignUpComponent],
@@ -14,7 +15,9 @@ import { RouterModule } from '@angular/router';
     SignUpRoutingModule,
     ComponentsModule,
     MatInputModule,
-    RouterModule
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
 })
 export class SignUpModule {}

@@ -15,7 +15,7 @@ section {
 
   #content {
     width: 40%;
-    padding: 3em 5em;
+    padding: 2em 4em;
 
     h2 {
       font-family: var(--primary-font);
@@ -43,24 +43,29 @@ section {
         }
 
         #forgot-password-button {
-            display: block;
-            width: fit-content;
-            margin-left: auto;
-            font-size: var(--small);
+          display: block;
+          width: fit-content;
+          margin-left: auto;
+          font-size: var(--small);
         }
       }
 
-      button[type="submit"] {
+      #submit-button {
         width: 100%;
-        margin: 2em 0;
+        margin: 2em 0 .5em 0;
       }
     }
 
+    #google-button {
+      width: 100%;
+      margin: 0 0 2em 0;
+    }
+
     #dont-have-account-button {
-        display: block;
-        width: fit-content;
-        margin: 0 auto;
-        font-size: var(--small);
+      display: block;
+      width: fit-content;
+      margin: 0 auto;
+      font-size: var(--small);
     }
   }
 }

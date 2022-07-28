@@ -1,0 +1,75 @@
+section {
+  display: grid;
+  gap: 1em;
+  grid-template-columns: 1fr 1fr 1fr 1.5fr;
+}
+
+.box {
+  box-shadow: var(--normal-shadow);
+  padding: 1.25em;
+  border-radius: 7px;
+
+  .box-top {
+    border-bottom: 1px solid var(--tertiary-color);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    h3 {
+      font-family: var(--secondary-font);
+      color: var(--tertiary-color);
+      font-size: var(--small);
+    }
+
+    button {
+      display: flex;
+
+      mat-icon {
+        margin-left: 0.25em;
+      }
+    }
+  }
+
+  .dish-cards {
+    button {
+      margin-top: 1em;
+      width: 100%;
+    }
+  }
+
+  &#most-order-type {
+    grid-row: span 2;
+    border-radius: 7px;
+  }
+
+  &#orders-delivered {
+    grid-row: span 2;
+    grid-column: span 2;
+  }
+
+  &#most-ordered-dishes {
+    grid-row: span 2;
+  }
+
+  &#sales {
+    grid-row: span 2;
+    grid-column: span 3;
+  }
+
+  &#pending-orders {
+    grid-row: span 3;
+  }
+
+  &#top-and-low-selling {
+    grid-row: span 2;
+    grid-column: span 3;
+  }
+
+  &#reservations {
+    grid-column: span 4;
+
+    table {
+      min-width: 1200px;
+    }
+  }
+}

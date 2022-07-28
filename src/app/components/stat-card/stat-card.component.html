@@ -1,0 +1,12 @@
+<div class="card">
+  <div class="top">
+    <div class="icon">
+      <mat-icon>{{ icon }}</mat-icon>
+    </div>
+    <div [class]="{ rate: true, gain: rate > 0, loss: rate <= 0 }">
+      {{ rate > 0 ? "+" : "" }}{{ rate.toFixed(2) }}%
+    </div>
+  </div>
+  <div class="value">{{ value }}</div>
+  <h3>{{ key }}</h3>
+</div>

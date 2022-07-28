@@ -175,7 +175,7 @@ export class AuthenticationService {
     this.dataProvider.pageSetting.lastRedirect = '';
     let data = await signInWithEmailAndPassword(this.auth, email, password)
       .then((credentials: UserCredential) => {
-        this.router.navigate(['']);
+        this.router.navigate(['admin']);
         this.dataProvider.pageSetting.blur = false;
       })
       .catch((error) => {

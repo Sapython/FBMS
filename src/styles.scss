@@ -1,24 +1,37 @@
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use "@angular/material" as mat;
-// Plus imports for other components in your app.
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@400;500&display=swap");
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$FBMS-primary: mat.define-palette(mat.$indigo-palette);
+$fbms-palette: (
+  50: #fcebe9,
+  100: #f6c4bc,
+  200: #ef9d8f,
+  300: #ea7c69,
+  400: #e34f36,
+  500: #c9361c,
+  600: #9d2a16,
+  700: #701e10,
+  800: #431209,
+  900: #160603,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #000,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+  ),
+);
+
+$FBMS-primary: mat.define-palette($fbms-palette, 300);
 $FBMS-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$FBMS-warn: mat.define-palette($fbms-palette, 600);
 
-// The warn palette is optional (defaults to red).
-$FBMS-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
 $FBMS-theme: mat.define-light-theme(
   (
     color: (
@@ -29,25 +42,29 @@ $FBMS-theme: mat.define-light-theme(
   )
 );
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include mat.all-component-themes($FBMS-theme);
-
-@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:wght@500&display=swap");
 
 :root {
   --primary-color: #ea7c69;
-  --primary-contrast-color: #FAF9FF;
+  --primary-contrast-color: #faf9ff;
   --secondary-color: #505050;
+  --tertiary-color: #000;
+  --quaternary-color: #ffd9da;
+  --success-color: #37a666;
+  --success-light-color: #88e0913d;
+  --danger-color: #ff7ca3;
 
   --primary-font: "Barlow", sans-serif;
+  --secondary-font: "Poppins", sans-serif;
 
   --xlarge: 26px;
   --large: 22px;
   --medium: 18px;
   --small: 16px;
-  --xsmall:  14px;
+  --xsmall: 14px;
+
+  --normal-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
 html,
@@ -59,16 +76,18 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.primary-button, .secondary-button {
+.primary-button,
+.secondary-button {
   font-family: var(--primary-font);
   font-size: var(--medium);
   border: none;
   outline: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: all .3s;
+  transition: all 0.3s;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     transform: scale(1.02);
   }
 }
@@ -76,10 +95,58 @@ body {
 .primary-button {
   background-color: var(--primary-color);
   color: var(--primary-contrast-color);
-  padding: .5em;
+  padding: 0.5em;
 }
 
 .secondary-button {
   background: none;
   color: var(--primary-color);
+}
+
+.table-container {
+  overflow-x: auto;
+  
+  table {
+    font-family: var(--secondary-font);
+    color: var(--tertiary-color);
+    font-size: var(--xsmall);
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+
+    th,
+    td {
+      padding: 0.5em;
+    }
+
+    thead {
+      border-bottom: 1px solid var(--tertiary-color);
+
+      tr {
+        th {
+          font-weight: 500;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          &.image-cell {
+            display: flex;
+            align-items: center;
+
+            img {
+              width: 30px;
+              height: 30px;
+              object-fit: cover;
+              margin-right: 0.5em;
+              border-radius: 50%;
+            }
+          }
+        }
+      }
+    }
+  }
 }

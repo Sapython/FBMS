@@ -1,0 +1,54 @@
+.card {
+  box-shadow: var(--normal-shadow);
+  padding: 1em 2em;
+  border-radius: 7px;
+
+  .top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5em;
+
+    .icon {
+      background-color: var(--quaternary-color);
+      color: var(--primary-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      padding: 0.25em;
+      margin-right: 0.5em;
+    }
+
+    .rate {
+      display: flex;
+      align-items: center;
+      font-size: var(--small);
+      font-family: var(--secondary-font);
+      font-weight: 500;
+      margin-right: 0.5em;
+
+      &.gain {
+        color: var(--success-color);
+      }
+
+      &.loss {
+        color: var(--danger-color);
+      }
+    }
+  }
+
+  .value {
+    font-family: var(--secondary-font);
+    font-weight: 600;
+    font-size: var(--large);
+    line-height: 140%;
+    margin-bottom: 0.25em;
+  }
+
+  h3 {
+    font-family: var(--secondary-font);
+    color: var(--secondary-color);
+    font-size: var(--small);
+    margin: 0;
+  }
+}

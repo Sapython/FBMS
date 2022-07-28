@@ -25,6 +25,8 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ComponentsModule } from './components/components.module';
 import { DataProvider } from './providers/data.provider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,7 +37,7 @@ import { DataProvider } from './providers/data.provider';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
     provideFirestore(() => getFirestore()),
-    provideAuth(()=> getAuth()),
+    provideAuth(() => getAuth()),
     provideFunctions(() => getFunctions()),
     provideMessaging(() => getMessaging()),
     providePerformance(() => getPerformance()),
@@ -47,12 +49,14 @@ import { DataProvider } from './providers/data.provider';
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000',
     }),
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     ScreenTrackingService,
     UserTrackingService,
     ComponentsModule,
-    DataProvider
+    DataProvider,
   ],
   bootstrap: [AppComponent],
 })

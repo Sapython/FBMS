@@ -1,1 +1,212 @@
-<p>dashboard works!</p>
+<section>
+  <app-stat-card
+    key="Total Revenue"
+    value="₹ 10,243.00"
+    [rate]="32.4"
+    icon="monetization_on"
+  ></app-stat-card>
+  <app-stat-card
+    key="Dishes Ordered"
+    value="31"
+    [rate]="-12.4"
+    icon="restaurant_menu"
+  ></app-stat-card>
+  <app-stat-card
+    key="Total Customers"
+    value="20"
+    [rate]="2.4"
+    icon="people"
+  ></app-stat-card>
+  <div class="box" id="most-order-type">
+    <div class="box-top">
+      <h3>Most Type of Orders</h3>
+      <button class="primary-button" [matMenuTriggerFor]="orderTypeMenu">
+        {{ orderTypeMenuValue }}<mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #orderTypeMenu="matMenu">
+        <button mat-menu-item (click)="orderTypeMenuValue = 'Today'">
+          Today
+        </button>
+        <button mat-menu-item (click)="orderTypeMenuValue = 'This Week'">
+          This Week
+        </button>
+        <button mat-menu-item (click)="orderTypeMenuValue = 'This Month'">
+          This Month
+        </button>
+        <button mat-menu-item (click)="orderTypeMenuValue = 'This Year'">
+          This Year
+        </button>
+      </mat-menu>
+    </div>
+    <canvas></canvas>
+  </div>
+  <div class="box" id="orders-delivered">
+    <div class="box-top">
+      <h3>Orders Delivered</h3>
+      <button class="primary-button" [matMenuTriggerFor]="ordersDeliveredMenu">
+        {{ ordersDeliveredMenuValue }}<mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #ordersDeliveredMenu="matMenu">
+        <button mat-menu-item (click)="ordersDeliveredMenuValue = 'This Week'">
+          This Week
+        </button>
+        <button mat-menu-item (click)="ordersDeliveredMenuValue = 'This Month'">
+          This Month
+        </button>
+        <button mat-menu-item (click)="ordersDeliveredMenuValue = 'This Year'">
+          This Year
+        </button>
+      </mat-menu>
+    </div>
+    <canvas></canvas>
+  </div>
+  <app-stat-card
+    key="Total Orders"
+    value="31"
+    [rate]="-12.4"
+    icon="receipt_long"
+  ></app-stat-card>
+  <app-stat-card
+    key="Online Sale"
+    value="20"
+    [rate]="+2.4"
+    icon="book_online"
+  ></app-stat-card>
+  <div class="box" id="most-ordered-dishes">
+    <div class="box-top">
+      <h3>Most Ordered</h3>
+      <button class="primary-button" [matMenuTriggerFor]="mostOrderedMenu">
+        {{ mostOrderedMenuValue }}<mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #mostOrderedMenu="matMenu">
+        <button mat-menu-item (click)="mostOrderedMenuValue = 'This Week'">
+          This Week
+        </button>
+        <button mat-menu-item (click)="mostOrderedMenuValue = 'This Month'">
+          This Month
+        </button>
+        <button mat-menu-item (click)="mostOrderedMenuValue = 'This Year'">
+          This Year
+        </button>
+      </mat-menu>
+    </div>
+    <div class="dish-cards">
+      <app-mini-dish-card
+        *ngFor="let dish of mostOrderedDishes"
+        [image]="dish.image"
+        [name]="dish.name"
+        [desc]="
+          dish.noOfOrders +
+          (dish.noOfOrders == 1 ? ' dishes' : ' dish') +
+          'ordered'
+        "
+      >
+      </app-mini-dish-card>
+      <button class="primary-button">View All</button>
+    </div>
+  </div>
+  <div class="box" id="sales">
+    <div class="box-top">
+      <h3>Total Sales</h3>
+      <button class="primary-button" [matMenuTriggerFor]="salesMenu">
+        {{ salesMenuValue }}<mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #salesMenu="matMenu">
+        <button mat-menu-item (click)="salesMenuValue = 'This Week'">
+          This Week
+        </button>
+        <button mat-menu-item (click)="salesMenuValue = 'This Month'">
+          This Month
+        </button>
+        <button mat-menu-item (click)="salesMenuValue = 'This Year'">
+          This Year
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="box" id="pending-orders">
+    <div class="box-top">
+      <h3>Pending Orders</h3>
+    </div>
+    <div class="dish-cards">
+      <app-mini-dish-card
+        *ngFor="let order of pendingOrders"
+        [image]="order.image"
+        [name]="order.name"
+        [desc]="order.table"
+      >
+      </app-mini-dish-card>
+      <button class="primary-button">View All</button>
+    </div>
+  </div>
+  <div class="box" id="top-and-low-selling">
+    <mat-tab-group>
+      <mat-tab label="Top Selling">
+        <app-mini-dish-card
+          *ngFor="let order of topSellingOrders"
+          [name]="order.name"
+          [image]="order.image"
+          [desc]="order.noOfOrders"
+        ></app-mini-dish-card>
+      </mat-tab>
+      <mat-tab label="Lowest Selling">
+        <app-mini-dish-card
+          *ngFor="let order of topSellingOrders"
+          [name]="order.name"
+          [image]="order.image"
+          [desc]="order.noOfOrders"
+        ></app-mini-dish-card>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <div class="box" id="reservations">
+    <div class="box-top">
+      <h3>Recent Table Reservations</h3>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Mobile</th>
+            <th>Table</th>
+            <th>Order</th>
+            <th>Time</th>
+            <th>Total Payment</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reservation of reservations">
+            <td class="image-cell">
+              <img [src]="reservation.photo" alt="Photo" />
+              <span>{{ reservation.name }}</span>
+            </td>
+            <td>{{ reservation.phone }}</td>
+            <td>{{ reservation.table }}</td>
+            <td>
+              <ng-container *ngFor="let item of reservation.order">
+                <span>{{ item.quantity }} x {{ item.name }}</span>
+                <br />
+              </ng-container>
+            </td>
+            <td>
+              {{
+                reservation.time.toDate().toLocaleString("en-us", {
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit"
+                })
+              }}
+            </td>
+            <td>₹{{ reservation.payment }}</td>
+            <td>{{ reservation.status }}</td>
+            <td><button class="primary-button">More Info</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

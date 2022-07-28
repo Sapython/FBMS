@@ -27,7 +27,12 @@
           Forgot your password?
         </button>
       </div>
-      <button type="submit" class="primary-button">Sign in</button>
+      <button type="submit" class="primary-button" id="submit-button">
+        Sign in
+      </button>
+      <button type="button" class="primary-button" id="google-button" (click)="authService.signInWithGoogle()">
+        Sign in with Google
+      </button>
     </form>
     <button
       type="button"
