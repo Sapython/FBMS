@@ -1,60 +1,66 @@
 section {
-    display: flex;
-    height: calc(100vh - 71px);
-    z-index: -1;
-  
-    aside {
-      width: 60%;
-  
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-  
-    #content {
-      width: 40%;
-      padding: 3em 5em;
-  
-      h2 {
-        font-family: var(--primary-font);
-        color: var(--primary-color);
-        font-size: var(--xlarge);
-        font-weight: 700;
-        margin-bottom: 1em;
-      }
-  
-      #taglines {
-        color: var(--secondary-color);
-        font-family: var(--primary-font);
-        font-size: var(--medium);
-        margin-bottom: 1.5em;
-  
-        p {
-          margin: 0;
-        }
-      }
-  
-      form {
-        #form-controls {
-          mat-form-field {
-            width: 100%;
-          }
-        }
-  
-        button[type="submit"] {
-          width: 100%;
-          margin: 2em 0;
-        }
-      }
-  
-      #already-have-account-button {
-          display: block;
-          width: fit-content;
-          margin: 0 auto;
-          font-size: var(--small);
-      }
+  display: flex;
+  min-height: calc(100vh - 71px);
+  z-index: -1;
+
+  aside {
+    width: 60%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
-  
+
+  #content {
+    width: 40%;
+    padding: 3em 5em;
+
+    h2 {
+      font-family: var(--primary-font);
+      color: var(--primary-color);
+      font-size: var(--xlarge);
+      font-weight: 700;
+      margin-bottom: 1em;
+    }
+
+    #taglines {
+      color: var(--secondary-color);
+      font-family: var(--primary-font);
+      font-size: var(--medium);
+      margin-bottom: 1.5em;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    form {
+      #form-controls {
+        mat-form-field {
+          width: 100%;
+        }
+      }
+
+      #submit-button {
+        width: 100%;
+        justify-content: center;
+        margin: 2em 0 0.5em 0;
+      }
+    }
+
+    #google-button {
+      width: 100%;
+      justify-content: center;
+      margin: 0 0 2em 0;
+    }
+
+    #already-have-account-button {
+      display: block;
+      width: fit-content;
+      margin: 0 auto;
+      font-size: var(--small);
+    }
+  }
+}

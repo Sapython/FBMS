@@ -24,11 +24,21 @@
           <input matInput type="password" formControlName="password" />
         </mat-form-field>
       </div>
-      <button type="submit" class="primary-button">Create Account</button>
+      <button type="submit" class="primary-button" id="submit-button">
+        Create Account
+      </button>
     </form>
     <button
+      type="submit"
+      class="primary-button"
+      id="google-button"
+      (click)="authService.signInWithGoogle()"
+    >
+      Sign up with Google
+    </button>
+    <button
       type="button"
-      class="secondary-button"
+      class="tertiary-button"
       id="already-have-account-button"
       routerLink="/sign-in"
     >

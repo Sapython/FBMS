@@ -1,6 +1,6 @@
 section {
   display: flex;
-  height: calc(100vh - 71px);
+  min-height: calc(100vh - 71px);
   z-index: -1;
 
   aside {
@@ -52,12 +52,14 @@ section {
 
       #submit-button {
         width: 100%;
-        margin: 2em 0 .5em 0;
+        justify-content: center;
+        margin: 2em 0 0.5em 0;
       }
     }
 
     #google-button {
       width: 100%;
+      justify-content: center;
       margin: 0 0 2em 0;
     }
 

@@ -1,0 +1,21 @@
+img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  transform: translateX(50%);
+}
+
+.dish-details {
+  box-shadow: var(--normal-shadow);
+  border-radius: 12px;
+  transform: translateY(-50%);
+  padding: 2em;
+
+  h4 {
+    font-family: var(--primary-font);
+    color: var(--tertiary-color);
+    font-size: var(--small);
+    font-weight: 500;
+  }
+}

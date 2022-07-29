@@ -1,0 +1,32 @@
+.top-buttons {
+  button {
+    align-items: center;
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 0.1em;
+
+    span {
+      cursor: unset;
+      height: auto;
+      font-size: var(--xxsmall);
+      border-radius: 7px 0 0 7px;
+    }
+
+    button {
+      border-radius: 0px;
+    }
+
+    #time-slot-button {
+      border-radius: 0 7px 7px 0;
+    }
+  }
+}
+
+#booked-tables {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1em;
+  margin-top: 1em;
+}

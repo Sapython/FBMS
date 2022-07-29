@@ -4,12 +4,16 @@ import { HeaderComponent } from './header/header.component';
 import { StatCardComponent } from './stat-card/stat-card.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MiniDishCardComponent } from './mini-dish-card/mini-dish-card.component';
+import { MenuDishCardComponent } from './menu-dish-card/menu-dish-card.component';
+import { BookedTableCardComponent } from './booked-table-card/booked-table-card.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     StatCardComponent,
-    MiniDishCardComponent
+    MiniDishCardComponent,
+    MenuDishCardComponent,
+    BookedTableCardComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +22,9 @@ import { MiniDishCardComponent } from './mini-dish-card/mini-dish-card.component
   exports: [
     HeaderComponent,
     StatCardComponent,
-    MiniDishCardComponent
+    MiniDishCardComponent,
+    MenuDishCardComponent,
+    BookedTableCardComponent
   ]
 })
 export class ComponentsModule { }

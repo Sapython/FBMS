@@ -1,0 +1,32 @@
+.booked-table {
+  box-shadow: var(--normal-shadow);
+  padding: 1em;
+  border-radius: 7px;
+
+  h3 {
+    font-family: var(--primary-font);
+    font-size: var(--large);
+    color: var(--tertiary-color);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .name-and-slot {
+    display: flex;
+    justify-content: space-between;
+    gap: 2em;
+  }
+
+  p {
+    font-family: var(--primary-font);
+    font-size: var(--small);
+    color: var(--tertiary-color);
+    margin: 0;
+  }
+
+  button {
+    width: 100%;
+    justify-content: center;
+    margin-top: 1em;
+  }
+}

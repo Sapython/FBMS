@@ -20,14 +20,6 @@ section {
       color: var(--tertiary-color);
       font-size: var(--small);
     }
-
-    button {
-      display: flex;
-
-      mat-icon {
-        margin-left: 0.25em;
-      }
-    }
   }
 
   .dish-cards {

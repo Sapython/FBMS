@@ -16,7 +16,7 @@ export class SignUpComponent implements OnInit {
   });
 
   constructor(
-    private authService: AuthenticationService,
+    public authService: AuthenticationService,
     private alertify: AlertsAndNotificationsService
   ) {}
 

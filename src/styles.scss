@@ -77,18 +77,33 @@ body {
 }
 
 .primary-button,
-.secondary-button {
+.secondary-button,
+.tertiary-button {
   font-family: var(--primary-font);
   font-size: var(--medium);
+  background: none;
   border: none;
   outline: none;
   border-radius: 5px;
+  display: flex;
   cursor: pointer;
   transition: all 0.3s;
 
   &:hover,
   &:focus {
     transform: scale(1.02);
+  }
+
+  &.left-icon-button {
+    mat-icon {
+      margin-right: 0.2em;
+    }
+  }
+
+  &.right-icon-button {
+    mat-icon {
+      margin-left: 0.2em;
+    }
   }
 }
 
@@ -99,13 +114,52 @@ body {
 }
 
 .secondary-button {
-  background: none;
   color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.tertiary-button {
+  color: var(--primary-color);
+}
+
+.top-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5em;
+
+  .start-buttons,
+  .end-buttons {
+    width: fit-content;
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 1em;
+
+    .primary-button, .secondary-button {
+      padding: 0.25em 0.4em;
+    }
+  }
+}
+
+.dropdown-container {
+  position: relative;
+  display: flex;
+
+  .dropdown {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translateY(100%);
+    padding: .25em;
+    border-radius: 7px;
+    box-shadow: var(--normal-shadow);
+  }
 }
 
 .table-container {
   overflow-x: auto;
-  
+
   table {
     font-family: var(--secondary-font);
     color: var(--tertiary-color);
