@@ -1,22 +1,7 @@
 <section>
-  <app-stat-card
-    key="Total Revenue"
-    value="₹ 10,243.00"
-    [rate]="32.4"
-    icon="monetization_on"
-  ></app-stat-card>
-  <app-stat-card
-    key="Dishes Ordered"
-    value="31"
-    [rate]="-12.4"
-    icon="restaurant_menu"
-  ></app-stat-card>
-  <app-stat-card
-    key="Total Customers"
-    value="20"
-    [rate]="2.4"
-    icon="people"
-  ></app-stat-card>
+  <app-stat-card  id="step1" key="Total Revenue" value="₹ 10,243.00" [rate]="32.4" icon="monetization_on"></app-stat-card>
+  <app-stat-card key="Dishes Ordered" value="31" [rate]="-12.4" icon="restaurant_menu"></app-stat-card>
+  <app-stat-card key="Total Customers" value="20" [rate]="2.4" icon="people"></app-stat-card>
   <div class="box" id="most-order-type">
     <div class="box-top">
       <h3>Most Type of Orders</h3>
@@ -60,18 +45,8 @@
     </div>
     <canvas></canvas>
   </div>
-  <app-stat-card
-    key="Total Orders"
-    value="31"
-    [rate]="-12.4"
-    icon="receipt_long"
-  ></app-stat-card>
-  <app-stat-card
-    key="Online Sale"
-    value="20"
-    [rate]="+2.4"
-    icon="book_online"
-  ></app-stat-card>
+  <app-stat-card key="Total Orders" value="31" [rate]="-12.4" icon="receipt_long"></app-stat-card>
+  <app-stat-card key="Online Sale" value="20" [rate]="+2.4" icon="book_online"></app-stat-card>
   <div class="box" id="most-ordered-dishes">
     <div class="box-top">
       <h3>Most Ordered</h3>
@@ -91,16 +66,11 @@
       </mat-menu>
     </div>
     <div class="dish-cards">
-      <app-mini-dish-card
-        *ngFor="let dish of mostOrderedDishes"
-        [image]="dish.image"
-        [name]="dish.name"
-        [desc]="
+      <app-mini-dish-card *ngFor="let dish of mostOrderedDishes" [image]="dish.image" [name]="dish.name" [desc]="
           dish.noOfOrders +
           (dish.noOfOrders == 1 ? ' dishes' : ' dish') +
           'ordered'
-        "
-      >
+        ">
       </app-mini-dish-card>
       <button class="primary-button">View All</button>
     </div>
@@ -129,12 +99,8 @@
       <h3>Pending Orders</h3>
     </div>
     <div class="dish-cards">
-      <app-mini-dish-card
-        *ngFor="let order of pendingOrders"
-        [image]="order.image"
-        [name]="order.name"
-        [desc]="order.table"
-      >
+      <app-mini-dish-card *ngFor="let order of pendingOrders" [image]="order.image" [name]="order.name"
+        [desc]="order.table">
       </app-mini-dish-card>
       <button class="primary-button">View All</button>
     </div>
@@ -142,20 +108,12 @@
   <div class="box" id="top-and-low-selling">
     <mat-tab-group>
       <mat-tab label="Top Selling">
-        <app-mini-dish-card
-          *ngFor="let order of topSellingOrders"
-          [name]="order.name"
-          [image]="order.image"
-          [desc]="order.noOfOrders"
-        ></app-mini-dish-card>
+        <app-mini-dish-card *ngFor="let order of topSellingOrders" [name]="order.name" [image]="order.image"
+          [desc]="order.noOfOrders"></app-mini-dish-card>
       </mat-tab>
       <mat-tab label="Lowest Selling">
-        <app-mini-dish-card
-          *ngFor="let order of topSellingOrders"
-          [name]="order.name"
-          [image]="order.image"
-          [desc]="order.noOfOrders"
-        ></app-mini-dish-card>
+        <app-mini-dish-card *ngFor="let order of topSellingOrders" [name]="order.name" [image]="order.image"
+          [desc]="order.noOfOrders"></app-mini-dish-card>
       </mat-tab>
     </mat-tab-group>
   </div>
@@ -193,12 +151,12 @@
             </td>
             <td>
               {{
-                reservation.time.toDate().toLocaleString("en-us", {
-                  month: "short",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit"
-                })
+              reservation.time.toDate().toLocaleString("en-us", {
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit"
+              })
               }}
             </td>
             <td>₹{{ reservation.payment }}</td>

@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataProvider } from './providers/data.provider';
 import { AuthenticationService } from './services/authentication.service';
+
+declare var introJs:any;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'FBMS';
   route:string = '';
   constructor(public dataProvider: DataProvider,private authService:AuthenticationService,private router:Router) {
@@ -34,5 +36,10 @@ export class AppComponent {
         localStorage.setItem('route',this.route)
       }
     },2000)
+  }
+
+  ngOnInit(): void {
+    
+    console.log(introJs)
   }
 }

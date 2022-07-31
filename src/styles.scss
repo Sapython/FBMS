@@ -204,3 +204,16 @@ body {
     }
   }
 }
+.introjs-tooltip{
+  .introjs-tooltip-header{}
+  .introjs-tooltiptext{}
+  .introjs-bullets{}
+  .introjs-arrow .top{}
+  .introjs-button{
+    border:none;
+    box-shadow: 0px 20px 10px rgba(0,0,0,0.1);
+    background-color: var(--primary-color);
+    color:white;
+    text-shadow: none;
+  }
+}
