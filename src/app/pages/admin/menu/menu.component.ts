@@ -4,11 +4,14 @@ import {
   keyframes,
   query,
   stagger,
+  state,
   style,
   transition,
   trigger,
 } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Dish } from 'src/app/structures/dish.structure';
 
 @Component({
@@ -16,11 +19,25 @@ import { Dish } from 'src/app/structures/dish.structure';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
   animations: [
+    trigger('dishCardState', [
+      state('default',style({
+        opacity: 1,
+        scale: 1,
+      })),
+      state('deleted',style({
+        opacity: 0,
+        scale: 0,
+      })),
+      transition('default => deleted', animate('0.5s')),
+      transition('deleted => default', animate('0.5s')),
+    ]),
     trigger('dishCardStagger', [
-      transition('* => *', [
+      state('in', style({})),
+      state('out', style({})),
+      transition('* <=> *', [
         query(':enter', style({ opacity: 0 }), { optional: true }),
         query(
-          ':enter',
+          ':enter', 
           stagger(
             '50ms',
             animate(
@@ -40,7 +57,7 @@ import { Dish } from 'src/app/structures/dish.structure';
           { optional: true }
         ),
         query(
-          ':leave',
+          '.deleted',
           stagger('300ms', [
             animate(
               '500ms ease-out',
@@ -57,9 +74,10 @@ import { Dish } from 'src/app/structures/dish.structure';
     ]),
   ],
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   menuOptions: 'Dine in' | 'Zomato' | 'Swiggy' = 'Dine in';
   categories: string[];
+  disable: boolean = false;
   dishes: Dish[] = [
     {
       id: '1',
@@ -132,13 +150,21 @@ export class MenuComponent implements OnInit {
       servesLeft: 15,
     },
   ];
-  constructor() {}
-
+  constructor(private router:Router) {}
+  routerSubscription:Subscription = Subscription.EMPTY;
   ngOnInit(): void {
+    this.routerSubscription = this.router.events.subscribe((event:any)=>{
+      if(event.url){
+        this.disable = true;
+      }
+    })
     this.getCategories();
   }
-  delete(id: string) {
-    this.dishes = this.dishes.filter((dish) => dish.id !== id);
+  delete(id: string,event:any) {
+    console.log(event.deleting = true);
+    setTimeout(() => {
+      this.dishes = this.dishes.filter((dish) => dish.id !== id);
+    }, 500);
   }
   getCategories() {
     this.categories = [
@@ -146,8 +172,11 @@ export class MenuComponent implements OnInit {
       'Cold Dishes',
       'Soup',
       'Grill',
-      'Apperizer',
+      'Appetizer',
       'Dessert',
     ];
+  }
+  ngOnDestroy(){
+    this.routerSubscription.unsubscribe();
   }
 }

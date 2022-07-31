@@ -18,9 +18,9 @@
   </div>
 </div>
 <mat-tab-group>
-  <mat-tab *ngFor="let category of categories" [label]="category">
+  <mat-tab *ngFor="let category of categories" [label]="category" [@.disabled]="disable">
     <div class="order-cards" [@dishCardStagger]="dishes.length">
-      <app-menu-dish-card *ngFor="let dish of dishes" (deleted)="delete(dish.id)" [dishName]="dish.name" [dishPrice]="dish.price" [servesLeft]="dish.servesLeft" [imageSource]="dish.image"></app-menu-dish-card>
+      <app-menu-dish-card [@dishCardState]="card.deleting ? 'deleted' : 'default'" #card *ngFor="let dish of dishes" (deleted)="delete(dish.id,card)" [dishName]="dish.name" [dishPrice]="dish.price" [servesLeft]="dish.servesLeft" [imageSource]="dish.image"></app-menu-dish-card>
     </div>
   </mat-tab>
 </mat-tab-group>

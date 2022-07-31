@@ -21,38 +21,6 @@ import {
   templateUrl: './menu-dish-card.component.html',
   styleUrls: ['./menu-dish-card.component.scss'],
   animations: [
-    trigger('dishCardState', [
-      transition('void => *', [
-        animate(
-          '0.2s',
-          keyframes([
-            style({
-              opacity: 0,
-              scale: 0,
-            }),
-            style({
-              opacity: 1,
-              scale: 1,
-            }),
-          ])
-        ),
-      ]),
-      transition('* => void', [
-        animate(
-          '0.2s',
-          keyframes([
-            style({
-              opacity: 1,
-              scale: 1,
-            }),
-            style({
-              opacity: 0,
-              scale: 0,
-            }),
-          ])
-        ),
-      ]),
-    ]),
     trigger('deleteHover', [
       state('default', style({})),
       state('hover', style({})),
@@ -113,5 +81,6 @@ export class MenuDishCardComponent {
   @Input() dishPrice: number = 100;
   @Input() servesLeft: number = 15;
   @Output() deleted: EventEmitter<any> = new EventEmitter();
+  deleting: boolean = false;
   deleteHovered: boolean = false;
 }

@@ -1,6 +1,6 @@
-<div class="mainCard" >
+<div class="mainCard">
   <img [src]="imageSource" [alt]="dishName" />
-  <div class="dish-details"  (mouseenter)="deleteHovered=true" (mouseleave)="deleteHovered=false" [@deleteHover]="deleteHovered ? 'hover' : 'default'">
+  <div class="dish-details" (mouseenter)="deleteHovered=true" (mouseleave)="deleteHovered=false" [@deleteHover]="deleteHovered ? 'hover' : 'default'">
     <p class="rate">₹{{dishPrice}}</p>
     <h4>{{dishName}}</h4>
     <p class="availability"><b
