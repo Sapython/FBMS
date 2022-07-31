@@ -36,5 +36,16 @@
     .availability{
       color:rgb(29, 29, 29);
     }
+    button{
+      background-color: transparent;
+      border:none;
+      color:var(--primary-color);
+      padding:20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width:100%;
+    }
+    margin-bottom: 5px;
   }
 }

@@ -1,5 +1,8 @@
 export type Dish = {
-    id?: string;
+    id: string;
     image: string;
     name: string;
+    price:number,
+    servesLeft:number,
+    
 }
