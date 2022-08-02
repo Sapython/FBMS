@@ -1,7 +1,11 @@
 <div class="top-buttons">
   <div class="start-buttons">
-    <button class="primary-button left-icon-button">
-      <mat-icon>table_restaurant</mat-icon>View Available Tables
+    <button
+      (click)="viewBookedTables = !viewBookedTables"
+      class="primary-button left-icon-button"
+    >
+      <mat-icon>table_restaurant</mat-icon>View
+      {{ viewBookedTables ? "all" : "booked" }} tables
     </button>
   </div>
   <div class="end-buttons">
@@ -47,7 +51,19 @@
     </div>
   </div>
 </div>
-<div id="booked-tables">
+<div *ngIf="!viewBookedTables" class="table-cards">
+  <app-table-card [number]="9" [available]="true"></app-table-card>
+  <app-table-card [number]="9" [available]="false"></app-table-card>
+  <app-table-card [number]="9" [available]="true"></app-table-card>
+  <app-table-card [number]="9" [available]="false"></app-table-card>
+  <app-table-card [number]="9" [available]="true"></app-table-card>
+  <app-table-card [number]="9" [available]="false"></app-table-card>
+  <app-table-card [number]="9" [available]="true"></app-table-card>
+  <app-table-card [number]="9" [available]="false"></app-table-card>
+  <app-table-card [number]="9" [available]="true"></app-table-card>
+  <app-table-card [number]="9" [available]="false"></app-table-card>
+</div>
+<div *ngIf="viewBookedTables" class="table-cards">
   <app-booked-table-card
     [number]="13"
     name="Rohit Sharma"

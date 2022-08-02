@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { FeedbackRoutingModule } from './feedback-routing.module';
 import { FeedbackComponent } from './feedback.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -11,7 +13,9 @@ import { FeedbackComponent } from './feedback.component';
   ],
   imports: [
     CommonModule,
-    FeedbackRoutingModule
+    FeedbackRoutingModule,
+    MatTabsModule,
+    MatIconModule
   ]
 })
 export class FeedbackModule { }

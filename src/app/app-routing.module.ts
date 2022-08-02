@@ -4,6 +4,11 @@ import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'admin',
+    pathMatch: 'full'
+  },
+  {
     path: 'sign-in',
     loadChildren: () =>
       import('./pages/sign-in/sign-in.module').then((m) => m.SignInModule),

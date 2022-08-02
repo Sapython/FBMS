@@ -1,1 +1,58 @@
-<p>event works!</p>
+<div class="top-buttons">
+  <div class="end-buttons">
+    <button class="primary-button left-icon-button">
+      <mat-icon>event</mat-icon>Create Event
+    </button>
+  </div>
+</div>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Event Name</th>
+        <th>Event Type</th>
+        <th>Date</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>No. of Guests</th>
+        <th>Required Service</th>
+        <th>Customer Name</th>
+        <th>Assigned To</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let event of events">
+        <td>{{ event.name }}</td>
+        <td>{{ event.type }}</td>
+        <td>{{ event.startTime.toDate() | date }}</td>
+        <td>
+          {{
+            event.startTime.toDate().toLocaleTimeString("en-us", {
+              hour: "2-digit",
+              minute: "2-digit"
+            })
+          }}
+        </td>
+        <td>
+          {{
+            event.endTime.toDate().toLocaleTimeString("en-us", {
+              hour: "2-digit",
+              minute: "2-digit"
+            })
+          }}
+        </td>
+        <td>{{ event.noOfGuests }}</td>
+        <td>{{ event.requiredService }}</td>
+        <td>{{ event.customerId }}</td>
+        <td>{{ event.assignedId }}</td>
+        <td>
+          <div class="actions">
+            <button class="primary-button"><mat-icon>edit</mat-icon></button>
+            <button class="primary-button"><mat-icon>delete</mat-icon></button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

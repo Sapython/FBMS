@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { EventRoutingModule } from './event-routing.module';
 import { EventComponent } from './event.component';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { EventComponent } from './event.component';
   ],
   imports: [
     CommonModule,
-    EventRoutingModule
+    EventRoutingModule,
+    MatIconModule
   ]
 })
 export class EventModule { }

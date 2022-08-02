@@ -6,6 +6,7 @@ import { slot, timeSlots } from 'src/app/structures/time-slot.structure';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
+  viewBookedTables: boolean = false;
   timeSlots: slot[] = timeSlots;
 
   selectedDate: Date = new Date();

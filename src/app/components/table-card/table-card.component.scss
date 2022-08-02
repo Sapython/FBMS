@@ -1,0 +1,57 @@
+.table-card {
+  box-shadow: var(--normal-shadow);
+  border-radius: 15px;
+  padding: 1em;
+
+  .card-content {
+    position: relative;
+
+    h3 {
+      font-family: var(--primary-font);
+      font-size: var(--large);
+      font-weight: 500;
+      margin-bottom: 1em;
+    }
+
+    .status {
+      font-family: var(--primary-font);
+      font-size: var(--small);
+      margin: 0;
+    }
+
+    mat-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 50px;
+      width: auto;
+      height: auto;
+    }
+  }
+
+  &.available {
+    background-color: var(--primary-color);
+    cursor: pointer;
+    transition: all .3s;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+
+    h3,
+    p,
+    mat-icon {
+      color: var(--primary-contrast-color);
+    }
+  }
+
+  &.booked {
+    border: 2px solid var(--quinary-color);
+
+    h3,
+    p,
+    mat-icon {
+      color: var(--quinary-color);
+    }
+  }
+}

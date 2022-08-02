@@ -1,0 +1,7 @@
+<div [class]="{ 'table-card': true, available: available, booked: !available }">
+  <div class="card-content">
+    <h3>Table {{ number }}</h3>
+    <p class="status">{{ available ? "Available" : "Booked" }}</p>
+    <mat-icon>table_restaurant</mat-icon>
+  </div>
+</div>

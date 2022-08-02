@@ -1,0 +1,14 @@
+.end-buttons {
+  margin-left: auto;
+}
+
+table {
+  th {
+    min-width: 90px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.5em;
+  }
+}
