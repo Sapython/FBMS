@@ -1,1 +1,45 @@
-<p>hrms works!</p>
+<div class="top-container">
+    <div class="top-buttons">
+        <button class="primary-button">Overall Report</button>
+        <button class="primary-button">Attendance</button>
+        <button class="primary-button">Payroll</button>
+        <button class="primary-button">Employee List</button>
+    </div>
+    <div class="end">
+        <button class="primary-button left-icon-button"><mat-icon>calendar_today</mat-icon>
+            Select Date</button>
+    </div>
+</div>
+<div class="section-one">
+    <div class="table">
+        <table>
+            <tr>
+              <th width="15%">Employee Name</th>
+              <th width="10%">Employee Id</th>
+              <th width="15%">Email</th>
+              <th width="10%">Phone</th>
+              <th width="10%">Join Date</th>
+              <th width="10%">Working Hours</th>
+              <th width="10%">Attendance</th>
+              <th width="10%">Working Salary</th>
+              <th width="10%">Action</th>
+            </tr>
+            <tr *ngFor="let user of users">
+              <td>{{user.name}}</td>
+              <td>{{user.id}}</td>
+              <td>{{user.emailId}}</td>
+              <td>{{user.phone}}</td>
+              <td><p>{{user.dateJoin}}</p></td>
+              <td><p>{{user.hours}}</p></td>
+              <td><p>{{user.attendance}}</p></td>
+              <td>{{user.salary}}</td>
+              <td>
+                <div class="icons">
+                  <p><mat-icon>perm_phone_msg</mat-icon></p>
+                  <p><mat-icon>record_voice_over</mat-icon></p>
+                </div>
+              </td>
+            </tr>
+          </table>
+    </div>
+</div>

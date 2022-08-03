@@ -1,0 +1,107 @@
+.top-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .primary-button{
+        font-size: var(--small);
+        font-weight: 450;
+        mat-icon{
+            margin-right: 5px;
+            margin-top: 1px;
+            font-size: var(--large);
+        }
+    }
+}
+.top-buttons{
+    width: 50%;
+}
+.section-one{
+    .table{
+        margin-top: 25px;
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-family: var(--primary-font);
+          }
+          
+          th {
+            border: 1px solid var(--primary-color);
+            text-align: left;
+            border-radius: 15px;
+            color: var(--primary-color);
+            padding: 8px;
+            font-weight: 400;
+          }
+
+          td{
+            padding: 8px;
+            border-radius: 10px;
+            text-align: left;
+          }
+          td:nth-child(5){
+            color: #9290FE;
+            p{
+              background-color: #E9E9FF;
+              border: 1px solid #9290FE;
+              border-radius: 15px;
+              text-align: center;
+              padding: 3px;
+              margin-bottom: 0;
+            }
+          }
+          td:nth-child(6){
+            color: #50D1AA;
+            p{
+              background-color: #DBF8EF;
+              border: 1px solid #50D1AA;
+              border-radius: 15px;
+              text-align: center;
+              padding: 3px;
+              margin-bottom: 0;
+            }
+          }
+          td:nth-child(7){
+            color: #FFB572;
+            p{
+              background-color: #FFF0E3;
+              border: 1px solid #FFB572;
+              border-radius: 15px;
+              text-align: center;
+              padding: 3px;
+              margin-bottom: 0;
+            }
+          }
+          td:nth-child(8){
+            font-size: var(--small);
+          }
+          .icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 18px;
+        
+            p {
+              cursor: pointer;
+              background-color: #FF9292;
+              color: #fff;
+              border-radius: 2px;
+              margin-right: 1px;
+              transition: .3s;
+              height: 30px;
+              text-align: center;
+        
+              &:hover {
+                transform: scale(1.1);
+              }
+              mat-icon{
+                font-size: var(--medium);
+                padding: 2px;
+                display: block;
+                margin: auto;
+                margin-top: 3px;
+              }
+            }
+          }
+    }
+}

@@ -92,10 +92,12 @@ body {
 
   &:hover,
   &:focus {
-    transform: scale(1.02);
+    transform: scale(1.08);
   }
 
   &.left-icon-button {
+    display: flex;
+    align-items: center;
     mat-icon {
       margin-right: 0.2em;
     }

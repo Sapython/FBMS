@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { HrmsRoutingModule } from './hrms-routing.module';
 import { HrmsComponent } from './hrms.component';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { HrmsComponent } from './hrms.component';
   ],
   imports: [
     CommonModule,
-    HrmsRoutingModule
+    HrmsRoutingModule,
+    MatIconModule
   ]
 })
 export class HrmsModule { }
