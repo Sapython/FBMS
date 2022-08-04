@@ -50,7 +50,7 @@ $FBMS-theme: mat.define-light-theme(
   --secondary-color: #505050;
   --tertiary-color: #000;
   --quaternary-color: #ffd9da;
-  --quinary-color: #6C757D;
+  --quinary-color: #6c757d;
   --success-color: #37a666;
   --success-light-color: #88e0913d;
   --danger-color: #ff7ca3;
@@ -139,7 +139,8 @@ body {
     gap: 0.5em;
     margin-bottom: 1em;
 
-    .primary-button, .secondary-button {
+    .primary-button,
+    .secondary-button {
       padding: 0.25em 0.4em;
     }
   }
@@ -154,7 +155,7 @@ body {
     bottom: 0;
     right: 0;
     transform: translateY(100%);
-    padding: .25em;
+    padding: 0.25em;
     border-radius: 7px;
     box-shadow: var(--normal-shadow);
   }
@@ -166,7 +167,7 @@ body {
   table {
     font-family: var(--secondary-font);
     color: var(--tertiary-color);
-    font-size: var(--xsmall);
+    font-size: var(--small);
     border-collapse: collapse;
     width: 100%;
     text-align: center;
@@ -207,16 +208,20 @@ body {
     }
   }
 }
-.introjs-tooltip{
-  .introjs-tooltip-header{}
-  .introjs-tooltiptext{}
-  .introjs-bullets{}
-  .introjs-arrow .top{}
-  .introjs-button{
-    border:none;
-    box-shadow: 0px 20px 10px rgba(0,0,0,0.1);
+.introjs-tooltip {
+  .introjs-tooltip-header {
+  }
+  .introjs-tooltiptext {
+  }
+  .introjs-bullets {
+  }
+  .introjs-arrow .top {
+  }
+  .introjs-button {
+    border: none;
+    box-shadow: 0px 20px 10px rgba(0, 0, 0, 0.1);
     background-color: var(--primary-color);
-    color:white;
+    color: white;
     text-shadow: none;
   }
 }
