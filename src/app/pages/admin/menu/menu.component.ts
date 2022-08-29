@@ -150,6 +150,44 @@ export class MenuComponent implements OnInit, OnDestroy {
       servesLeft: 15,
     },
   ];
+  features = [
+    {
+      feature_Name:'Base Menu',
+      button_Name:'Manage',
+      src:'assets/menu1.png',
+      link:'dine-in'
+    },
+    {
+      feature_Name:'Swiggy',
+      button_Name:'Manage',
+      src:'assets/menu2.png',
+      link:'dine-in'
+    },
+    {
+      feature_Name:'Zomato',
+      button_Name:'Manage',
+      src:'assets/menu3.png',
+      link:'dine-in'
+    },
+    {
+      feature_Name:'Parcel',
+      button_Name:'Manage',
+      src:'assets/menu4.png',
+      link:'dine-in'
+    },
+    {
+      feature_Name:'Home Delivery',
+      button_Name:'Manage',
+      src:'assets/menu5.png',
+      link:'dine-in'
+    },
+    {
+      feature_Name:'Dine In',
+      button_Name:'Manage',
+      src:'assets/menu6.png',
+      link:'dine-in'
+    },
+  ]
   constructor(private router:Router) {}
   routerSubscription:Subscription = Subscription.EMPTY;
   ngOnInit(): void {

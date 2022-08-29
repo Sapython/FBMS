@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    align-items: center;
+    background: #f0f0f0;
+    box-shadow: 20px 20px 60px #cccccc,
+        -20px -20px 60px #ffffff;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 15px;
+    transition: .4s;
+    &:hover{
+        border: 2px solid #000;
+        transform: scale(1.08);
+    }
+
+    .box {
+        margin-left: 15px;
+        font-family: var(--primary-font);
+    }
+
+    p {
+        font-weight: 500;
+        font-size: 18px;
+    }
+
+    button {
+        background-color: transparent;
+        border: none;
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+}

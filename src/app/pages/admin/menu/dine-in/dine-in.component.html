@@ -1,0 +1,43 @@
+<mat-tab-group>
+    <mat-tab label="Dine-In" class="big">
+        <div class="container">
+            <div class="box">
+                <div>
+                    <mat-tab-group>
+                        <mat-tab label="Hot dishes"> Content 1 </mat-tab>
+                        <mat-tab label="Cold Dishes"> Content 2 </mat-tab>
+                        <mat-tab label="Soup"> Content 3 </mat-tab>
+                    </mat-tab-group>
+                </div>
+                <div class="buttons">
+                    <div class="select">
+                        <select>
+                            <option>Quick Actions</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>Mark As Vlog</option>
+                        </select>
+                    </div>
+                    <div class="select">
+                        <select>
+                            <option>Pricing</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>Mark As Vlog</option>
+                        </select>
+                    </div>
+                    <button class="secondary-button left-icon-button">
+                        <mat-icon>add</mat-icon>Add dish
+                    </button>
+                    <button class="secondary-button left-icon-button">
+                        <mat-icon>edit</mat-icon>Edit Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Swiggy">
+        <app-menu-dish-card></app-menu-dish-card>
+    </mat-tab>
+    <mat-tab label="Zomato"> Zomato </mat-tab>
+</mat-tab-group>

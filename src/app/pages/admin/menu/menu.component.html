@@ -18,6 +18,11 @@
   </div>
 </div>
 <mat-tab-group>
+  <mat-tab label="All Menu">
+    <div class="container">
+        <app-menu-feature-widget *ngFor="let feature of features" [feature_Name]="feature.feature_Name" [button_Name]="feature.button_Name" [src]="feature.src" [link]="feature.link"></app-menu-feature-widget>
+    </div>
+  </mat-tab>
   <mat-tab *ngFor="let category of categories" [label]="category" [@.disabled]="disable">
     <div class="order-cards" [@dishCardStagger]="dishes.length">
       <app-menu-dish-card [@dishCardState]="card.deleting ? 'deleted' : 'default'" #card *ngFor="let dish of dishes" (deleted)="delete(dish.id,card)" [dishName]="dish.name" [dishPrice]="dish.price" [servesLeft]="dish.servesLeft" [imageSource]="dish.image"></app-menu-dish-card>

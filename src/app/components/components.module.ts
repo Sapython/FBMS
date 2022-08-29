@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
@@ -8,6 +9,7 @@ import { MenuDishCardComponent } from './menu-dish-card/menu-dish-card.component
 import { BookedTableCardComponent } from './booked-table-card/booked-table-card.component';
 import { TableCardComponent } from './table-card/table-card.component';
 import { BookTableComponent } from './book-table/book-table.component';
+import { MenuFeatureWidgetComponent } from './menu-feature-widget/menu-feature-widget.component';
 
 @NgModule({
   declarations: [
@@ -18,8 +20,9 @@ import { BookTableComponent } from './book-table/book-table.component';
     BookedTableCardComponent,
     TableCardComponent,
     BookTableComponent,
+    MenuFeatureWidgetComponent,
   ],
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule,RouterModule],
   exports: [
     HeaderComponent,
     StatCardComponent,
@@ -27,6 +30,7 @@ import { BookTableComponent } from './book-table/book-table.component';
     MenuDishCardComponent,
     BookedTableCardComponent,
     TableCardComponent,
+    MenuFeatureWidgetComponent
   ],
 })
 export class ComponentsModule {}
