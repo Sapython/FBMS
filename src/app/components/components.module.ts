@@ -10,6 +10,9 @@ import { BookedTableCardComponent } from './booked-table-card/booked-table-card.
 import { TableCardComponent } from './table-card/table-card.component';
 import { BookTableComponent } from './book-table/book-table.component';
 import { MenuFeatureWidgetComponent } from './menu-feature-widget/menu-feature-widget.component';
+import { KotCardComponent } from './kot-card/kot-card.component';
+import { KotPendingCardComponent } from './kot-pending-card/kot-pending-card.component';
+import { KotDetailsCardComponent } from './kot-details-card/kot-details-card.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +24,9 @@ import { MenuFeatureWidgetComponent } from './menu-feature-widget/menu-feature-w
     TableCardComponent,
     BookTableComponent,
     MenuFeatureWidgetComponent,
+    KotCardComponent,
+    KotPendingCardComponent,
+    KotDetailsCardComponent,
   ],
   imports: [CommonModule, MatIconModule,RouterModule],
   exports: [
@@ -30,7 +36,10 @@ import { MenuFeatureWidgetComponent } from './menu-feature-widget/menu-feature-w
     MenuDishCardComponent,
     BookedTableCardComponent,
     TableCardComponent,
-    MenuFeatureWidgetComponent
+    MenuFeatureWidgetComponent,
+    KotCardComponent,
+    KotPendingCardComponent,
+    KotDetailsCardComponent
   ],
 })
 export class ComponentsModule {}

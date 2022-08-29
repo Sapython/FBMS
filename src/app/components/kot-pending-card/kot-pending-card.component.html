@@ -1,0 +1,39 @@
+<div class="card">
+    <img src="../../../assets/order1.png" class="order_img" alt="dish_name" />
+    <div class="order_details">
+        <h5>
+            Order No. :
+            <p>{{orderNo}}</p>
+        </h5>
+        <h5>
+            Table No. :
+            <p>{{tableNo}}</p>
+        </h5>
+        <h5>
+            Customer Name :
+            <p>{{customerName}}</p>
+        </h5>
+        <h5>
+            Estimated Time :
+            <p>{{estimatedTime}}</p>
+        </h5>
+        <div class="pending">
+            <div class="details">
+                <div class="first">
+                    <p>1. {{dishName}}</p>
+                    <p class="opacity">ADD:{{topping}}</p>
+                    <p class="opacity">{{extra}}</p>
+                </div>
+                <div class="status">
+                    <p>
+                        <mat-icon>query_builder</mat-icon> {{timeLeft}}
+                    </p>
+                </div>
+                <div class="flex">
+                    <p id="current">{{status}}</p>
+                    <button>Mark as Cooked</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
