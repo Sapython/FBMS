@@ -42,4 +42,10 @@ export class AppComponent implements OnInit {
     
     console.log(introJs)
   }
+
+
+  overlayClicked(){
+    // this.dataProvider.pageSetting.overlay = false;
+    this.dataProvider.overlayDismissed.next(true);
+  }
 }

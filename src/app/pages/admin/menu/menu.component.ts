@@ -9,212 +9,64 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Dialog } from '@angular/cdk/dialog';
+import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { SideFlowComponent } from 'src/app/components/side-flow/side-flow.component';
+import { DataProvider } from 'src/app/providers/data.provider';
 import { Dish } from 'src/app/structures/dish.structure';
+import { AddRecipeComponent } from './add-recipe/add-recipe.component';
+import { ManagementComponent } from './management/mangement.component';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
-  animations: [
-    trigger('dishCardState', [
-      state('default',style({
-        opacity: 1,
-        scale: 1,
-      })),
-      state('deleted',style({
-        opacity: 0,
-        scale: 0,
-      })),
-      transition('default => deleted', animate('0.5s')),
-      transition('deleted => default', animate('0.5s')),
-    ]),
-    trigger('dishCardStagger', [
-      state('in', style({})),
-      state('out', style({})),
-      transition('* <=> *', [
-        query(':enter', style({ opacity: 0 }), { optional: true }),
-        query(
-          ':enter', 
-          stagger(
-            '50ms',
-            animate(
-              '0.5s ease-in',
-              keyframes([
-                style({
-                  opacity: 0,
-                  scale: 0,
-                }),
-                style({
-                  opacity: 1,
-                  scale: 1,
-                }),
-              ])
-            )
-          ),
-          { optional: true }
-        ),
-        query(
-          '.deleted',
-          stagger('300ms', [
-            animate(
-              '500ms ease-out',
-              keyframes([
-                style({ opacity: 1, transform: 'scale(1.1)', offset: 0 }),
-                style({ opacity: 0.5, transform: 'scale(.5)', offset: 0.3 }),
-                style({ opacity: 0, transform: 'scale(0)', offset: 1 }),
-              ])
-            ),
-          ]),
-          { optional: true }
-        ),
-      ]),
-    ]),
-  ],
+  styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit, OnDestroy {
-  menuOptions: 'Dine in' | 'Zomato' | 'Swiggy' = 'Dine in';
-  categories: string[];
-  disable: boolean = false;
-  dishes: Dish[] = [
-    {
-      id: '1',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '2',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '3',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '4',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '5',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '6',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '7',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '8',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '9',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '10',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-  ];
+export class MenuComponent {
+  
   features = [
     {
       feature_Name:'Base Menu',
       button_Name:'Manage',
       src:'assets/menu1.png',
-      link:'dine-in'
+      link:'baseMenu'
     },
     {
       feature_Name:'Swiggy',
       button_Name:'Manage',
       src:'assets/menu2.png',
-      link:'dine-in'
+      link:'swiggy'
     },
     {
       feature_Name:'Zomato',
       button_Name:'Manage',
       src:'assets/menu3.png',
-      link:'dine-in'
+      link:'zomato'
     },
     {
       feature_Name:'Parcel',
       button_Name:'Manage',
       src:'assets/menu4.png',
-      link:'dine-in'
+      link:'parcel'
     },
     {
       feature_Name:'Home Delivery',
       button_Name:'Manage',
       src:'assets/menu5.png',
-      link:'dine-in'
+      link:'homeDelivery'
     },
     {
       feature_Name:'Dine In',
       button_Name:'Manage',
       src:'assets/menu6.png',
-      link:'dine-in'
+      link:'dineIn'
     },
   ]
-  constructor(private router:Router) {}
-  routerSubscription:Subscription = Subscription.EMPTY;
-  ngOnInit(): void {
-    this.routerSubscription = this.router.events.subscribe((event:any)=>{
-      if(event.url){
-        this.disable = true;
-      }
-    })
-    this.getCategories();
-  }
-  delete(id: string,event:any) {
-    console.log(event.deleting = true);
-    setTimeout(() => {
-      this.dishes = this.dishes.filter((dish) => dish.id !== id);
-    }, 500);
-  }
-  getCategories() {
-    this.categories = [
-      'Hot Dishes',
-      'Cold Dishes',
-      'Soup',
-      'Grill',
-      'Appetizer',
-      'Dessert',
-    ];
-  }
-  ngOnDestroy(){
-    this.routerSubscription.unsubscribe();
+  categories:any[] = [];
+
+  editCategory(index:number){
+
   }
 }

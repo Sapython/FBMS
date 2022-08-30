@@ -1,24 +1,17 @@
-
-
-.end-buttons {
-  margin-left: auto;
-}
-
-.order-cards {
-  padding: 1em;
-  display: flex;
-  flex-wrap: wrap;
-  gap:20px;
-}
-.container{
-  display: block;
-  margin: auto;
-  width: 90%;
-  border-radius: 10px;
-  margin: 15px;
-  box-shadow: 7px 15px 30px rgba(22, 22, 22, 0.1);
+.categoryContainer  {
   display: grid;
-  grid-template: auto / auto auto auto;
-  grid-gap: 15px; 
-  padding: 15px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:20px;
+  padding:20px;
+}
+.categories{
+  table{
+    width: 100%;
+    tr{
+      // background: ;
+      th{
+        padding:15px
+      }
+    }
+  }
 }

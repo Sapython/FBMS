@@ -1,0 +1,69 @@
+<main>
+    <section>
+        <div class="container">
+            <h1>Add New Item</h1>
+            <form [formGroup]="stockItemForm">
+                <div class="fields">
+                    <div [class]="files.length==0 ? 'dropZone' : 'dropZone grid'" DropZone (onFileDropped)="addFile($event)">
+                        <div class="group" *ngIf="files.length == 0">
+                            <mat-icon>image</mat-icon>
+                            <p>Add-Photo</p>
+                        </div>
+                        <div id="image" *ngFor="let file of files;let i = index">
+                            <i (click)="removeFile(i)" class="fa-solid fa-xmark"></i>
+                            <img [src]="file.url" matBadgeColor="warn" matBadge="X" width="100px">
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Name Of Item</mat-label>
+                                <input matInput placeholder="Name">
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Unit</mat-label>
+                                <mat-select>
+                                    <mat-option *ngFor="let unit of units" [value]="unit.id">{{unit.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Rate</mat-label>
+                                <input type="number" matInput placeholder="Rate Of Input" #rate>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Quantity</mat-label>
+                                <input type="number" matInput placeholder="Quantity" #quantity>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Type</mat-label>
+                                <mat-select>
+                                    <mat-option value="Raw">Raw</mat-option>
+                                    <mat-option value="Consumable">Consumable</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Final Value Calculated</mat-label>
+                                <input matInput [value]="finalValue(rate,quantity)" placeholder="0.00" disabled>
+                            </mat-form-field>
+                        </p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button mat-stroked-button color="primary">Cancel</button>
+                    <button mat-raised-button color="primary">Add Stock Item</button>
+                </div>
+            </form>
+        </div>
+        <img src="./assets/images/spices.jpg" alt="Spices">
+    </section>
+</main>

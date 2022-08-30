@@ -1,0 +1,18 @@
+<main>
+    <mat-tab-group>
+        <mat-tab label="Opening Balance">
+            <div class="container">
+                <div *ngFor="let item of items.items;let i = index" class="balanceItem">
+                    <div class="item">
+                        <img [src]="item.images[0]">
+                        <p class="name">{{item.name}}</p>
+                    </div>
+                    <button mat-icon-button color="primary" (click)="addQuantity(i)"><mat-icon>add</mat-icon></button>
+                    <input class="quantityInput" type="text" [(ngModel)]="item.quantity">
+                    <button mat-icon-button color="primary" (click)="removeQuantity(i)"><mat-icon>remove</mat-icon></button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Closing Balance"></mat-tab>
+    </mat-tab-group>
+</main>

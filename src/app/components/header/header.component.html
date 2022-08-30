@@ -6,4 +6,27 @@
       <p>Systems</p>
     </div>
   </div>
+  <div class="content">
+    <div class="page">
+      <h3>{{(dataProvider.pageSetting.title || title) | titlecase}}</h3>
+      <p>{{date | date:'fullDate'}}</p>
+    </div>
+    <div class="searchAndProfile">
+      <mat-form-field appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Search">
+        <mat-icon matSuffix color="primary">search</mat-icon>
+      </mat-form-field>
+      <!-- <button mat-icon-button color="primary"><mat-icon>notifications</mat-icon></button> -->
+      <div class="profile">
+        <img [src]="dataProvider.userData?.photoURL" referrerpolicy="no-referrer" alt="">
+        <p>{{dataProvider.userData?.name}}</p>
+        <mat-icon [matMenuTriggerFor]="settingsMenu">arrow_drop_down</mat-icon>
+        <mat-menu #settingsMenu>
+          <!-- <menu mat-menu-item (click)="openProfile()">Profile</menu> -->
+          <menu mat-menu-item (click)="authService.logout()">Logout</menu>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
 </header>

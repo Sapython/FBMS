@@ -1,0 +1,142 @@
+<main>
+    <div class="header">
+        <h1>Add Recipe</h1>
+        <div class="quickOptions">
+            <span (click)="favorite=!favorite">
+                <mat-icon *ngIf="favorite">check_circle</mat-icon>
+                <mat-icon *ngIf="!favorite">radio_button_unchecked</mat-icon>
+                <p>Mark as favorite</p>
+            </span>
+            <span (click)="active=!active">
+                <mat-icon *ngIf="active">check_circle</mat-icon>
+                <mat-icon *ngIf="!active">radio_button_unchecked</mat-icon>
+                <p>Set as active</p>
+            </span>
+        </div>
+    </div>
+    <hr>
+    <div class="fields">
+        <div class="basicDetails">
+            <div class="imageDropArea" DropZone>
+                <div class="group">
+                    <mat-icon>image</mat-icon>
+                    <span>Drop Images Here</span>
+                </div>
+            </div>
+            <div class="mainData">
+                <mat-form-field appearance="outline">
+                    <mat-label>Dish Name</mat-label>
+                    <input matInput placeholder="Dish Name">
+                </mat-form-field>
+                <div class="inlineRow">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Search Ingredient</mat-label>
+                        <input matInput placeholder="Search Ingredient">
+                    </mat-form-field>
+                    <button mat-raised-button color="primary">Manage Category</button>
+                </div>
+                <div class="ingredients">
+                    <li *ngFor="let item of ingredients">
+                        <p>{{item.name}}</p>
+                        <div class="ingredientRow">
+                            <span>
+                                <i class="fa-solid fa-plus"></i>
+                                <input type="number" [(ngModel)]="item.quantity">
+                                <i class="fa-solid fa-minus"></i>
+                            </span>
+                        </div>
+                    </li>
+                    <mat-icon *ngIf="ingredients.length==0" class="skeleton">fastfood</mat-icon>
+                    <p *ngIf="ingredients.length==0" class="skeleton">Add Ingredients</p>
+                </div>
+            </div>
+        </div>
+        <div class="options">
+            <div class="optionsContainer">
+                <mat-radio-group *ngFor="let option of options">
+                    <p>{{option.title}}</p>
+                    <div class="selectors">
+                        <mat-radio-button [value]="selector.value" *ngFor="let selector of option.selectors">{{selector.name}}</mat-radio-button>
+                    </div>
+                </mat-radio-group>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div class="configurations">
+        <div class="prices">
+            <mat-form-field appearance="outline">
+                <mat-label>Cost Price</mat-label>
+                <input matInput disabled placeholder="Cost Price">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Selling Price</mat-label>
+                <input matInput disabled placeholder="Selling Price">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Online Price</mat-label>
+                <input matInput placeholder="Final Price">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Profit Margin</mat-label>
+                <input matInput placeholder="Profit Margin">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Shop Price</mat-label>
+                <input matInput placeholder="Shop Price">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>3rd Party Platform Price</mat-label>
+                <input matInput placeholder="3rd Party Platform Price">
+                <mat-hint>Currently not integrated so leave it empty</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Select tag</mat-label>
+                <mat-select [multiple]="true">
+                    <mat-option *ngFor="let tag of tags">{{tag}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-checkbox class="example-margin" [(ngModel)]="availableOnQrMenu">Show On QR Menu</mat-checkbox>
+        </div>
+        <div class="taxes">
+            <div class="optionsContainer">
+                <mat-radio-group [(ngModel)]="selectedTaxes" *ngFor="let taxCategory of taxes">
+                    <p>{{taxCategory.name}}</p>
+                    <div class="selectors">
+                        <mat-radio-button class="example-radio-button" *ngFor="let tax of taxCategory.taxes" [value]="tax">
+                            {{tax.name}}
+                        </mat-radio-button>
+                    </div>
+                </mat-radio-group>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div class="misc">
+        <div class="availability">
+            <p>Expose this item in</p>
+            <div class="optionContainer">
+                <mat-radio-button class="example-radio-button" *ngFor="let platform of platforms" [value]="platform">
+                    {{platform.name}}
+                </mat-radio-button>
+            </div>
+        </div>
+        <div class="orderType">
+            <p>Order Type</p>
+            <div class="optionContainer">
+                <mat-radio-button class="example-radio-button" *ngFor="let orderType of orderTypes" [value]="orderType">
+                    {{orderType.name}}
+                </mat-radio-button>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <mat-form-field appearance="outline">
+            <mat-label>Outline form field</mat-label>
+            <textarea matInput placeholder="Placeholder"></textarea>
+        </mat-form-field>
+        <button mat-raised-button color="primary">
+            Save
+        </button>
+    </div>
+</main>

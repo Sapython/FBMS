@@ -1,5 +1,5 @@
 @use "@angular/material" as mat;
-@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@400;500&display=swap");
 
 @include mat.core();
 
@@ -13,12 +13,12 @@ $fbms-palette: (
   600: #9d2a16,
   700: #701e10,
   800: #431209,
-  900: #160603,
+  900: #ff2626,
   contrast: (
     50: #000,
     100: #000,
-    200: #000,
-    300: #000,
+    200: #fff,
+    300: #fff,
     400: #fff,
     500: #fff,
     600: #fff,
@@ -29,7 +29,7 @@ $fbms-palette: (
 );
 
 $FBMS-primary: mat.define-palette($fbms-palette, 300);
-$FBMS-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$FBMS-accent: mat.define-palette($fbms-palette, 300);
 $FBMS-warn: mat.define-palette($fbms-palette, 600);
 
 $FBMS-theme: mat.define-light-theme(
@@ -53,7 +53,8 @@ $FBMS-theme: mat.define-light-theme(
   --quinary-color: #6c757d;
   --success-color: #37a666;
   --success-light-color: #88e0913d;
-  --danger-color: #ff7ca3;
+  --danger-color: #ff5757;
+  --warning-color: #ffb007;
 --background-color:#D1D1D1;
   --primary-font: "Barlow", sans-serif;
   --secondary-font: "Poppins", sans-serif;
@@ -224,4 +225,36 @@ body {
     color: white;
     text-shadow: none;
   }
+}
+
+#overlay{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+
+}
+.mat-body p, .mat-body-1 p, .mat-typography .mat-body p, .mat-typography .mat-body-1 p, .mat-typography p {
+  margin: 0px !important;
+}
+.mat-form-field-label{
+  padding:1px !important;
+}
+.mat-form-field-wrapper {
+	padding-bottom: 0em !important;
+}
+// .mat-badge-medium.mat-badge-above .mat-badge-content {
+//   z-index: 9;
+//   color:white;
+// }
+// Custom helpers
+
+*{
+  font-family: 'Poppins', sans-serif;
+}
+.primary-contrast{
+  color: var(--primary-contrast-color);
 }

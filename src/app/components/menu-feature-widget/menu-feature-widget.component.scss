@@ -1,16 +1,15 @@
 .container {
     display: flex;
     align-items: center;
-    background: #f0f0f0;
-    box-shadow: 20px 20px 60px #cccccc,
-        -20px -20px 60px #ffffff;
+    background: #ffffff;
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.1);
     padding: 20px;
-    margin: 15px;
+    // margin: 15px;
     border-radius: 15px;
-    transition: .4s;
+    border: 2px solid white;
+    transition: .5s;
     &:hover{
-        border: 2px solid #000;
-        transform: scale(1.08);
+        border: 2px solid var(--primary-color);
     }
 
     .box {
@@ -24,12 +23,6 @@
     }
 
     button {
-        background-color: transparent;
-        border: none;
-        border: 1px solid #000;
-        border-radius: 5px;
-        padding: 5px 10px;
-        font-size: 13px;
-        cursor: pointer;
+        margin-top: 10px;
     }
 }

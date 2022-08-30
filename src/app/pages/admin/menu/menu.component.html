@@ -1,31 +1,44 @@
-<div class="top-buttons">
-  <div class="end-buttons">
-    <button class="secondary-button" [matMenuTriggerFor]="menuMenu">
-      {{ menuOptions }}<mat-icon>expand_more</mat-icon>
-    </button>
-    <mat-menu #menuMenu="matMenu">
-      <button mat-menu-item (click)="menuOptions = 'Dine in'">Dine in</button>
-      <button mat-menu-item (click)="menuOptions = 'Zomato'">Zomato</button>
-      <button mat-menu-item (click)="menuOptions = 'Swiggy'">Swiggy</button>
-    </mat-menu>
-    <button class="secondary-button left-icon-button">
-      <mat-icon>add</mat-icon>Add dish
-    </button>
-    <button class="secondary-button left-icon-button">
-      <mat-icon>edit</mat-icon>Edit menu
-    </button>
-    <button class="primary-button">Items in Cart</button>
-  </div>
-</div>
 <mat-tab-group>
-  <mat-tab label="All Menu">
-    <div class="container">
-        <app-menu-feature-widget *ngFor="let feature of features" [feature_Name]="feature.feature_Name" [button_Name]="feature.button_Name" [src]="feature.src" [link]="feature.link"></app-menu-feature-widget>
+  <mat-tab label="Menus">
+    <div class="categoryContainer">
+      <app-menu-feature-widget *ngFor="let feature of features" [feature_Name]="feature.feature_Name" [button_Name]="feature.button_Name" [src]="feature.src" [link]="feature.link"></app-menu-feature-widget>
     </div>
   </mat-tab>
-  <mat-tab *ngFor="let category of categories" [label]="category" [@.disabled]="disable">
-    <div class="order-cards" [@dishCardStagger]="dishes.length">
-      <app-menu-dish-card [@dishCardState]="card.deleting ? 'deleted' : 'default'" #card *ngFor="let dish of dishes" (deleted)="delete(dish.id,card)" [dishName]="dish.name" [dishPrice]="dish.price" [servesLeft]="dish.servesLeft" [imageSource]="dish.image"></app-menu-dish-card>
+  <mat-tab label="Categories">
+    <div class="categories">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Display Name</th>
+            <th>Discount List</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Modified</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of categories; let i = index">
+            <td>{{category.name}}</td>
+            <td>{{category.displayName}}</td>
+            <td>{{category.discountList}}</td>
+            <td class="status {{category.status}}">{{category.status}}</td>
+            <td>{{category.created | date}}</td>
+            <td>{{category.modified}}</td>
+            <td><mat-icon (click)="editCategory(i)">edit</mat-icon></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </mat-tab>
+  <mat-tab label="Table/Area">
+
+  </mat-tab>
+  <mat-tab label="Taxes">
+
+  </mat-tab>
+  <mat-tab label="Discounts">
+    
   </mat-tab>
 </mat-tab-group>

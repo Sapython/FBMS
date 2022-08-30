@@ -1,0 +1,19 @@
+
+
+.end-buttons {
+    margin-left: auto;
+  }
+  
+  .order-cards {
+    padding: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    gap:20px;
+  }
+  .categoryContainer  {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:20px;
+    padding:20px;
+  }
+  

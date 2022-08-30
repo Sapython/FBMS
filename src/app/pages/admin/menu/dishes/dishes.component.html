@@ -1,0 +1,32 @@
+<div class="top-buttons">
+    <div class="end-buttons">
+        <button class="secondary-button" [matMenuTriggerFor]="menuMenu">
+            {{ menuOptions }}<mat-icon>expand_more</mat-icon>
+        </button>
+        <mat-menu #menuMenu="matMenu">
+            <button mat-menu-item (click)="menuOptions = 'Dine in'">Dine in</button>
+            <button mat-menu-item (click)="menuOptions = 'Zomato'">Zomato</button>
+            <button mat-menu-item (click)="menuOptions = 'Swiggy'">Swiggy</button>
+        </mat-menu>
+        <button class="secondary-button left-icon-button" (click)="addRecipe()">
+            <mat-icon>add</mat-icon>Add dish
+        </button>
+        <button class="secondary-button left-icon-button">
+            <mat-icon>edit</mat-icon>Edit menu
+        </button>
+        <button class="primary-button">Items in Cart</button>
+    </div>
+</div>
+<app-side-flow *ngIf="openMenuManager" [isOpen]="closeOpenMenuManager ? 'closed' : 'open'"
+    (dismiss)="closeOpenMenuManager = true">
+    <h1>Alpha Beta</h1>
+</app-side-flow>
+<mat-tab-group>
+    <mat-tab *ngFor="let category of categories" [label]="category" [@.disabled]="disable">
+        <div class="order-cards" [@dishCardStagger]="dishes.length">
+            <app-menu-dish-card [@dishCardState]="card.deleting ? 'deleted' : 'default'" #card
+                *ngFor="let dish of dishes" (deleted)="delete(dish.id,card)" [dishName]="dish.name"
+                [dishPrice]="dish.price" [servesLeft]="dish.servesLeft" [imageSource]="dish.image"></app-menu-dish-card>
+        </div>
+    </mat-tab>
+</mat-tab-group>

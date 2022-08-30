@@ -1,0 +1,4 @@
+<section [@openClose]="isOpen" @animation>
+    <button (click)="shuffleView()" class="togggler"><mat-icon>{{isOpen === 'open' ? 'arrow_back_ios' : 'arrow_forward_ios'}}</mat-icon></button>
+    <ng-content></ng-content>
+</section>

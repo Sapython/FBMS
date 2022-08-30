@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { PageSetting } from '../structures/method.structure';
 import { UserData } from '../structures/user.structure';
 
@@ -7,11 +8,14 @@ export class DataProvider {
   public data: any;
   public pageSetting: PageSetting = {
     blur: false,
+    title:'',
+    overlay: false,
     lastRedirect: '',
     message: '',
     spinner: false,
     messageType: 'Error',
   };
+  public overlayDismissed:Subject<boolean> = new Subject<boolean>();
   public userData: UserData | undefined;
   public loggedIn: boolean = false;
   public gettingUserData: boolean = true;
