@@ -16,6 +16,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { KotCardComponent } from './kot-card/kot-card.component';
+import { KotPendingCardComponent } from './kot-pending-card/kot-pending-card.component';
+import { KotDetailsCardComponent } from './kot-details-card/kot-details-card.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { MatMenuModule } from '@angular/material/menu';
     BookTableComponent,
     MenuFeatureWidgetComponent,
     SideFlowComponent,
-    DropzoneDirective
+    DropzoneDirective,
+    KotCardComponent,
+    KotPendingCardComponent,
+    KotDetailsCardComponent,
   ],
   imports: [CommonModule, MatIconModule,RouterModule,MatButtonModule,MatFormFieldModule,MatInputModule,MatMenuModule],
   exports: [
@@ -40,7 +46,10 @@ import { MatMenuModule } from '@angular/material/menu';
     TableCardComponent,
     MenuFeatureWidgetComponent,
     SideFlowComponent,
-    DropzoneDirective
+    DropzoneDirective,
+    KotCardComponent,
+    KotPendingCardComponent,
+    KotDetailsCardComponent
   ],
 })
 export class ComponentsModule {}

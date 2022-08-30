@@ -1,0 +1,117 @@
+.card {
+    width: 10%;
+    position: relative;
+    font-family: var(--primary-font);
+    margin: 10px;
+
+    .order_img {
+        position: absolute;
+        right: 0;
+        border-radius: 50%;
+        top: 0;
+        height: 75px;
+        width: 75px;
+        object-fit: cover;
+        padding: 0.5rem;
+    }
+
+    height: 16rem;
+    min-width: 18rem;
+    border-radius: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    background-color: rgb(255, 255, 255);
+
+    .order_details {
+        height: 75%;
+        width: 65%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        padding: 1rem 0.3rem;
+
+        h5 {
+            margin: 0;
+            display: flex;
+            font-family: var(--primary-font);
+            margin-left: 10px;
+            font-size: 12px;
+
+            p {
+                margin: 0;
+                padding-left: 0.3rem;
+                color: var(--secondary-color);
+            }
+        }
+
+    }
+
+    .order_name {
+        text-align: center;
+        color: rgb(0, 0, 0);
+        margin: auto;
+        width: 100%;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+}
+
+.details {
+    font-family: var(--primary-font);
+    padding: 10px;
+    .first{
+        line-height: 15px;
+    }
+    
+    #current{
+        margin-top: -5px;
+        background: rgba(146, 144, 254, 0.2);
+        border: 1px solid #9290FE;
+        padding: 5px 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        color: #9290FE;
+        display: inline-block;
+        margin-right: 15px;
+        min-width: 75px;
+    }
+    .flex{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        button{
+            padding: 5px;
+            margin-top: -20px;
+            min-width: 125px;
+            background-color: var(--primary-color);
+            color: #fff;
+            font-family: var(--primary-font);
+            border:none;
+            font-size: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: .4s;
+            &:hover{
+                transform: scale(1.12);
+            }
+        }
+    }
+    .status {
+        color: var(--primary-color);
+
+        p {
+            display: flex;
+            align-items: center;
+
+            mat-icon {
+                margin-right: 5px;
+            }
+        }
+
+    }
+}
+
+.opacity {
+    opacity: .5;
+}
