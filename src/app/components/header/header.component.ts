@@ -6,8 +6,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+ path:any =window.location.pathname.split('/')[2];
+
   constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+    console.log(this.path);
+  }
 
 }

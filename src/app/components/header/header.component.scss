@@ -1,8 +1,12 @@
 header {
   padding: .75em 1.25em;
   box-shadow: var(--normal-shadow);
-
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;  #container {
+display: flex;
+align-items: center;
+justify-content: flex-start;
+gap: 5rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px; 
+   #container {
     display: flex;
     align-items: center;
 
@@ -32,4 +36,60 @@ header {
       }
     }
   }
+  .container2{
+// background-color: red;
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: space-between;
+width: 100%;
+.categories{
+   margin-left: 0.5rem;
+  b{
+   
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+  p{
+    margin: 0.3rem 0;
+    color: grey;
+  }
+
+}
+.search_box{
+  margin-top:0.3rem  ;
+margin-left:28%;
+}
+.profile{
+  // background-color: red;
+
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:1rem;
+  font-size: 1.5rem;
+  p{
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: black;
+  }
+  .avatar{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    img{
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
+  .fa-sort-down{
+    margin-bottom: 0.5rem;
+  }
+}
+  }
+ 
 }

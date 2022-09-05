@@ -41,10 +41,13 @@
               color: var(--primary-contrast-color);
             }
   
-            mat-icon {
+            mat-icon,i {
               margin-right: 10px;
               width: 24px;
               height: 24px;
+            }
+            i{
+                margin: 0;
             }
           }
         }
