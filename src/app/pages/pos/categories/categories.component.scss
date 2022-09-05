@@ -1,0 +1,11 @@
+.container{
+    display: flex;
+    .section-one{
+        width: 70%;
+    }
+    .section-two{
+        width: 30%;
+        border: 2px solid #969696;
+        height: 100vh;
+    }
+}
