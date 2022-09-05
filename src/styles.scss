@@ -226,7 +226,8 @@ body {
   }
 }
 .uk-modal-body{
-  height: 95%;
+  min-height: 95%;
+  height: fit-content;
   width: 95%;
   padding: 0;
 }

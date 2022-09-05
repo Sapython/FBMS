@@ -47,8 +47,81 @@
         </div>
     </div>
     <div class="section-two">
+        <div class="back-btn">
+            <button><mat-icon>keyboard_backspace</mat-icon></button>
+        </div>
+
+        <div class="part1">
+            <div class="left">
+            <h3 class="txt">Orders #34562</h3>
+        </div>
+        <div class="right">
+            <button class="btn-btn">Dine In</button>
+            <button class="btn-btn">Delivery</button>
+        </div>
+        </div>
+
+        <div class="part2">
+            <div class="left">
+                <span class="txt-txt">Item</span>
+            </div>
+            <div class="right">
+                <span class="txt-txt">Qty</span>
+                <span class="txt-txt">Price</span>
+            </div>
+        </div>
         
+        <div class="content" *ngFor="let item of items" >
+        <div class="part3">
+            <div class="left">
+                <img class="food-img" src={{item.image}} alt="">
+                <div class="ff">
+                <span class="txt-2">{{item.name}}</span>
+                <p class="txt-t">₹ {{item.price}}</p>
+            </div>
+            </div>
+            <div class="right">
+                <span class="txt-1">{{item.quantity}}</span>
+                <span class="txt-2">₹ {{item.quantity *item.price }}</span>
+            </div>
+        </div>
+        <div class="part4">
+            <div class="left1">
+                <input type="text" placeholder="Please, just a little bit spicy only.">
+            </div>
+            <div class="right">
+                <button class="right12"><i class="fa-solid fa-trash"></i>   </button>
+            </div>
+        </div>
     </div>
+ 
+
+        <section>
+            <div class="f-one">
+                <button class="btn-bt">Cash</button>
+                <button class="btn-bt">Card</button>
+                <button class="btn-bt">Due</button>
+                <button class="btn-bt">Others</button>
+                <button class="btn-bt">Part</button>
+            </div>
+
+
+            <div class="f-two">
+                <span class="ts">Total</span>
+                <span class="ps">₹ {{total}}</span>
+            </div>
+
+            <div class="f-three">
+                <span>Customer Info -</span>
+            </div>
+
+            <div class="f-four">
+                <input type="text" placeholder="Full Name">
+                <input type="text" placeholder="Phone Number">
+            </div>
+        </section>
+    </div>
+
 </div>
 <div id="my-id" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
@@ -57,7 +130,7 @@
         <div class="table" *ngFor="let table of tables">
             <p id="table_no">{{table.no}}</p>
             <img src="../../../../assets/table.svg" alt="">
-            <div class="buttons">
+            <div class="buttons1">
                 <button class="booked">Booked</button>
                 <button class="empty">Mark As Empty</button>
             </div>
