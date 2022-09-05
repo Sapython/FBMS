@@ -9,7 +9,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'pos',
+        redirectTo: 'categories',
         pathMatch: 'full'
       },
       {
