@@ -3,7 +3,7 @@
         <div class="upper-box">
             <div class="buttons">
                 <button class="secondary-button">Select Table One</button>
-                <button class="secondary-button">Select Table</button>
+                <button class="secondary-button" uk-toggle="target: #my-id" type="button">Select Table</button>
                 <button class="secondary-button">+91-9838824982</button>
                 <button class="secondary-button">Report Bug</button>
             </div>
@@ -16,5 +16,21 @@
     </div>
     <div class="section-two">
         
+    </div>
+</div>
+<div id="my-id" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Tables</h2>
+       <div class="tables">
+        <div class="table" *ngFor="let table of tables">
+            <p id="table_no">{{table.no}}</p>
+            <img src="../../../../assets/table.svg" alt="">
+            <div class="buttons">
+                <button class="booked">Booked</button>
+                <button class="empty">Mark As Empty</button>
+            </div>
+        </div>
+       
+       </div>
     </div>
 </div>
