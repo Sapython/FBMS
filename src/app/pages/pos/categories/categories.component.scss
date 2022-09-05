@@ -1,24 +1,94 @@
-.container{
+.container {
     display: flex;
-    .section-one{
+
+    .section-one {
         width: 70%;
-        .upper-box{
+
+        .upper-box {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: 0px 10px;
-            .buttons{
+            margin-right: 10px;
+
+            .buttons {
                 display: flex;
-                button{
+
+                button:nth-child(1) {
+                    margin: 0;
+                }
+
+                button:nth-child(1) {
+                    margin: 0;
+                }
+
+                button {
                     margin-left: 8px;
                 }
             }
-            .icons{
+
+            .icons {
                 color: var(--primary-color);
+                font-size: 20px;
+                display: flex;
+
+                i {
+                    cursor: pointer;
+                    transition: .3s;
+                    margin-right: 8px;
+                    &:hover{
+                        transform: scale(1.12);
+                    }
+                }
+            }
+        }
+
+        .dishes {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+
+            .dish {
+                padding: 15px 20px;
+                font-family: var(--font-one);
+                background: transparent;
+                border: 1px solid #969696;
+                border-radius: 10px;
+                margin-top: 15px;
+                transition: .3s;
+                margin-right: 10px;
+                cursor: pointer;
+                color: #494949;
+
+                &:hover {
+                    transform: scale(1.12);
+                }
+            }
+        }
+
+        .lower-section {
+            margin-top: 15px;
+            overflow-x: auto;
+
+            .widgets {
+                overflow-x: auto;
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                height: 350px;
+            }
+
+            .box {
+                overflow-x: auto;
+                height: 350px;
+
+                app-categories-pos-table-widget {
+                    margin-top: 20px;
+                }
             }
         }
     }
-    .section-two{
+
+    .section-two {
         width: 30%;
         border: 2px solid #969696;
         height: 100vh;

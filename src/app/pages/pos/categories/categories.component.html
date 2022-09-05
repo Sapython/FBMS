@@ -8,10 +8,42 @@
                 <button class="secondary-button">Report Bug</button>
             </div>
             <div class="icons">
-                <mat-icon>fiber_smart_record</mat-icon>
-                <mat-icon>fiber_smart_record</mat-icon>
-                <mat-icon>fiber_smart_record</mat-icon>
+                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-heart"></i>
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
             </div>
+        </div>
+        <div class="dishes">
+            <div class="dish">
+                <p>{{type}}</p>
+                <p>{{price}}</p>
+            </div>
+            <div class="dish">
+                <p>{{type}}</p>
+                <p>{{price}}</p>
+            </div>
+        </div>
+        <div class="lower-section">
+            <mat-tab-group>
+                <mat-tab label="Saved Orders">
+                    <div class="widgets">
+                        <app-categories-pos-widget *ngFor="let widget of widgets" [id]="widget.id" [products]="widget.products" [date]="widget.date"></app-categories-pos-widget>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Customers">
+                    <div class="box">
+                        <app-categories-pos-table-widget></app-categories-pos-table-widget>
+                        <app-categories-pos-table-widget></app-categories-pos-table-widget>
+                        <app-categories-pos-table-widget></app-categories-pos-table-widget>
+                        <app-categories-pos-table-widget></app-categories-pos-table-widget>
+                        <app-categories-pos-table-widget></app-categories-pos-table-widget>
+                        <app-categories-pos-table-widget></app-categories-pos-table-widget>
+                        <app-categories-pos-table-widget></app-categories-pos-table-widget>
+                        <app-categories-pos-table-widget></app-categories-pos-table-widget>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Cancelled Orders"> Content 3 </mat-tab>
+              </mat-tab-group>
         </div>
     </div>
     <div class="section-two">
