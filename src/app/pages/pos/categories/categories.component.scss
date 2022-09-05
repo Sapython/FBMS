@@ -2,6 +2,21 @@
     display: flex;
     .section-one{
         width: 70%;
+        .upper-box{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0px 10px;
+            .buttons{
+                display: flex;
+                button{
+                    margin-left: 8px;
+                }
+            }
+            .icons{
+                color: var(--primary-color);
+            }
+        }
     }
     .section-two{
         width: 30%;
