@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div id="wrapper">
+  <aside>
+    <ul>
+      <li>
+        <button routerLink="/pos/categories" routerLinkActive="active">
+          <mat-icon aria-hidden>dashboard </mat-icon>Categories
+        </button>
+      </li>
+      <li>
+        <button routerLink="/pos/snacks" routerLinkActive="active">
+          <mat-icon aria-hidden>whatshot</mat-icon>Snacks
+        </button>
+      </li>
+      <li>
+        <button routerLink="/pos/south_combo" routerLinkActive="active">
+          <mat-icon aria-hidden>fastfood</mat-icon>South Combo
+        </button>
+      </li>
+      <li>
+        <button routerLink="/pos/appetizers" routerLinkActive="active">
+          <mat-icon aria-hidden>local_cafe</mat-icon>Appetizers
+        </button>
+     
+    </ul>
+  </aside>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>

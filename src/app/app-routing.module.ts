@@ -3,11 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'admin',
-    pathMatch: 'full'
-  },
+  // {
+  //   path: '',
+  //   redirectTo: 'admin',
+  //   pathMatch: 'full'
+  // },
   {
     path: 'sign-in',
     loadChildren: () =>
@@ -18,11 +18,16 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/sign-up/sign-up.module').then((m) => m.SignUpModule),
   },
+  // {
+  //   path: 'admin',
+  //   // canActivate: [AdminGuard],
+  //   loadChildren: () =>
+  //     import('./pages/admin/admin.module').then((m) => m.AdminModule),
+  // },
   {
-    path: 'admin',
-    // canActivate: [AdminGuard],
+    path: 'pos',
     loadChildren: () =>
-      import('./pages/admin/admin.module').then((m) => m.AdminModule),
+      import('./pages/pos/pos.module').then((m) => m.PosModule),
   },
 ];
 

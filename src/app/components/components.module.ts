@@ -19,6 +19,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { KotCardComponent } from './kot-card/kot-card.component';
 import { KotPendingCardComponent } from './kot-pending-card/kot-pending-card.component';
 import { KotDetailsCardComponent } from './kot-details-card/kot-details-card.component';
+import { CategoriesPosWidgetComponent } from './categories-pos-widget/categories-pos-widget.component';
+import { CategoriesPosTableWidgetComponent } from './categories-pos-table-widget/categories-pos-table-widget.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { KotDetailsCardComponent } from './kot-details-card/kot-details-card.com
     KotCardComponent,
     KotPendingCardComponent,
     KotDetailsCardComponent,
+    CategoriesPosWidgetComponent,
+    CategoriesPosTableWidgetComponent,
   ],
   imports: [CommonModule, MatIconModule,RouterModule,MatButtonModule,MatFormFieldModule,MatInputModule,MatMenuModule],
   exports: [
@@ -49,7 +53,9 @@ import { KotDetailsCardComponent } from './kot-details-card/kot-details-card.com
     DropzoneDirective,
     KotCardComponent,
     KotPendingCardComponent,
-    KotDetailsCardComponent
+    KotDetailsCardComponent,
+    CategoriesPosWidgetComponent,
+    CategoriesPosTableWidgetComponent
   ],
 })
 export class ComponentsModule {}

@@ -258,3 +258,9 @@ body {
 .primary-contrast{
   color: var(--primary-contrast-color);
 }
+.uk-modal-body{
+  min-height: 95%;
+  height: fit-content;
+  width: 95%;
+  padding: 0;
+}
