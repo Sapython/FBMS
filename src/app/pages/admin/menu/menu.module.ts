@@ -17,9 +17,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio'; 
 import {MatCheckboxModule} from '@angular/material/checkbox'; 
-
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { AddCategoryComponent } from './add-category/add-category.component';
+import { AddTaxComponent } from './add-tax/add-tax.component';
+import { AddDiscountComponent } from './add-discount/add-discount.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
 @NgModule({
-  declarations: [MenuComponent, ManagementComponent, AddRecipeComponent],
+  declarations: [MenuComponent, ManagementComponent, AddRecipeComponent, AddCategoryComponent, AddTaxComponent, AddDiscountComponent],
   imports: [
     CommonModule,
     MenuRoutingModule,
@@ -35,7 +41,11 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     FormsModule,
     MatSelectModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatAutocompleteModule
   ],
 })
 export class MenuModule {}

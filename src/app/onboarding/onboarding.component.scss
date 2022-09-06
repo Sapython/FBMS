@@ -1,0 +1,65 @@
+main {
+  background: url("/assets/background.jpg");
+  width: 100vw;
+  height: 100vh;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  div {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    min-width: 40vw;
+    min-height: 50vh;
+    align-items: center;
+    border: 5px solid var(--primary-color);
+    width: fit-content;
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(50px);
+    color: white;
+    row-gap: 20px;
+    h1 {
+      font-size: 45px;
+      color: white;
+      font-family: "Poppins";
+    }
+    input {
+      border: 2px solid var(--primary-color);
+      width: fit-content;
+      padding: 10px;
+      border-radius: 7px;
+      backdrop-filter: blur(50px);
+      background-color: rgba(0,0,0,0.6);
+      color:white;
+      font-size: 20px;
+      text-align: center;
+    }
+    p{
+        display: flex;
+        align-items: center;
+        font-size: 19px;
+        column-gap: 20px;
+    }
+    ul{
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+        li{
+            list-style: none;
+            input{
+                font-size: 16px;
+            }
+        }
+    }
+  }
+}
+
+input:focus{
+    outline: none !important;
+}
+button{
+    font-size: 20px;
+}

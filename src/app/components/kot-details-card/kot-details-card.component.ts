@@ -16,6 +16,7 @@ export class KotDetailsCardComponent implements OnInit {
   @Input() extra =  'Dressing on Slide'
   @Input() timeLeft =  '6M:47S'
   @Input() time =  '10:34 PM'
+  @Input() delivery:boolean = false;
 
   constructor() { }
 

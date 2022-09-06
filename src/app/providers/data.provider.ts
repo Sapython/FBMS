@@ -15,6 +15,8 @@ export class DataProvider {
     spinner: false,
     messageType: 'Error',
   };
+  public currentProject:Project;
+  public projects:any[] = []
   public overlayDismissed:Subject<boolean> = new Subject<boolean>();
   public userData: UserData | undefined;
   public loggedIn: boolean = false;
@@ -22,4 +24,10 @@ export class DataProvider {
   public userID: string | undefined;
   public verifyEmail: boolean | undefined;
   public reloadPage: boolean = false;
+}
+
+type Project = {
+  projectName: string;
+  projectId: string;
+  mails: string[];
 }

@@ -1,0 +1,55 @@
+<main>
+    <form [formGroup]="taxForm" (ngSubmit)="addCategory()">
+        <div class="header">
+            <h1>{{title}}</h1>
+            <div class="quickOptions">
+                <span (click)="active=!active">
+                    <mat-icon *ngIf="active">check_circle</mat-icon>
+                    <mat-icon *ngIf="!active">radio_button_unchecked</mat-icon>
+                    <p>Set as active</p>
+                </span>
+            </div>
+        </div>
+        <hr>
+        <div class="fields">
+            <div class="basicDetails">
+                <div class="mainData">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input formControlName="name" matInput placeholder="Tax Name">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Display Name</mat-label>
+                        <input formControlName="displayName" matInput placeholder="Display Name">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Price Type</mat-label>
+                        <!-- <input formControlName="displayName" matInput placeholder="Tax Type"> -->
+                        <mat-select formControlName="priceType">
+                            <mat-option value="percentage">Percentage</mat-option>
+                            <mat-option value="flat">Flat</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tax Type</mat-label>
+                        <mat-select formControlName="taxType">
+                            <mat-option value="BackwardTax">Backward Tax</mat-option>
+                            <mat-option value="ForwardTax">Forward tax</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Amount</mat-label>
+                        <input formControlName="amount" matInput placeholder="Amount">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Order</mat-label>
+                        <input formControlName="order" matInput placeholder="Order">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <button type="submit" mat-raised-button color="primary" [disabled]="!taxForm.valid">{{title}}</button>
+        </div>
+    </form>
+</main>

@@ -10,4 +10,9 @@ export class AdminComponent implements OnInit {
   constructor(public dataProvider: DataProvider) {}
 
   ngOnInit(): void {}
+
+  validPath(){
+    console.log("window.location.pathname",window.location.pathname)
+    return true
+  }
 }

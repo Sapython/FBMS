@@ -1,5 +1,9 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { DatabaseService } from 'src/app/services/database.service';
 import { slot, timeSlots } from 'src/app/structures/time-slot.structure';
+import { AddTableComponent } from './add-table/add-table.component';
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -14,10 +18,19 @@ export class TableComponent implements OnInit {
 
   showCalendar: boolean = false;
   showSlots: boolean = false;
+  tables:any[] = []
+  constructor(private databaseService:DatabaseService,private dialog:Dialog) {}
+  tableSubscription:Subscription = Subscription.EMPTY;
 
-  constructor() {}
-
+  addTable(){
+    this.dialog.open(AddTableComponent)
+  }
   ngOnInit(): void {
+    this.databaseService.getTables().subscribe((tables:any)=>{
+      this.tables = tables;
+      console.log("tables",tables);
+
+    })
     // By default, select the most recent slot
     const now = new Date();
     this.selectedSlot =

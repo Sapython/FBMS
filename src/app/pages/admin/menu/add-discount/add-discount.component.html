@@ -1,0 +1,131 @@
+<main>
+    <form [formGroup]="discountForm" (ngSubmit)="addCategory()">
+        <div class="header">
+            <h1>{{title}}</h1>
+            <div class="quickOptions">
+                <span (click)="active=!active">
+                    <mat-icon *ngIf="active">check_circle</mat-icon>
+                    <mat-icon *ngIf="!active">radio_button_unchecked</mat-icon>
+                    <p>Set as active</p>
+                </span>
+            </div>
+        </div>
+        <hr>
+        <div class="fields">
+            <div class="basicDetails">
+                <div class="mainData">
+                    <div class="row">
+                        <h3>Title</h3>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Title</mat-label>
+                            <input formControlName="title" matInput placeholder="Title">
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <h3>Price Range</h3>
+                        <div class="innerRow">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Start Price</mat-label>
+                                <input formControlName="startPrice" matInput placeholder="Start Price">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>End Price</mat-label>
+                                <input formControlName="endPrice" matInput placeholder="Start Price">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3>Date Range</h3>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [rangePicker]="picker">
+                                <input formControlName="startDate" matStartDate placeholder="Start date">
+                                <input formControlName="endDate" matEndDate placeholder="End date">
+                            </mat-date-range-input>
+                            <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <h3>Time Range</h3>
+                        <div class="innerRow">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Start Time</mat-label>
+                                <input matInput type="time" formControlName="startTime">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>End Time</mat-label>
+                                <input matInput type="time" formControlName="endTime">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="extraOptions">
+                    <div class="applicableOn">
+                        <p>Discount Type</p>
+                        <mat-radio-group formControlName="discountType" class="innerRow">
+                            <mat-radio-button value="percentage">Percentage</mat-radio-button>
+                            <mat-radio-button value="flat">Flat</mat-radio-button>
+                        </mat-radio-group> 
+                    </div>
+                    <div class="discount">
+                        <p>Discount Amount</p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Amount</mat-label>
+                            <input formControlName="discountValue" matInput placeholder="Amount">
+                        </mat-form-field>
+                    </div>
+                    <div class="discount">
+                        <p>Max Discount</p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Allow Max. Discount</mat-label>
+                            <input formControlName="maxDiscount" matInput placeholder="Allow Max. Discount">
+                        </mat-form-field>
+                    </div>
+                    <div class="days">
+                        <p>Days</p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Days</mat-label>
+                            <mat-select multiple="true" formControlName="days">
+                                <mat-option value="allDays">All Days</mat-option>
+                                <mat-option value="sunday">Sunday</mat-option>
+                                <mat-option value="monday">Monday</mat-option>
+                                <mat-option value="tuesday">Tuesday</mat-option>
+                                <mat-option value="wednesday">Wednesday</mat-option>
+                                <mat-option value="thursday">Thursday</mat-option>
+                                <mat-option value="friday">Friday</mat-option>
+                                <mat-option value="saturday">Saturday</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="days">
+                        <p>Discount Code</p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Discount Code</mat-label>
+                            <input formControlName="discountCode" matInput placeholder="Discount Code">
+                        </mat-form-field>
+                    </div>
+                    <!-- <div class="column">
+                        <h2>Validation</h2>
+                        <mat-radio-group class="column" formControlName="validation">
+                            <mat-radio-button class="example-radio-button" value="withoutCode">
+                                Without Code
+                            </mat-radio-button>
+                            <mat-radio-button class="example-radio-button" value="withoutValidation">
+                                With code without validation
+                            </mat-radio-button>
+                            <mat-radio-button class="example-radio-button" value="coupon">
+                                Assign Coupon
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div> -->
+                    <button mat-raised-button color="primary"></button>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <button type="submit" mat-raised-button color="primary" [disabled]="!discountForm.valid">{{title}}</button>
+        </div>
+    </form>
+</main>

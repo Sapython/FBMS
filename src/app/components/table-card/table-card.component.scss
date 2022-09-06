@@ -30,28 +30,28 @@
   }
 
   &.available {
-    background-color: var(--primary-color);
+    border: 2px solid var(--quinary-color);
     cursor: pointer;
     transition: all .3s;
-
+    
     &:hover {
       transform: scale(1.03);
     }
-
-    h3,
-    p,
-    mat-icon {
-      color: var(--primary-contrast-color);
-    }
-  }
-
-  &.booked {
-    border: 2px solid var(--quinary-color);
-
+    
     h3,
     p,
     mat-icon {
       color: var(--quinary-color);
+    }
+  }
+  
+  &.booked {
+    background-color: var(--primary-color);
+    
+    h3,
+    p,
+    mat-icon {
+      color: var(--primary-contrast-color);
     }
   }
 }

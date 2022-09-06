@@ -1,0 +1,16 @@
+<main>
+    <form [formGroup]="project" (ngSubmit)="addAccount()">
+        <div>
+            <h1>Join the Viraj</h1>
+            <input type="text" formControlName="projectName" placeholder="Project Name">
+            <p>
+                <span>Registered Accounts</span>
+                <button type="button" mat-icon-button color="primary" (click)="addMail()"><mat-icon>add</mat-icon> Add Mail</button>
+            </p>
+            <ul>
+                <li *ngFor="let mail of mails; let i = index"><input type="email" placeholder="Email" [formControl]="mail"><button type="button" mat-icon-button (click)="removeMail(i)"><mat-icon>remove</mat-icon></button></li>
+            </ul>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!project.valid">Register for Viraj</button>
+        </div>
+    </form>
+</main>

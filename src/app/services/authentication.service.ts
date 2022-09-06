@@ -71,6 +71,10 @@ export class AuthenticationService {
   public get getUser(): Observable<User | null> {
     return this.user;
   }
+
+  getUserData(userId:string){
+    return getDoc(doc(this.firestore,'users/'+userId));
+  }
   // Read functions end
   // Sign in functions start
   public signInWithGoogle() {
@@ -225,11 +229,18 @@ export class AuthenticationService {
       return await signOut(this.auth);
     }
   }
+
+  async getProjects(){
+    return getDoc(doc(this.firestore,'business/accounts'))
+  }
+
+
   private setDataObserver(user: Observable<User | null>) {
     // console.log('Starting data observer')
     if (user) {
       // console.log('Setting data observer')
       user.subscribe((u) => {
+        this.getProjects();
         if (u) {
           // alert('User logged in');
           this.dataProvider.loggedIn = true;

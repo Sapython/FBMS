@@ -8,7 +8,7 @@
   </div>
   <div class="content">
     <div class="page">
-      <h3>{{(dataProvider.pageSetting.title || title) | titlecase}}</h3>
+      <h3>{{dataProvider.currentProject ? dataProvider.currentProject?.projectName + '-' : ''}} {{(dataProvider.pageSetting.title || title) | titlecase}}</h3>
       <p>{{date | date:'fullDate'}}</p>
     </div>
     <div class="searchAndProfile">
@@ -20,7 +20,10 @@
       <!-- <button mat-icon-button color="primary"><mat-icon>notifications</mat-icon></button> -->
       <div class="profile">
         <img [src]="dataProvider.userData?.photoURL" referrerpolicy="no-referrer" alt="">
-        <p>{{dataProvider.userData?.name}}</p>
+        <div class="details">
+          <p>{{dataProvider.userData?.name}}</p>
+          <p>{{dataProvider.currentProject?.projectName}}</p>
+        </div>
         <mat-icon [matMenuTriggerFor]="settingsMenu">arrow_drop_down</mat-icon>
         <mat-menu #settingsMenu>
           <!-- <menu mat-menu-item (click)="openProfile()">Profile</menu> -->

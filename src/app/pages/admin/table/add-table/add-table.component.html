@@ -1,0 +1,29 @@
+<main>
+    <form [formGroup]="tableForm" (ngSubmit)="addCategory()">
+        <div class="header">
+            <h1>{{title}}</h1>
+        </div>
+        <hr>
+        <div class="fields">
+            <div class="basicDetails">
+                <div class="mainData">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Table Name</mat-label>
+                        <input formControlName="name" matInput placeholder="Table Name">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Table No</mat-label>
+                        <input formControlName="tableNo" type="number   " matInput placeholder="Table Number">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Max Occupancy</mat-label>
+                        <input formControlName="maxOccupancy" matInput placeholder="Max Occupancy">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <button type="submit" mat-raised-button color="primary" [disabled]="!tableForm.valid">{{title}}</button>
+        </div>
+    </form>
+</main>

@@ -3,13 +3,13 @@
         <div class="flex">
             <mat-icon>how_to_reg</mat-icon>
             <div class="info">
-                <p>Table {{tableNo}}</p>
+                <p *ngIf="tableNo">Table {{tableNo}}</p>
                 <p>Guest 4</p>
             </div>
         </div>
         <div class="flex-second">
             <p>{{time}}</p>
-            <p>Waiter: {{waiterName}}</p>
+            <p>{{delivery ? 'Delivery boy:' : 'Waiter:'}} {{waiterName}}</p>
         </div>
     </div>
     <div class="middle-section">

@@ -5,10 +5,10 @@
       <div class="select">
         <div class="select">
           <select>
-              <option>All Orders</option>
-              <option>Pending</option>
-              <option>Delivered</option>
-              <option>In Progress</option>
+            <option>All Orders</option>
+            <option>Pending</option>
+            <option>Delivered</option>
+            <option>In Progress</option>
           </select>
           <button class="secondary-button left-icon-button">
             <mat-icon>event</mat-icon>Start Date
@@ -16,53 +16,31 @@
           <button class="secondary-button left-icon-button">
             <mat-icon>event</mat-icon>End Date
           </button>
+        </div>
       </div>
-      </div> 
     </div>
     <mat-tab-group class="tab-group">
       <mat-tab label="Dine-In">
         <div class="cards">
-          <app-kot-card *ngFor="let bill of bills"
-          [kotId]="bill.kotId"
-          [orderRecieve]="bill.orderRecieve"
-          [estimatedTime]="bill.estimatedTime"
-          [status]="bill.status"
-          [item]="bill.item"
-          [customerPhone]="bill.customerPhone"
-          [customerName]="bill.customerName"
-          [billPrintDate]="bill.billPrintDate"
-          [orderType]="bill.orderType"
-          [dishName]="bill.dishName"></app-kot-card>
+          <app-kot-details-card *ngFor="let item of items" [time]="item.time" [timeLeft]="item.timeLeft"
+            [extra]="item.extra" [topping]="item.topping" [peopleOdered]="item.peopleOdered" [dishName]="item.dishName"
+            [id]="item.id" [waiterName]="item.waiterName" [tableNo]="item.tableNo"></app-kot-details-card>
         </div>
       </mat-tab>
-      <mat-tab label="Zomato"> 
+      <mat-tab label="QR Menu">
         <div class="cards">
-          <app-kot-pending-card *ngFor="let widget of widgets"
-          [status]="widget.status"
-          [timeLeft]="widget.timeLeft"
-          [extra]="widget.extra"
-          [topping]="widget.topping"
-          [estimatedTime]="widget.estimatedTime"
-          [dishName]="widget.dishName"
-          [customerName]="widget.customerName"
-          [tableNo]="widget.tableNo"
-          [orderNo]="widget.orderNo"></app-kot-pending-card>
-        </div> 
-      </mat-tab>
-      <mat-tab label="Swiggy">
-        <div class="cards">
-          <app-kot-details-card *ngFor="let item of items"
-          [time]="item.time"
-          [timeLeft]="item.timeLeft"
-          [extra]="item.extra"
-          [topping]="item.topping"
-          [peopleOdered]="item.peopleOdered"
-          [dishName]="item.dishName"
-          [id]="item.id"
-          [waiterName]="item.waiterName"
-          [tableNo]="item.tableNo"></app-kot-details-card>
+          <app-kot-details-card *ngFor="let item of items" [time]="item.time" [timeLeft]="item.timeLeft"
+            [extra]="item.extra" [topping]="item.topping" [peopleOdered]="item.peopleOdered" [dishName]="item.dishName"
+            [id]="item.id" [waiterName]="item.waiterName" [tableNo]="item.tableNo"></app-kot-details-card>
         </div>
       </mat-tab>
-    </mat-tab-group>  
+      <mat-tab label="Delivery">
+        <div class="cards">
+          <app-kot-details-card *ngFor="let item of items" [time]="item.time" [timeLeft]="item.timeLeft"
+            [extra]="item.extra" [topping]="item.topping" [peopleOdered]="item.peopleOdered" [dishName]="item.dishName"
+            [id]="item.id" [delivery]="true" [waiterName]="item.waiterName" [tableNo]="''"></app-kot-details-card>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

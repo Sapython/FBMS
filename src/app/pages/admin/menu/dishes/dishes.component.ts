@@ -4,6 +4,7 @@ import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataProvider } from 'src/app/providers/data.provider';
+import { DatabaseService } from 'src/app/services/database.service';
 import { Dish } from 'src/app/structures/dish.structure';
 import { AddRecipeComponent } from '../add-recipe/add-recipe.component';
 
@@ -70,82 +71,12 @@ import { AddRecipeComponent } from '../add-recipe/add-recipe.component';
 export class DishesComponent implements OnInit, OnDestroy {
   selectedIndex: number = 0;
   menuOptions: 'Dine in' | 'Zomato' | 'Swiggy' = 'Dine in';
-  categories: string[];
+  categories: any[];
   closeOpenMenuManager:boolean = false;
   disable: boolean = false;
-  dishes: Dish[] = [
-    {
-      id: '1',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '2',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '3',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '4',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '5',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '6',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '7',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '8',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '9',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-    {
-      id: '10',
-      image: './assets/images/dish.png',
-      name: 'Simple Pasta',
-      price: 100,
-      servesLeft: 15,
-    },
-  ];
-  constructor(private router:Router,private viewContainerRef: ViewContainerRef, private dataProvider:DataProvider,private dialog:Dialog,private activatedRoute:ActivatedRoute) {
+  dishes: any[] = [];
+  currentMenu:string = 'baseMenu';
+  constructor(private router:Router,private viewContainerRef: ViewContainerRef, private dataProvider:DataProvider,private dialog:Dialog,private activatedRoute:ActivatedRoute,private databaseService:DatabaseService) {
     this.activatedRoute.params.subscribe((params:any) => {
       // this.selectedIndex = Number(params.name)
       console.log(params.dish)
@@ -172,6 +103,11 @@ export class DishesComponent implements OnInit, OnDestroy {
         this.disable = true;
       }
     })
+    // this.databaseService.getRecipes().then((dishes) => {
+    //   dishes.forEach((data:any)=>{
+    //     this.dishes.push({...data.data(),id:data.id})
+    //   })
+    // })
     this.getCategories();
     // this.addRecipe()
   }
@@ -182,14 +118,26 @@ export class DishesComponent implements OnInit, OnDestroy {
     }, 500);
   }
   getCategories() {
-    this.categories = [
-      'Hot Dishes',
-      'Cold Dishes',
-      'Soup',
-      'Grill',
-      'Appetizer',
-      'Dessert',
-    ];
+    this.dataProvider.pageSetting.blur = true;
+    this.databaseService.getRecipeCategories().then((categories) => {
+      this.categories = [];
+      categories.forEach((data:any)=>{
+        this.categories.push({...data.data(),id:data.id})
+      })
+      console.log(this.categories)
+      const menu = this.categories.filter((category:any) => category.connectedMenu == this.currentMenu);
+      menu.forEach((data:any)=>{
+        this.databaseService.getRecipes(data.id).then((dishes) => {
+          dishes.forEach((data:any)=>{
+            this.dishes.push({...data.data(),id:data.id})
+          })
+          console.log("dishes",this.dishes)
+          
+        }).finally(()=>{
+          this.dataProvider.pageSetting.blur = false;
+        })
+      })
+    })
   }
   ngOnDestroy(){
     this.routerSubscription.unsubscribe();
@@ -204,6 +152,10 @@ export class DishesComponent implements OnInit, OnDestroy {
   }
 
   addRecipe(){
-    this.dialog.open(AddRecipeComponent,{})
+    this.dialog.open(AddRecipeComponent,{
+      data:{
+        menu:this.currentMenu
+      }
+    })
   }
 }

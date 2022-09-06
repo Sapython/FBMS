@@ -1,8 +1,8 @@
 <main>
     <section>
         <div class="container">
-            <h1>Add New Item</h1>
-            <form [formGroup]="stockItemForm">
+            <h1>{{title}}</h1>
+            <form [formGroup]="stockItemForm" (ngSubmit)="addIngredient()">
                 <div class="fields">
                     <div [class]="files.length==0 ? 'dropZone' : 'dropZone grid'" DropZone (onFileDropped)="addFile($event)">
                         <div class="group" *ngIf="files.length == 0">
@@ -11,20 +11,20 @@
                         </div>
                         <div id="image" *ngFor="let file of files;let i = index">
                             <i (click)="removeFile(i)" class="fa-solid fa-xmark"></i>
-                            <img [src]="file.url" matBadgeColor="warn" matBadge="X" width="100px">
+                            <img [src]="file.type=='preloaded' ? file.onlineUrl : file.url " matBadgeColor="warn" matBadge="X" width="100px">
                         </div>
                     </div>
                     <div class="fields">
                         <p>
                             <mat-form-field appearance="fill">
                                 <mat-label>Name Of Item</mat-label>
-                                <input matInput placeholder="Name">
+                                <input matInput formControlName="name" placeholder="Name">
                             </mat-form-field>
                         </p>
                         <p>
                             <mat-form-field appearance="fill">
                                 <mat-label>Unit</mat-label>
-                                <mat-select>
+                                <mat-select formControlName="unit">
                                     <mat-option *ngFor="let unit of units" [value]="unit.id">{{unit.name}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -32,21 +32,20 @@
                         <p>
                             <mat-form-field appearance="fill">
                                 <mat-label>Rate</mat-label>
-                                <input type="number" matInput placeholder="Rate Of Input" #rate>
+                                <input type="number" formControlName="ratePerUnit" matInput placeholder="Rate Of Input" #rate>
                             </mat-form-field>
                         </p>
                         <p>
                             <mat-form-field appearance="fill">
                                 <mat-label>Quantity</mat-label>
-                                <input type="number" matInput placeholder="Quantity" #quantity>
+                                <input type="number" formControlName="quantity" matInput placeholder="Quantity" #quantity>
                             </mat-form-field>
                         </p>
                         <p>
                             <mat-form-field appearance="fill">
-                                <mat-label>Type</mat-label>
-                                <mat-select>
-                                    <mat-option value="Raw">Raw</mat-option>
-                                    <mat-option value="Consumable">Consumable</mat-option>
+                                <mat-label>Category</mat-label>
+                                <mat-select formControlName="category">
+                                    <mat-option [value]="category" *ngFor="let category of categories">{{category}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </p>
@@ -56,11 +55,23 @@
                                 <input matInput [value]="finalValue(rate,quantity)" placeholder="0.00" disabled>
                             </mat-form-field>
                         </p>
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Warning Threshold</mat-label>
+                                <input matInput formControlName="warningThreshold" placeholder="0.00">
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Error Threshold</mat-label>
+                                <input matInput formControlName="errorThreshold" placeholder="0.00">
+                            </mat-form-field>
+                        </p>
                     </div>
                 </div>
                 <div class="actions">
-                    <button mat-stroked-button color="primary">Cancel</button>
-                    <button mat-raised-button color="primary">Add Stock Item</button>
+                    <button type="button" mat-stroked-button color="primary">Cancel</button>
+                    <button type="submit" mat-raised-button color="primary">{{this.title}}</button>
                 </div>
             </form>
         </div>

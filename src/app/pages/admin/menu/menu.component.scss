@@ -1,16 +1,136 @@
-.categoryContainer  {
+.categoryContainer {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap:20px;
-  padding:20px;
+  gap: 20px;
+  padding: 20px;
 }
-.categories{
-  table{
+.categories {
+  padding: 10px;
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 20px 0px;
+    column-gap: 10px;
+  }
+  table {
     width: 100%;
-    tr{
-      // background: ;
-      th{
-        padding:15px
+    tr {
+      background: white;
+      box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+      th {
+        padding: 15px;
+        color: grey;
+        font-size: 17px;
+        font-weight: 600;
+        font-family: "Poppins";
+        border-bottom: 2px solid #f0f0f0;
+      }
+      td {
+        text-align: center;
+        padding: 15px;
+        color: rgb(77, 77, 77);
+        .active {
+          color: #ffffff;
+          background-color: #8fdaff;
+          border: 2px solid #49c2ff;
+          padding: 5px;
+          border-radius: 9px;
+          font-size: 17px;
+          font-weight: 600;
+        }
+        .inactive{
+          color: #ffffff;
+          background-color: #ff8787;
+          border: 2px solid #ff4444;
+          padding: 5px;
+          border-radius: 9px;
+          font-size: 17px;
+          font-weight: 600;
+        }
+        .row {
+          display: flex;
+          justify-content: center;
+          column-gap: 20px;
+          align-items: center;
+          font-size: 20px;
+          i {
+            color: var(--primary-color);
+          }
+          p {
+            margin: 0;
+          }
+        }
+      }
+    }
+    .body {
+      background: white;
+      box-shadow: none;
+      margin-bottom: 10px;
+      td {
+        border-bottom: 2px solid #f0f0f0;
+      }
+    }
+  }
+  .Taxes {
+    padding: 10px;
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin: 20px 0px;
+      column-gap: 10px;
+    }
+    table {
+      width: 100%;
+      tr {
+        background: white;
+        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+        th {
+          padding: 15px;
+          color: grey;
+          font-size: 17px;
+          font-weight: 600;
+          font-family: "Poppins";
+          border-bottom: 2px solid #f0f0f0;
+        }
+        td {
+          text-align: center;
+          padding: 15px;
+          color: rgb(77, 77, 77);
+          .active {
+            color: #ffffff;
+            background-color: #8fdaff;
+            border: 2px solid #49c2ff;
+            padding: 5px;
+            border-radius: 9px;
+            font-size: 17px;
+            font-weight: 600;
+          }
+          .row {
+            display: flex;
+            justify-content: center;
+            column-gap: 20px;
+            align-items: center;
+            font-size: 20px;
+            i {
+              color: var(--primary-color);
+            }
+            p {
+              margin: 0;
+            }
+          }
+        }
+      }
+      .body {
+        background: white;
+        box-shadow: none;
+        margin-bottom: 10px;
+        td {
+          border-bottom: 2px solid #f0f0f0;
+        }
       }
     }
   }

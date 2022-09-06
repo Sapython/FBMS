@@ -9,8 +9,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { AddTableComponent } from './add-table/add-table.component';
+import { DialogModule } from '@angular/cdk/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 @NgModule({
-  declarations: [TableComponent],
+  declarations: [TableComponent, AddTableComponent],
   imports: [
     CommonModule,
     TableRoutingModule,
@@ -19,7 +23,11 @@ import { ComponentsModule } from 'src/app/components/components.module';
     MatNativeDateModule,
     MatAutocompleteModule,
     MatInputModule,
-    ComponentsModule
+    ComponentsModule,
+    DialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule
   ],
 })
 export class TableModule {}

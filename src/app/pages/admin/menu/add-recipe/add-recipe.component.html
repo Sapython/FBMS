@@ -15,128 +15,139 @@
         </div>
     </div>
     <hr>
-    <div class="fields">
-        <div class="basicDetails">
-            <div class="imageDropArea" DropZone>
-                <div class="group">
-                    <mat-icon>image</mat-icon>
-                    <span>Drop Images Here</span>
+    <form [formGroup]="recipeForm" (ngSubmit)="submit()">
+        <div class="fields">
+            <div class="basicDetails">
+                <div [class]="files.length==0 ? 'imageDropArea' : 'imageDropArea grid'" DropZone (onFileDropped)="addFile($event)">
+                    <div class="group" *ngIf="files.length == 0">
+                        <mat-icon>image</mat-icon>
+                        <p>Add-Photo</p>
+                    </div>
+                    <div id="image" *ngFor="let file of files;let i = index">
+                        <i (click)="removeFile(i)" class="fa-solid fa-xmark"></i>
+                        <img [src]="file.type=='preloaded' ? file.onlineUrl : file.url " matBadgeColor="warn" matBadge="X" width="100px">
+                    </div>
                 </div>
-            </div>
-            <div class="mainData">
-                <mat-form-field appearance="outline">
-                    <mat-label>Dish Name</mat-label>
-                    <input matInput placeholder="Dish Name">
-                </mat-form-field>
-                <div class="inlineRow">
+                <div class="mainData">
                     <mat-form-field appearance="outline">
-                        <mat-label>Search Ingredient</mat-label>
-                        <input matInput placeholder="Search Ingredient">
+                        <mat-label>Dish Name</mat-label>
+                        <input matInput formControlName="dishName" placeholder="Dish Name">
                     </mat-form-field>
-                    <button mat-raised-button color="primary">Manage Category</button>
+                    <div class="inlineRow">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Search Ingredient</mat-label>
+                            <input matInput (input)="search($event)" placeholder="Search Ingredient" [matAutocomplete]="auto" #input>
+                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of filteredIngredients" [value]="option.id" (click)="selectedIngredients.push(option) && input.value = ''">
+                                  {{option.name}}
+                                </mat-option>
+                              </mat-autocomplete>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Select Category</mat-label>
+                            <mat-select formControlName="categories">
+                                <mat-option [value]="category" *ngFor="let category of categories">{{category.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="ingredients {{selectedIngredients.length==0 ? 'centered' : ''}}">
+                        <li *ngFor="let item of selectedIngredients;let i = index">
+                            <p>{{item.name | titlecase}}</p>
+                            <div class="ingredientRow">
+                                <span>
+                                    <button type="button" mat-icon-button *ngIf="item.amount < item.quantity" (click)="(item.amount = item.amount + 1) && calculateFullPrice()"><i class="fa-solid fa-plus"></i></button>
+                                    <input type="number" [(ngModel)]="item.amount"  [ngModelOptions]="{standalone: true}">
+                                    <button type="button" mat-icon-button *ngIf="item.amount > 1" (click)="(item.amount = item.amount - 1 ) && calculateFullPrice()"><i class="fa-solid fa-minus"></i></button>
+                                </span>
+                                <button type="button" mat-icon-button color="primary" (click)="selectedIngredients.splice(i,1) && calculateFullPrice()"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </li>
+                        <mat-icon *ngIf="selectedIngredients.length==0" class="skeleton">fastfood</mat-icon>
+                        <p *ngIf="selectedIngredients.length==0" class="skeleton">Add Ingredients</p>
+                    </div>
                 </div>
-                <div class="ingredients">
-                    <li *ngFor="let item of ingredients">
-                        <p>{{item.name}}</p>
-                        <div class="ingredientRow">
-                            <span>
-                                <i class="fa-solid fa-plus"></i>
-                                <input type="number" [(ngModel)]="item.quantity">
-                                <i class="fa-solid fa-minus"></i>
-                            </span>
+            </div>
+            <div class="options">
+                <div class="optionsContainer">
+                    <mat-radio-group *ngFor="let option of options">
+                        <p>{{option.title}}</p>
+                        <div class="selectors">
+                            <mat-radio-button [value]="selector.value" *ngFor="let selector of option.selectors">{{selector.name}}</mat-radio-button>
                         </div>
-                    </li>
-                    <mat-icon *ngIf="ingredients.length==0" class="skeleton">fastfood</mat-icon>
-                    <p *ngIf="ingredients.length==0" class="skeleton">Add Ingredients</p>
+                    </mat-radio-group>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class="configurations">
+            <div class="prices">
+                <mat-form-field appearance="outline">
+                    <mat-label>Cost Price</mat-label>
+                    <input matInput [(ngModel)]="cookingCost" [ngModelOptions]="{standalone: true}" type="number" [disabled]="true" placeholder="Cost Price">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Selling Price</mat-label>
+                    <input matInput [(ngModel)]="sellingCost" [ngModelOptions]="{standalone: true}" type="number" [disabled]="true" placeholder="Selling Price">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Online Price</mat-label>
+                    <input matInput formControlName="onlinePrice" type="number" placeholder="Final Price">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Profit Margin</mat-label>
+                    <input matInput min="1" (input)="calculateFullPrice()" [ngModelOptions]="{standalone: true}" type="number" [(ngModel)]="costPercentage" placeholder="Profit Margin">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Shop Price</mat-label>
+                    <input matInput formControlName="shopPrice" type="number" placeholder="Shop Price">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>3rd Party Platform Price</mat-label>
+                    <input matInput formControlName="thirdPartyPrice" type="number" placeholder="3rd Party Platform Price">
+                    <mat-hint>Currently not integrated so leave it empty</mat-hint>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Select tag</mat-label>
+                    <mat-select [multiple]="true" formControlName="tags">
+                        <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-checkbox class="example-margin" [ngModelOptions]="{standalone: true}" [(ngModel)]="availableOnQrMenu">Show On QR Menu</mat-checkbox>
+            </div>
+            <div class="taxes">
+                <h1>All Taxes</h1>
+                <mat-checkbox class="example-radio-button" [checked]="tax.checked" (change)="tax.checked = taxCheck.checked" *ngFor="let tax of taxes" [value]="tax" #taxCheck>
+                    {{tax.name}}
+                </mat-checkbox>
+            </div>
+            <hr>
+        </div>
+        <div class="misc">
+            <div class="availability">
+                <p>Expose this item in</p>
+                <div class="optionContainer">
+                    <mat-checkbox class="example-radio-button" [checked]="platform.checked" (change)="platform.checked = check.checked" *ngFor="let platform of platforms" [value]="platform" #check>
+                        {{platform.name}}
+                    </mat-checkbox>
                 </div>
             </div>
-        </div>
-        <div class="options">
-            <div class="optionsContainer">
-                <mat-radio-group *ngFor="let option of options">
-                    <p>{{option.title}}</p>
-                    <div class="selectors">
-                        <mat-radio-button [value]="selector.value" *ngFor="let selector of option.selectors">{{selector.name}}</mat-radio-button>
-                    </div>
+            <div class="orderType">
+                <p>Order Type</p>
+                <mat-radio-group class="optionContainer" formControlName="orderType">
+                    <mat-radio-button class="example-radio-button" *ngFor="let orderType of orderTypes" [value]="orderType">
+                        {{orderType.name}}
+                    </mat-radio-button>
                 </mat-radio-group>
             </div>
-            <hr>
         </div>
-    </div>
-    <div class="configurations">
-        <div class="prices">
+        <div class="footer">
             <mat-form-field appearance="outline">
-                <mat-label>Cost Price</mat-label>
-                <input matInput disabled placeholder="Cost Price">
+                <mat-label>Additional Instructions</mat-label>
+                <textarea matInput formControlName="additionalInstructions" placeholder="Additional Instructions"></textarea>
             </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Selling Price</mat-label>
-                <input matInput disabled placeholder="Selling Price">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Online Price</mat-label>
-                <input matInput placeholder="Final Price">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Profit Margin</mat-label>
-                <input matInput placeholder="Profit Margin">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Shop Price</mat-label>
-                <input matInput placeholder="Shop Price">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>3rd Party Platform Price</mat-label>
-                <input matInput placeholder="3rd Party Platform Price">
-                <mat-hint>Currently not integrated so leave it empty</mat-hint>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Select tag</mat-label>
-                <mat-select [multiple]="true">
-                    <mat-option *ngFor="let tag of tags">{{tag}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-checkbox class="example-margin" [(ngModel)]="availableOnQrMenu">Show On QR Menu</mat-checkbox>
+            <button mat-raised-button color="primary" type="submit">
+                Save
+            </button>
         </div>
-        <div class="taxes">
-            <div class="optionsContainer">
-                <mat-radio-group [(ngModel)]="selectedTaxes" *ngFor="let taxCategory of taxes">
-                    <p>{{taxCategory.name}}</p>
-                    <div class="selectors">
-                        <mat-radio-button class="example-radio-button" *ngFor="let tax of taxCategory.taxes" [value]="tax">
-                            {{tax.name}}
-                        </mat-radio-button>
-                    </div>
-                </mat-radio-group>
-            </div>
-            <hr>
-        </div>
-    </div>
-    <div class="misc">
-        <div class="availability">
-            <p>Expose this item in</p>
-            <div class="optionContainer">
-                <mat-radio-button class="example-radio-button" *ngFor="let platform of platforms" [value]="platform">
-                    {{platform.name}}
-                </mat-radio-button>
-            </div>
-        </div>
-        <div class="orderType">
-            <p>Order Type</p>
-            <div class="optionContainer">
-                <mat-radio-button class="example-radio-button" *ngFor="let orderType of orderTypes" [value]="orderType">
-                    {{orderType.name}}
-                </mat-radio-button>
-            </div>
-        </div>
-    </div>
-    <div class="footer">
-        <mat-form-field appearance="outline">
-            <mat-label>Outline form field</mat-label>
-            <textarea matInput placeholder="Placeholder"></textarea>
-        </mat-form-field>
-        <button mat-raised-button color="primary">
-            Save
-        </button>
-    </div>
+    </form>
 </main>

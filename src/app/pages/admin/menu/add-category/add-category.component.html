@@ -1,0 +1,43 @@
+<main>
+    <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+        <div class="header">
+            <h1>{{title}}</h1>
+            <div class="quickOptions">
+                <span (click)="active=!active">
+                    <mat-icon *ngIf="active">check_circle</mat-icon>
+                    <mat-icon *ngIf="!active">radio_button_unchecked</mat-icon>
+                    <p>Set as active</p>
+                </span>
+            </div>
+        </div>
+        <hr>
+        <div class="fields">
+            <div class="basicDetails">
+                <div class="mainData">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input formControlName="name" matInput placeholder="Dish Name">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Display Name</mat-label>
+                        <input formControlName="displayName" matInput placeholder="Dish Name">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Description</mat-label>
+                        <mat-select formControlName="connectedMenu">
+                            <mat-option value="baseMenu">Base Menu</mat-option>
+                            <mat-option value="swiggy">Swiggy Menu</mat-option>
+                            <mat-option value="zomato">Zomato Menu</mat-option>
+                            <mat-option value="parcel">Parcel Menu</mat-option>
+                            <mat-option value="homeDelivery">Home Delivery Menu</mat-option>
+                            <mat-option value="dineIn">Dine In Menu</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <button type="submit" mat-raised-button color="primary" [disabled]="!categoryForm.valid">{{title}}</button>
+        </div>
+    </form>
+</main>
