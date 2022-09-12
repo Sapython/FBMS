@@ -2,11 +2,17 @@
   <img [src]="imageSource" [alt]="dishName" />
   <div class="dish-details" (mouseenter)="deleteHovered=true" (mouseleave)="deleteHovered=false" [@deleteHover]="deleteHovered ? 'hover' : 'default'">
     <p class="rate">₹{{dishPrice}}</p>
+    <p class="rate">{{id}}</p>
     <h4>{{dishName}}</h4>
     <p class="availability"><b
         [ngStyle]="{'color': servesLeft < 5 ? 'tomato' : 'rgb(81, 187, 122)' }">{{servesLeft}}</b> serves available</p>
-    <button (click)="deleted.emit()">
-      <mat-icon>delete</mat-icon><b class="deleteText" *ngIf="deleteHovered">Delete</b>
-    </button>
+    <div class="actions">
+      <button (click)="deleted.emit()">
+        <mat-icon>delete</mat-icon><b class="deleteText">Delete</b>
+      </button>
+      <button (click)="deleted.emit()">
+        <mat-icon>edit</mat-icon><b class="deleteText">Edit</b>
+      </button>
+    </div>
   </div>
 </div>

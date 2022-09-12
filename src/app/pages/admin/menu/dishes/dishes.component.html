@@ -26,8 +26,8 @@
         <div class="order-cards" [@dishCardStagger]="dishes.length">
             <ng-container *ngFor="let dish of dishes">
                 <app-menu-dish-card [@dishCardState]="card.deleting ? 'deleted' : 'default'" #card
-                 (deleted)="delete(dish.id,card)" [dishName]="dish.dishName" *ngIf="dish.categories.id === category.id"
-                [dishPrice]="dish.onlinePrice" [servesLeft]="10" [imageSource]="dish.images[0]"></app-menu-dish-card>
+                 (deleted)="delete(dish.id,card)" [dishName]="dish.dishName" *ngIf="dish.categories.name === category.name"
+                [dishPrice]="dish.onlinePrice" [id]="dish.id" [servesLeft]="10" [imageSource]="dish.images[0]"></app-menu-dish-card>
             </ng-container>
         </div>
         <h1 *ngIf="dishes.length == 0">No dishes found.</h1>

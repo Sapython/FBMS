@@ -23,9 +23,10 @@ import { AddTaxComponent } from './add-tax/add-tax.component';
 import { AddDiscountComponent } from './add-discount/add-discount.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { AddMainCategoryComponent } from './add-main-category/add-main-category.component'; 
 @NgModule({
-  declarations: [MenuComponent, ManagementComponent, AddRecipeComponent, AddCategoryComponent, AddTaxComponent, AddDiscountComponent],
+  declarations: [MenuComponent, ManagementComponent, AddRecipeComponent, AddCategoryComponent, AddTaxComponent, AddDiscountComponent, AddMainCategoryComponent],
   imports: [
     CommonModule,
     MenuRoutingModule,

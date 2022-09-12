@@ -1,0 +1,35 @@
+<main>
+    <div class="header">
+        <h1>{{title}}</h1>
+        <div class="quickOptions">
+            <span (click)="active=!active">
+                <mat-icon *ngIf="active">check_circle</mat-icon>
+                <mat-icon *ngIf="!active">radio_button_unchecked</mat-icon>
+                <p>Set as active</p>
+            </span>
+        </div>
+    </div>
+    <hr>
+    <form [formGroup]="addCategoryForm" (ngSubmit)="addCategory()">
+        <div class="fields">
+            <div class="basicDetails">
+                <div class="mainData">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input formControlName="name" matInput placeholder="Dish Name">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Sub Categories</mat-label>
+                        <mat-select multiple formControlName="subCategories">
+                            <mat-option *ngFor="let topping of dialogData.subcategories" [value]="topping.name">{{topping.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <button type="submit" mat-raised-button color="primary">{{title}}</button>
+        </div>
+    </form>
+</main>

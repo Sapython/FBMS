@@ -23,12 +23,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/sign-up/sign-up.module').then((m) => m.SignUpModule),
   },
-  // {
-  //   path: 'admin',
-  //   // canActivate: [AdminGuard],
-  //   loadChildren: () =>
-  //     import('./pages/admin/admin.module').then((m) => m.AdminModule),
-  // },
+  {
+    path: 'admin',
+    // canActivate: [AdminGuard],
+    loadChildren: () =>
+      import('./pages/admin/admin.module').then((m) => m.AdminModule),
+  },
   {
     path: 'pos',
     loadChildren: () =>

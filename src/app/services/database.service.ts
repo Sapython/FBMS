@@ -16,7 +16,7 @@ import {
   collectionData,
 } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
-import { Category, Discount, Tax } from '../pages/admin/menu/menu.component';
+import { SubCategory, Discount, Tax } from '../pages/admin/menu/menu.component';
 import { DataProvider } from '../providers/data.provider';
 
 @Injectable({
@@ -113,7 +113,7 @@ export class DatabaseService {
     );
   }
 
-  addRecipeCategory(data:Category){
+  addRecipeCategory(data:SubCategory){
     return addDoc(
       collection(
         this.fs,
@@ -227,7 +227,7 @@ export class DatabaseService {
             this.dataProvider.currentProject?.projectId +
             '/recipes/recipes'
         ),
-        where('categories.id','==',category)
+        where('categories.name','==',category)
       )
     );
   }
@@ -301,5 +301,18 @@ export class DatabaseService {
       ),
       data
     );
+  }
+
+  addMainCategory(data:any){
+    return addDoc(collection(this.fs,'business/accounts/'+ this.dataProvider.currentProject?.projectId +'/recipes/categoryGroups'),data);
+  }
+  updateMainCategory(id:string,data:any){
+    return updateDoc(doc(this.fs,'business/accounts/'+ this.dataProvider.currentProject?.projectId +'/recipes/categoryGroups/'+id),data);
+  }
+  getMainCategories(){
+    return getDocs(collection(this.fs,'business/accounts/'+ this.dataProvider.currentProject?.projectId +'/recipes/categoryGroups'));
+  }
+  deleteMainCategory(id:string){
+    return deleteDoc(doc(this.fs,'business/accounts/'+ this.dataProvider.currentProject?.projectId +'/recipes/categoryGroups/'+id));
   }
 }

@@ -6,58 +6,117 @@
     </div>
   </mat-tab>
   <mat-tab label="Categories">
-    <div class="categories">
-      <div class="actions">
-        <button mat-raised-button (click)="addCategory()" color="primary">
-          <mat-icon>add</mat-icon> Add category
-        </button>
-        <button mat-raised-button color="primary" (click)="multiSelector=!multiSelector">
-          <mat-icon>done_all</mat-icon> Select Multiple
-        </button>
-      </div>
-      <table [cellSpacing]="0">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Display Name</th>
-            <th>Discount List</th>
-            <th>Status</th>
-            <th>Created</th>
-            <th>Modified</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let category of categories; let i = index" class="body">
-            <td>
-              <div class="row">
-                  <i class="fa-solid fa-circle-check" *ngIf="category.checked && multiSelector"
+    <mat-tab-group>
+      <mat-tab label="Categories">
+        <div class="categories">
+          <div class="actions">
+            <button mat-raised-button (click)="addMainCategory()" color="primary">
+              <mat-icon>add</mat-icon> Add category
+            </button>
+            <button mat-raised-button color="primary" (click)="multiSelector=!multiSelector">
+              <mat-icon>done_all</mat-icon> Select Multiple
+            </button>
+          </div>
+          <table [cellSpacing]="0">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th style="text-align: start;">Sub-Categories</th>
+                <th>Created</th>
+                <th>Modified</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let category of categories; let i = index" class="body">
+                <td>
+                  <div class="row">
+                    <i class="fa-solid fa-circle-check" *ngIf="category.checked && multiSelector"
                       (click)="category.checked=false"></i>
-                  <i class="fa-regular fa-circle" *ngIf="!category.checked && multiSelector" (click)="category.checked=true"></i>
-                  <p>{{i+1}}</p>
-              </div>
-          </td>
-            <td>{{category.name}}</td>
-            <td>{{category.displayName}}</td>
-            <td>{{category.discountList || 'N/A'}}</td>
-            <td class="status">
-              <div [class]="category.status ? 'active' : 'inactive'">
-                {{category.status ? 'Active' : 'Inactive' | titlecase}}
-              </div>
-            </td>
-            <td>{{category.created.toDate() | date}}</td>
-            <td>{{category.modified.toDate() | date}}</td>
-            <td>
-              <mat-icon (click)="editCategory(category)">edit</mat-icon>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-        (page)="pageEvent = $event" aria-label="Select page">
-      </mat-paginator>
-    </div>
+                    <i class="fa-regular fa-circle" *ngIf="!category.checked && multiSelector"
+                      (click)="category.checked=true"></i>
+                    <p>{{i+1}}</p>
+                  </div>
+                </td>
+                <td>{{category.name}}</td>
+                <td style="text-align: start;">
+                  <ol>
+                    <li *ngFor="let item of category.subCategories">
+                      {{item}}
+                    </li>
+                  </ol>
+                </td>
+                <td>{{category.created.toDate() | date}}</td>
+                <td>{{category.modified.toDate() | date}}</td>
+                <td>
+                  <mat-icon (click)="editMainCategory(category)">edit</mat-icon>
+                  <mat-icon (click)="deleteMainCategory(category)">delete</mat-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+            (page)="pageEvent = $event" aria-label="Select page">
+          </mat-paginator>
+        </div>
+      </mat-tab>
+      <mat-tab label="Sub-Categories">
+        <div class="categories">
+          <div class="actions">
+            <button mat-raised-button (click)="addCategory()" color="primary">
+              <mat-icon>add</mat-icon> Add category
+            </button>
+            <button mat-raised-button color="primary" (click)="multiSelector=!multiSelector">
+              <mat-icon>done_all</mat-icon> Select Multiple
+            </button>
+          </div>
+          <table [cellSpacing]="0">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Display Name</th>
+                <th>Discount List</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Modified</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let category of subcategories; let i = index" class="body">
+                <td>
+                  <div class="row">
+                    <i class="fa-solid fa-circle-check" *ngIf="category.checked && multiSelector"
+                      (click)="category.checked=false"></i>
+                    <i class="fa-regular fa-circle" *ngIf="!category.checked && multiSelector"
+                      (click)="category.checked=true"></i>
+                    <p>{{i+1}}</p>
+                  </div>
+                </td>
+                <td>{{category.name}}</td>
+                <td>{{category.displayName}}</td>
+                <td>{{category.discountList || 'N/A'}}</td>
+                <td class="status">
+                  <div [class]="category.status ? 'active' : 'inactive'">
+                    {{category.status ? 'Active' : 'Inactive' | titlecase}}
+                  </div>
+                </td>
+                <td>{{category.created.toDate() | date}}</td>
+                <td>{{category.modified.toDate() | date}}</td>
+                <td>
+                  <mat-icon (click)="editCategory(category)">edit</mat-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+            (page)="pageEvent = $event" aria-label="Select page">
+          </mat-paginator>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </mat-tab>
   <mat-tab label="Taxes">
     <div class="categories">
@@ -88,12 +147,12 @@
           <tr *ngFor="let tax of taxes; let i = index" class="body">
             <td>
               <div class="row">
-                  <i class="fa-solid fa-circle-check" *ngIf="tax.checked && multiSelector"
-                      (click)="tax.checked=false"></i>
-                  <i class="fa-regular fa-circle" *ngIf="!tax.checked && multiSelector" (click)="tax.checked=true"></i>
-                  <p>{{i+1}}</p>
+                <i class="fa-solid fa-circle-check" *ngIf="tax.checked && multiSelector"
+                  (click)="tax.checked=false"></i>
+                <i class="fa-regular fa-circle" *ngIf="!tax.checked && multiSelector" (click)="tax.checked=true"></i>
+                <p>{{i+1}}</p>
               </div>
-          </td>
+            </td>
             <td>{{tax.name}}</td>
             <td>{{tax.displayName}}</td>
             <td>{{tax.taxType}}</td>
@@ -147,12 +206,13 @@
           <tr *ngFor="let discount of discounts; let i = index" class="body">
             <td>
               <div class="row">
-                  <i class="fa-solid fa-circle-check" *ngIf="discount.checked && multiSelector"
-                      (click)="discount.checked=false"></i>
-                  <i class="fa-regular fa-circle" *ngIf="!discount.checked && multiSelector" (click)="discount.checked=true"></i>
-                  <p>{{i+1}}</p>
+                <i class="fa-solid fa-circle-check" *ngIf="discount.checked && multiSelector"
+                  (click)="discount.checked=false"></i>
+                <i class="fa-regular fa-circle" *ngIf="!discount.checked && multiSelector"
+                  (click)="discount.checked=true"></i>
+                <p>{{i+1}}</p>
               </div>
-          </td>
+            </td>
             <td>{{discount.title}}</td>
             <td>{{discount.startPrice}}</td>
             <td>{{discount.endPrice}}</td>

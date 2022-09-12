@@ -4,6 +4,7 @@ import { Timestamp } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/services/database.service';
 import { AddCategoryComponent } from './add-category/add-category.component';
 import { AddDiscountComponent } from './add-discount/add-discount.component';
+import { AddMainCategoryComponent } from './add-main-category/add-main-category.component';
 import { AddTaxComponent } from './add-tax/add-tax.component';
 
 @Component({
@@ -50,6 +51,7 @@ export class MenuComponent implements OnInit {
       link: 'dineIn',
     },
   ];
+  subcategories: SubCategory[] = [];
   categories: Category[] = [];
   taxes: Tax[] = [];
   discounts: Discount[] = []
@@ -58,7 +60,7 @@ export class MenuComponent implements OnInit {
     private dialog: Dialog,
     private databaseService: DatabaseService
   ) {}
-  length: number = this.categories.length;
+  length: number = this.subcategories.length;
   pageSize: number = 10;
   pageSizeOptions = [10, 20, 50, 100];
   pageEvent: any;
@@ -68,14 +70,33 @@ export class MenuComponent implements OnInit {
     this.getRecipes();
     this.getTaxes();
     this.getDiscounts();
+    this.getMainCategories();
   }
-
-  getRecipes() {
-    this.databaseService.getRecipeCategories().then((data: any) => {
+  getMainCategories(){
+    this.databaseService.getMainCategories().then((data: any) => {
+      // console.log("Main Categoris",data.data().categories)
+      // this.categories = data.data().categories;
       this.categories = [];
-      console.log('getIngredientCategories', data);
       data.forEach((element: any) => {
         this.categories.push({ ...element.data(), id: element.id });
+      });
+    });
+  }
+  getSubCategoryName(id: string) {
+    let name = '';
+    this.subcategories.forEach((element) => {
+      if (element.id == id) {
+        name = element.name;
+      }
+    });
+    return name;
+  }
+  getRecipes() {
+    this.databaseService.getRecipeCategories().then((data: any) => {
+      this.subcategories = [];
+      console.log('getIngredientCategories', data);
+      data.forEach((element: any) => {
+        this.subcategories.push({ ...element.data(), id: element.id });
       });
     });
   }
@@ -127,7 +148,7 @@ export class MenuComponent implements OnInit {
       inst.close()
     });
   }
-  editCategory(category: Category) {
+  editCategory(category: SubCategory) {
     const inst = this.dialog.open(AddCategoryComponent, {
       data: {
         method: 'edit',
@@ -182,9 +203,41 @@ export class MenuComponent implements OnInit {
     console.log('Timestamp', ts);
     return ts;
   }
+
+  addMainCategory() {
+    const inst = this.dialog.open(AddMainCategoryComponent, {
+      data: {
+        method: 'add',
+        subcategories:this.subcategories
+      },
+    })
+    inst.componentInstance?.closeModal.subscribe((data: any) => {
+      inst.close();
+      this.getMainCategories();
+    });
+  }
+  editMainCategory(category:any){
+    const inst = this.dialog.open(AddMainCategoryComponent, {
+      data: {
+        method: 'edit',
+        category: category,
+        subcategories:this.subcategories
+      },
+    })
+    inst.componentInstance?.closeModal.subscribe((data: any) => {
+      inst.close();
+      this.getMainCategories();
+    });
+  }
+
+  deleteMainCategory(category:any){
+    this.databaseService.deleteMainCategory(category.id).then(()=>{
+      this.getMainCategories();
+    })
+  }
 }
 
-export type Category = {
+export type SubCategory = {
   id?: string;
   name: string;
   displayName: string;
@@ -224,3 +277,11 @@ export type Discount = {
   checked: boolean;
   active: boolean;
 };
+export type Category = {
+  id?: string;
+  name:string;
+  subCategories: string[];
+  checked: boolean;
+  created: any;
+  modified: any;
+}

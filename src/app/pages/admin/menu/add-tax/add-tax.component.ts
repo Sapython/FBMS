@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { DataProvider } from 'src/app/providers/data.provider';
 import { AlertsAndNotificationsService } from 'src/app/services/alerts-and-notifications.service';
 import { DatabaseService } from 'src/app/services/database.service';
-import { Category, Tax } from '../menu.component';
+import { SubCategory, Tax } from '../menu.component';
 
 @Component({
   selector: 'app-add-tax',

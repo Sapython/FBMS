@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { DataProvider } from 'src/app/providers/data.provider';
 import { AlertsAndNotificationsService } from 'src/app/services/alerts-and-notifications.service';
 import { DatabaseService } from 'src/app/services/database.service';
-import { Category } from '../../menu/menu.component';
+import { SubCategory } from '../../menu/menu.component';
 
 @Component({
   selector: 'app-add-table',

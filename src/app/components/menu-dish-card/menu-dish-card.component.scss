@@ -8,6 +8,8 @@
   justify-content: center;
   align-items: center;
   height: min-content;
+  width: 230px;
+  height:257px;
   img{
     position: relative;
     width:100px;
@@ -49,6 +51,10 @@
       align-items: center;
       justify-content: center;
       width:100%;
+    }
+    .actions{
+      display: flex;
+      
     }
     margin-bottom: 5px;
   }

@@ -127,7 +127,7 @@ export class AddRecipeComponent implements OnInit {
   cookingCost: number = 0;
   sellingCost: number = 0;
   costPercentage: number = 1;
-
+  title: string = '';
   recipeForm: FormGroup = new FormGroup({
     dishName: new FormControl(),
     categories: new FormControl(),
@@ -171,6 +171,23 @@ export class AddRecipeComponent implements OnInit {
         }
       });
     });
+    if (this.dialogData.mode == 'edit') {
+      this.title = 'Edit Recipe';
+      this.recipeForm.patchValue(this.dialogData.recipe);
+      this.files = this.dialogData.recipe.images.map((image: any) => {
+        return {
+          file: null,
+          url: this.sanitizer.bypassSecurityTrustUrl(image),
+          type: 'preloaded',
+          onlineUrl: image,
+        };
+      });
+      this.selectedIngredients = this.dialogData.recipe.ingredients;
+      this.calculateFullPrice();
+    } else if (this.dialogData.mode == 'add') {
+      this.title = 'Add Recipe';
+      
+    }
   }
   search(event: any) {
     const res = this.ingredientFuse.search(event.target.value);
@@ -244,6 +261,15 @@ export class AddRecipeComponent implements OnInit {
           )
         );
       }
+    }
+    if (uploadedImages.length == 0){
+      uploadedImages.push("https://firebasestorage.googleapis.com/v0/b/fbms-shreeva-demo.appspot.com/o/food(1).png?alt=media&token=558c361b-00a5-4a1b-b9ae-07ddaf7151ff")
+    }
+    if(!this.recipeForm.value['shopPrice']){
+      this.recipeForm.value['shopPrice'] = this.recipeForm.value['onlinePrice'];
+    }
+    if(!this.recipeForm.value['thirdPartyPrice']){
+      this.recipeForm.value['thirdPartyPrice'] = this.recipeForm.value['onlinePrice'];
     }
     const data = {
       ...this.recipeForm.value,

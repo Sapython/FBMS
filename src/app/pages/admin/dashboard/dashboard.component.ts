@@ -53,14 +53,14 @@ export class DashboardComponent implements OnInit {
     this.getPendingOrders();
     this.getTopSellingOrders();
     this.getReservations();
-    introJs().setOptions({
-      steps: [{
-        intro: "Here you will see your total revenue per month!"
-      }, {
-        element: document.querySelector('#step1'),
-        intro: "Start the intro to dashboard!"
-      }]
-    }).start();
+    // introJs().setOptions({
+    //   steps: [{
+    //     intro: "Here you will see your total revenue per month!"
+    //   }, {
+    //     element: document.querySelector('#step1'),
+    //     intro: "Start the intro to dashboard!"
+    //   }]
+    // }).start();
   }
 
   getMostOrderedDishes() {
