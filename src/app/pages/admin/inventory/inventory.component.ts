@@ -102,7 +102,47 @@ export class InventoryComponent implements OnInit {
   }
 
   compareOpeningClosingBalance() {
-    this.dialogModule.open(BalanceSheetComponent, {});
+    const inst = this.dialogModule.open(BalanceSheetComponent, {
+      data:{
+        type:'rawMaterials',
+        items:this.allMaterials
+      }
+    });
+    inst.componentInstance!.saveOpeningBalance.subscribe((data: any) => {
+      console.log('saveOpeningBalance', data);
+      this.allMaterials = data;
+      let updatePromises:Promise<void>[] = [];
+      // compare from copy to allMaterials and update the quantity
+      this.copyIngredients.forEach((item: StockItem) => {
+        
+        const copyItem = this.allMaterials.find(
+          (copy) => {
+            console.log('item', copy.quantity,item.quantity,copy.id,item.id,copy.quantity != item.quantity && copy.id == item.id);
+            return copy.quantity != item.quantity && copy.id == item.id
+          }
+        );
+        console.log('copyItem', copyItem);
+        if (copyItem) {
+          if(copyItem.id){
+            updatePromises.push(
+              this.databaseService.updateIngredientQuantity(copyItem.quantity,copyItem.id).catch((error: any) => {
+                this.alertify.presentToast(error);
+                console.error(error);
+              }).then(() => {
+                console.log('updated');
+              })
+            );
+          }
+        }
+      });
+      console.log('updatePromises',updatePromises);
+      Promise.all(updatePromises).then(() => {
+        this.alertify.presentToast('All stock Updated Successfully');
+      }).catch((error:any)=>{
+        this.alertify.presentToast(error.message);
+      })
+      inst.close();
+    })
   }
 
   setTab(event: any) {

@@ -206,24 +206,24 @@
           <tr *ngFor="let discount of discounts; let i = index" class="body">
             <td>
               <div class="row">
-                <i class="fa-solid fa-circle-check" *ngIf="discount.checked && multiSelector"
+                <i class="fa-solid fa-circle-check" *ngIf="discount?.checked && multiSelector"
                   (click)="discount.checked=false"></i>
-                <i class="fa-regular fa-circle" *ngIf="!discount.checked && multiSelector"
+                <i class="fa-regular fa-circle" *ngIf="!discount?.checked && multiSelector"
                   (click)="discount.checked=true"></i>
                 <p>{{i+1}}</p>
               </div>
             </td>
-            <td>{{discount.title}}</td>
-            <td>{{discount.startPrice}}</td>
-            <td>{{discount.endPrice}}</td>
-            <td>{{discount.startDate.toDate() | date}}</td>
-            <td>{{discount.endDate.toDate() | date}}</td>
-            <td>{{discount.discountType}}</td>
-            <td>{{discount.discountValue}}</td>
-            <td>{{discount.maxDiscount}}</td>
+            <td>{{discount?.title}}</td>
+            <td>{{discount?.startPrice}}</td>
+            <td>{{discount?.endPrice}}</td>
+            <td>{{discount?.startDate!='' ?  (discount?.startDate?.toDate() | date) : ''}}</td>
+            <td>{{discount?.endDate != '' ? (discount?.endDate.toDate() | date) : ''}}</td>
+            <td>{{discount?.discountType}}</td>
+            <td>{{discount?.discountValue}}</td>
+            <td>{{discount?.maxDiscount}}</td>
             <td class="status">
-              <div [class]="discount.active ? 'active' : 'inactive'">
-                {{discount.active ? 'Active' : 'Inactive' | titlecase}}
+              <div [class]="discount?.active ? 'active' : 'inactive'">
+                {{discount?.active ? 'Active' : 'Inactive' | titlecase}}
               </div>
             </td>
             <td>

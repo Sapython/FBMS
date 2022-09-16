@@ -1,5 +1,5 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { StockItem } from '../inventory.component';
 
 @Component({
@@ -8,9 +8,9 @@ import { StockItem } from '../inventory.component';
   styleUrls: ['./balance-sheet.component.scss']
 })
 export class BalanceSheetComponent implements OnInit {
+  @Output() saveOpeningBalance:EventEmitter<StockItem[]> = new EventEmitter<StockItem[]>();
 
   constructor(@Inject(DIALOG_DATA) public items: {type:'rawMaterials'|'consumables',items:StockItem[]}) { }
-
   ngOnInit(): void {
   }
 

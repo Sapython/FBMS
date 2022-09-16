@@ -27,17 +27,17 @@ export class AddDiscountComponent implements OnInit {
   ]
   discountForm:FormGroup = new FormGroup({
     title: new FormControl('',[Validators.required]),
-    startPrice: new FormControl('',[Validators.required]),
-    endPrice: new FormControl('',[Validators.required]),
-    startTime: new FormControl('',[Validators.required]),
-    endTime: new FormControl('',[Validators.required]),
-    startDate: new FormControl('',[Validators.required]),
-    endDate: new FormControl('',[Validators.required]),
+    startPrice: new FormControl(''),
+    endPrice: new FormControl(''),
+    startTime: new FormControl(''),
+    endTime: new FormControl(''),
+    startDate: new FormControl(''),
+    endDate: new FormControl(''),
     discountType: new FormControl('',[Validators.required]),
     discountValue: new FormControl('',[Validators.required]),
-    maxDiscount: new FormControl('',[Validators.required]),
-    days: new FormControl('',[Validators.required]),
-    discountCode: new FormControl('',[Validators.required]),
+    maxDiscount: new FormControl(''),
+    days: new FormControl(''),
+    discountCode: new FormControl(''),
   })
 
   ngOnInit(): void {
