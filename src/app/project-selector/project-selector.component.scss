@@ -1,0 +1,47 @@
+@keyframes moveBackground {
+    0% {
+        object-position: 0 0;
+    }
+    100% {
+        object-position: 0 100%;
+    }
+}
+
+img {
+    width: 100vw;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+    animation: movePosition 10s linear infinite;
+}
+
+.container {
+    min-height: calc(100vh - 300px);
+    background: #141517;
+    .overflow {
+        transform: translateY(-100px);
+        display: flex;
+        // auto flow columns of 300px
+        // jus
+        gap:20px;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+        // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        .project {
+            width: 300px;
+            height: 250px;
+            -webkit-backdrop-filter: blur(999px);
+            backdrop-filter: blur(10px);
+            border: 3px solid var(--primary);
+            background-color: rgba(33, 33, 33, 0.253);
+            border-radius: 10px;
+            border:3px solid black;
+            box-shadow:3px 5px 10px rgba(0,0,0,0.8);
+            padding: 20px;
+            h2,h3{
+                color:White;
+            }
+        }
+    }
+}

@@ -44,7 +44,7 @@ export class InventoryComponent implements OnInit {
       this.allMaterials = [];
       ingredients.forEach((item: any) => {
         console.log('ingredients.map', item.data());
-        this.allMaterials.push({ ...item.data(), id: item.id });
+        this.allMaterials.push({ ...item.data(), id: item.id,issued:item.issued || 0, touched: false,openingBalance:item.quantity || 0, closingBalance:item.closingBalance || 0 });
       });
       console.log('allMaterials', this.allMaterials);
       this.copyIngredients = JSON.parse(JSON.stringify(this.allMaterials));
@@ -230,9 +230,11 @@ export type StockItem = {
   id?: string;
   name: string;
   checked: boolean;
+  touched: boolean;
   errorThreshold: number;
   warningThreshold: number;
   images: string[];
+  issued?: number;
   category: string;
   unit: string;
   quantity: number;

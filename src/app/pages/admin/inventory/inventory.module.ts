@@ -18,6 +18,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatBadgeModule} from '@angular/material/badge';
 import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component'; 
 import { ComponentsModule } from 'src/app/components/components.module';
+import { MatDatepickerModule, MatDateSelectionModel } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { ComponentsModule } from 'src/app/components/components.module';
     MatSelectModule,
     ReactiveFormsModule,
     FormsModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatDatepickerModule,
+    MatNativeDateModule 
   ]
 })
 export class InventoryModule { }

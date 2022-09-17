@@ -1,1 +1,9 @@
-<p>project-selector works!</p>
+<img src="/assets/background.jpg" alt="">
+<div class="container">
+    <div class="overflow">
+        <div class="project" *ngFor="let project of dataProvider.projects">
+            <h2>Project: {{project.projectName}}</h2>
+            <h3>ID: {{project.projectId}}</h3>
+        </div>
+    </div>
+</div> 

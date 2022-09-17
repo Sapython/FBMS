@@ -315,4 +315,42 @@ export class DatabaseService {
   deleteMainCategory(id:string){
     return deleteDoc(doc(this.fs,'business/accounts/'+ this.dataProvider.currentProject?.projectId +'/recipes/categoryGroups/'+id));
   }
+
+  getBalanceHitory(startDate:Date,endDate:Date){
+    return getDocs(
+      query(
+        collection(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/balanceHistory/balanceHistory'
+        ),
+        where('date','>=',startDate),
+        where('date','<=',endDate)
+      )
+    );
+  }
+  
+  async addBalanceHistory(data:any,items:any[]){
+    const mainDoc = await addDoc(
+      collection(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/balanceHistory/balanceHistory'
+      ),
+      data
+    );
+    await Promise.all(items.map(async (item:any) => {
+      await setDoc(
+        doc(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/balanceHistory/balanceHistory/' + mainDoc.id + '/items/'+item.id
+        ),
+        item
+      );
+    }));
+  }
 }
