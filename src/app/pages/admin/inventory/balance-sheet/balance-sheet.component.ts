@@ -27,26 +27,38 @@ export class BalanceSheetComponent implements OnInit {
   purchaseSheet: any[] = [];
   itemsCopy: StockItem[] = [];
   addTodaySheet: boolean = false;
+  showHistory: boolean = false;
   ngOnInit(): void {
     this.itemsCopy = JSON.parse(JSON.stringify(this.items.items));
     console.log(this.items);
     this.range.valueChanges.subscribe((value) => {
       console.log(value);
+      this.showHistory = false;
+      // check if the start and end are same date
+      if (value.start?.getTime() == value.end?.getTime()) {
+        value.end?.setHours(24);
+        console.log("Same", value);
+      }
       if (value.start && value.end) {
+        this.sheet = [];
+        this.purchaseSheet = [];
+        this.dataProvider.pageSetting.blur = true;
         this.databaseService
           .getBalanceHitory(value.start, value.end)
           .then((docs: any) => {
             // console.log(docs);
             let counter = 0;
             docs.forEach((element: any) => {
-              console.log(element);
+              // console.log(element);
               this.databaseService.getBalanceHistoryIngredients(element.data().items,element.id).then((res:any)=>{
                 // console.log(res);
                 this.sheet.push({ ...element.data(), id: element.id,items:res });
               })
               counter++;
             });
-            // console.log(counter);
+            console.log("Balances "+counter);
+          }).finally(()=>{
+            this.dataProvider.pageSetting.blur =false;
           });
         this.databaseService.getPurchasesHistory(value.start, value.end).then((docs: any) => {
           // console.log(docs);
@@ -61,7 +73,9 @@ export class BalanceSheetComponent implements OnInit {
             counter++;
           });
 
-          // console.log(counter);
+          console.log("Purchases "+counter);
+        }).finally(()=>{
+          this.dataProvider.pageSetting.blur =false;
         })
       }
     });
@@ -98,10 +112,13 @@ export class BalanceSheetComponent implements OnInit {
     items.forEach((item: any) => {
       const found = this.itemsCopy.find((element: any) => {
         return (
-          element.id == item.id && element.closingBalance != item.closingBalance
+          element.id == item.id && element.used != item.used
         );
       });
       if (found) {
+        // found.closingBalance = ((items.openingBalance11 || 0) - (items.used || 0))
+        found.openingBalance = item.closingBalance
+        found.quantity = item.closingBalance
         differenceArray.push(found);
         itemDifferenceArray.push(item);
       }

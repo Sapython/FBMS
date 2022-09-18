@@ -29,6 +29,8 @@ export class InventoryComponent implements OnInit {
   currentTab: string = 'Raw Material';
   copyIngredients: StockItem[] = [];
   purchaseMode: boolean = false;
+  isActionActive:boolean = false;
+  currrentAction:'quantity' | 'purchase' | '' = '';
   ngOnInit(): void {
     this.allMaterials = [];
     this.categories = [];
@@ -112,6 +114,7 @@ export class InventoryComponent implements OnInit {
   }
 
   compareOpeningClosingBalance() {
+    this.isActionActive = true;
     const inst = this.dialogModule.open(BalanceSheetComponent, {
       data: {
         type: 'rawMaterials',
@@ -162,6 +165,9 @@ export class InventoryComponent implements OnInit {
         });
       inst.close();
     });
+    inst.closed.subscribe((data: any) => {
+      this.isActionActive = false;
+    })
   }
 
   setTab(event: any) {
@@ -188,26 +194,30 @@ export class InventoryComponent implements OnInit {
   }
 
   deleteItem(id: string) {
-    if (id) {
-      this.databaseService
-        .deleteIngredient(id)
-        .then((doc: any) => {
-          this.alertify.presentToast('Item Deleted Successfully');
-        })
-        .catch((error: any) => {
-          this.alertify.presentToast(error.message);
-        })
-        .finally(() => {
-          this.ngOnInit();
-        });
-    } else {
-      this.alertify.presentToast('Item Not Found, Id undefined');
+    if(confirm('Are you sure you want to delete this item?')){
+      if (id) {
+        this.databaseService
+          .deleteIngredient(id)
+          .then((doc: any) => {
+            this.alertify.presentToast('Item Deleted Successfully');
+          })
+          .catch((error: any) => {
+            this.alertify.presentToast(error.message);
+          })
+          .finally(() => {
+            this.ngOnInit();
+          });
+      } else {
+        this.alertify.presentToast('Item Not Found, Id undefined');
+      }
     }
   }
 
   updateStockQuantities() {
+    this.isActionActive = true;
     this.updateStockItems = !this.updateStockItems;
     if (this.updateStockItems) {
+      this.currrentAction = 'quantity';
       this.alertify.presentToast('Update Stock Quantity Enabled');
     } else {
       let updatePromises: Promise<void>[] = [];
@@ -248,20 +258,31 @@ export class InventoryComponent implements OnInit {
         })
         .catch((error: any) => {
           this.alertify.presentToast(error.message);
+        }).finally(() => {
+          this.isActionActive = false;
         });
       this.alertify.presentToast('Update Stock Quantity Disabled');
     }
+    
   }
 
   completePurchase() {
+    this.isActionActive = true;
     this.purchaseMode = !this.purchaseMode;
+    if (this.purchaseMode) {
+      this.currrentAction = 'purchase';
+      this.alertify.presentToast('Purchase Mode Enabled');
+    }
     if (!this.purchaseMode) {
       var differenceItems:StockItem[] = [];
       let updatePromises: Promise<void>[] = [];
       // compare from copy to allMaterials and update the quantity
       this.copyIngredients.forEach((item: StockItem) => {
         const copyItem = this.allMaterials.find((copy) => {
-          console.log(copy.closingBalance)
+          // console.log(copy.closingBalance)
+          if (!copy.closingBalance){
+            copy.closingBalance = 0;
+          }
           return (
             copy.id == item.id &&
             (copy.newQuantity != item.newQuantity ||
@@ -274,7 +295,7 @@ export class InventoryComponent implements OnInit {
           console.log("DIFF-ITEM",copyItem)
           differenceItems.push(copyItem);
           let copiedIngredient = JSON.parse(JSON.stringify(copyItem));
-          copiedIngredient.quantity = Number(copyItem.newQuantity) + Number(copyItem.quantity);
+          copiedIngredient.quantity = Number(copyItem.newQuantity || 0) + Number(copyItem.quantity || 0);
           copiedIngredient.ratePerUnit = Number(copyItem.newRatePerUnit);
           copiedIngredient.finalPrice = Number(finalPrice);
           if (copyItem) {
@@ -299,8 +320,11 @@ export class InventoryComponent implements OnInit {
           this.ngOnInit();
         }).catch((error: any) => {
           this.alertify.presentToast(error.message);
+        }).finally(() => {
+          this.isActionActive = false;
         })
       } else {
+        this.isActionActive = false;
         this.alertify.presentToast('No Changes Made');
       }
       console.log('updatePromises', updatePromises,differenceItems);

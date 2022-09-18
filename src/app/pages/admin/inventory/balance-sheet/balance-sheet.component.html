@@ -15,13 +15,13 @@
         </mat-form-field>
         <button *ngIf="!addTodaySheet" mat-raised-button color="primary"
             (click)="saveOpeningBalance.next(items.items)">Save</button>
-        <button *ngIf="!addTodaySheet" mat-raised-button color="primary" (click)="addTodaySheet=true">Add Today's
+        <button *ngIf="!addTodaySheet" mat-raised-button color="primary" (click)="addTodaySheet=true;showHistory=false;">Add Today's
             Sheet</button>
-        <button *ngIf="addTodaySheet" mat-raised-button color="primary" (click)="saveTodaySheet(items.items)">Save
+        <button *ngIf="addTodaySheet" mat-raised-button color="primary" (click)="saveTodaySheet(items.items); showHistory=true">Save
             Today's Sheet</button>
     </div>
-    <mat-tab-group *ngIf="range.valid">
-        <mat-tab label="Balance History">
+    <mat-tab-group *ngIf="range.valid && !showHistory">
+        <mat-tab label="Balance History" *ngIf="sheet.length > 0">
             <mat-tab-group>
                 <mat-tab [label]="(dateKey.date.toDate() | date) || 'Error'" *ngFor="let dateKey of sheet">
                     <div class="container">
@@ -37,22 +37,22 @@
                             <tr *ngFor="let item of dateKey.items;let i = index" class="balanceItem">
                                 <td>
                                     <div class="item">
-                                        <img [src]="item.images[0]">
-                                        <p class="name">{{item.name}}</p>
+                                        <img [src]="item?.images[0]">
+                                        <p class="name">{{item?.name}}</p>
                                     </div>
                                 </td>
-                                <td>{{item.ratePerUnit}}</td>
-                                <td>{{item.quantity}}</td>
-                                <td>{{item.openingBalance}}</td>
-                                <td>{{item.closingBalance}}</td>
-                                <p class="unit">{{item.unit}}</p>
+                                <td>{{item?.ratePerUnit}}</td>
+                                <td>{{item?.quantity}}</td>
+                                <td>{{item?.openingBalance}}</td>
+                                <td>{{item?.closingBalance}}</td>
+                                <p class="unit">{{item?.unit}}</p>
                             </tr>
                         </table>
                     </div>
                 </mat-tab>
             </mat-tab-group>
         </mat-tab>
-        <mat-tab label="Purchase History">
+        <mat-tab label="Purchase History" *ngIf="purchaseSheet.length>0">
             <mat-tab-group>
                 <mat-tab [label]="(dateKey.date.toDate() | date) || 'Error'" *ngFor="let dateKey of purchaseSheet">
                     <div class="container">
@@ -68,15 +68,15 @@
                             <tr *ngFor="let item of dateKey.items;let i = index" class="balanceItem">
                                 <td>
                                     <div class="item">
-                                        <img [src]="item.images[0]">
-                                        <p class="name">{{item.name}}</p>
+                                        <img [src]="item?.images[0]">
+                                        <p class="name">{{item?.name}}</p>
                                     </div>
                                 </td>
-                                <td>{{item.ratePerUnit}}</td>
-                                <td>{{item.quantity}}</td>
-                                <td>{{item.openingBalance}}</td>
-                                <td>{{item.closingBalance}}</td>
-                                <p class="unit">{{item.unit}}</p>
+                                <td>{{item?.ratePerUnit}}</td>
+                                <td>{{item?.quantity}}</td>
+                                <td>{{item?.openingBalance}}</td>
+                                <td>{{item?.closingBalance}}</td>
+                                <p class="unit">{{item?.unit}}</p>
                             </tr>
                         </table>
                     </div>
@@ -84,46 +84,45 @@
             </mat-tab-group>
         </mat-tab>
     </mat-tab-group>
-    <ng-container *ngIf="sheet.length==0 && range.valid">
+    <ng-container *ngIf="!(sheet.length >0 || purchaseSheet.length > 0) && range.valid">
         <h4>No Balance Sheets or Purchase Sheet Found</h4>
     </ng-container>
     <ng-container *ngIf="!range.valid"><p>Select a date to check records or set todays' balance sheet.</p></ng-container>
-    <ng-container *ngIf="addTodaySheet">
+    <ng-container *ngIf="addTodaySheet && !showHistory">
         <div class="container">
             <table>
                 <tr>
                     <th>Name</th>
                     <th>Price</th>
                     <th>OB</th>
-                    <th>Usage</th>
-                    <th>Quantity</th>
                     <th>CB</th>
+                    <th>Quantity</th>
+                    <th>Usage</th>
                     <th>Unit</th>
                 </tr>
                 <tr *ngFor="let item of items.items;let i = index" class="balanceItem">
                     <td>
                         <div class="item">
                             <img [src]="item.images[0]">
-                            <p class="name">{{item.name}}</p>
+                            <p class="name">{{item?.name}}</p>
                         </div>
                     </td>
-                    <td>{{item.ratePerUnit}}</td>
+                    <td>{{item?.ratePerUnit}}</td>
                     <td>
-                        <p>{{item.openingBalance}}</p>
+                        <p>{{item?.openingBalance}}</p>
                     </td>
                     <td>
-                        <p>{{(item.openingBalance) - (item.closingBalance)}}</p>
+                        <p>{{(item?.openingBalance || 0) - (item?.used || 0)}}</p>
                     </td>
                     <td>
-                        <p>{{item.quantity}}</p>
+                        <p>{{item?.quantity}}</p>
                     </td>
                     <td>
-                        <input class="quantityInput" step="0.1" type="number"
-                            (input)="item.used = (item.openingBalance) - (item.closingBalance)"
-                            [value]="item.closingBalance" [(ngModel)]="item.closingBalance">
+                        <input class="quantityInput" step="0.1" type="number" (input)="item.closingBalance = ((item.openingBalance || 0) - (item.used || 0))"
+                            [value]="item.used || 0" [(ngModel)]="item.used">
                     </td>
                     <td>
-                        <p class="unit">{{item.unit}}</p>
+                        <p class="unit">{{item?.unit}}</p>
                     </td>
                 </tr>
             </table>

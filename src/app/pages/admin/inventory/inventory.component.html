@@ -1,36 +1,56 @@
 <div class="actions">
-    <button mat-flat-button (click)="ngOnInit()" color="primary">
+    <button mat-flat-button *ngIf="!isActionActive" (click)="ngOnInit()" color="primary">
         <mat-icon>restart_alt</mat-icon>
         <span>&nbsp;&nbsp;Refresh</span>
     </button>
-    <button mat-flat-button color="primary" *ngIf="categories.length>0" (click)="compareOpeningClosingBalance()">
+    <button mat-flat-button color="primary" *ngIf="categories.length>0 && !isActionActive" (click)="compareOpeningClosingBalance()">
         <mat-icon>compare_arrows</mat-icon>
         <span>&nbsp;&nbsp;Set Opening/Closing Balance</span>
     </button>
-    <button mat-flat-button color="primary" *ngIf="categories.length>0" (click)="completePurchase()">
+    <ng-container  *ngIf="categories.length>0 && isActionActive && currrentAction=='quantity'">
+        <button mat-stroked-button color="primary" (click)="isActionActive=false;currrentAction='';updateStockItems=false; ngOnInit()">
+            <mat-icon>cancel</mat-icon>
+            <span>&nbsp;&nbsp;Cancel</span>
+        </button>
+        <button mat-flat-button color="primary" (click)="updateStockQuantities()">
+            <mat-icon>save</mat-icon>
+            <span>&nbsp;&nbsp;Save</span>
+        </button>
+    </ng-container>
+    <ng-container  *ngIf="categories.length>0 && isActionActive && currrentAction=='purchase'">
+        <button mat-stroked-button color="primary" (click)="isActionActive=false;currrentAction='';purchaseMode=false; ngOnInit()">
+            <mat-icon>cancel</mat-icon>
+            <span>&nbsp;&nbsp;Cancel</span>
+        </button>
+        <button mat-flat-button color="primary" (click)="completePurchase()">
+            <mat-icon>save</mat-icon>
+            <span>&nbsp;&nbsp;Save</span>
+        </button>
+    </ng-container>
+    <button mat-flat-button color="primary" *ngIf="categories.length>0 && !isActionActive" (click)="completePurchase()">
         <mat-icon>compare_arrows</mat-icon>
         <span>&nbsp;&nbsp;{{purchaseMode ? 'Save Purchases' : 'Set Purchases'}}</span>
     </button>
-    <button mat-flat-button color="primary" *ngIf="categories.length>0" (click)="updateStockQuantities()">
+    <button mat-flat-button color="primary" *ngIf="categories.length>0 && !isActionActive" (click)="updateStockQuantities()">
         <mat-icon>sync</mat-icon>
         <span>&nbsp;&nbsp;Update Stock</span>
     </button>
-    <button mat-flat-button color="primary" *ngIf="categories.length>0">
+    <!-- <button mat-flat-button *ngIf="isActionActive" color="primary" *ngIf="categories.length>0">
         <mat-icon>remove</mat-icon>
         <span>&nbsp;&nbsp;Remove Items</span>
-    </button>
-    <button mat-flat-button color="primary" (click)="addNewItem()" *ngIf="categories.length>0">
+    </button> -->
+    <button mat-flat-button color="primary" (click)="addNewItem()" *ngIf="categories.length>0 && !isActionActive">
         <mat-icon>add</mat-icon>
         <span>&nbsp;&nbsp;Add Item</span>
     </button>
-    <button mat-flat-button color="primary" (click)="addCategory()">
+    <button mat-flat-button *ngIf="!isActionActive" color="primary" (click)="addCategory()">
         <mat-icon>add</mat-icon>
         <span>&nbsp;&nbsp;Add Category</span>
     </button>
-    <button mat-flat-button color="primary">
+    <!-- <button mat-flat-button *ngIf="isActionActive" color="primary">
         <mat-icon>analytics</mat-icon>
         <span>&nbsp;&nbsp;Analytics</span>
-    </button>
+    </button> -->
 </div>
 <mat-tab-group mat-align-tabs="start" (selectedTabChange)="setTab($event)" *ngIf="categories.length>0">
     <mat-tab [label]="category" *ngFor="let category of categories">
@@ -43,8 +63,9 @@
                         <th>Unit</th>
                         <th>Quantity</th>
                         <th>Rate/Unit</th>
-                        <th>Total Rate</th>
-                        <th>Actions</th>
+                        <th>Gross Value</th>
+                        <th *ngIf="updateStockItems">Update</th>
+                        <th *ngIf="!isActionActive">Actions</th>
                         <ng-container *ngIf="purchaseMode">
                             <th>New Quantity</th>
                             <th>New Rate</th>
@@ -72,8 +93,8 @@
                         </td>
                         <td>
                             <div class="row">
-                                <span>{{item.quantity}}</span>
-                                <div
+                                <span>{{item.openingBalance}}</span>
+                                <div *ngIf="!isActionActive"
                                     [class]="item.quantity < (item.warningThreshold ? item.warningThreshold : 20) ? (item.quantity < (item.errorThreshold ? item.errorThreshold : 5) ? 'error' : 'warning') : ''">
                                     <ng-container
                                         *ngIf="item.quantity < (item.errorThreshold ? item.errorThreshold : 5)">
@@ -92,17 +113,17 @@
                         <td>
                             <p>{{item.finalPrice ? item.finalPrice : item.ratePerUnit * item.quantity}}</p>
                         </td>
-                        <td class="align-center">
-                            <ng-container *ngIf="!updateStockItems">
+                        <td class="align-center" *ngIf="!isActionActive || updateStockItems">
+                            <ng-container *ngIf="!isActionActive">
                                 <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="edit" (click)="editItem(item)">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                                <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="copy" (click)="duplicateItem(item)">
+                                <!-- <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="copy" (click)="duplicateItem(item)">
                                     <mat-icon>content_copy</mat-icon>
-                                </button>
-                                <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="insights">
-                                    <mat-icon>insights</mat-icon>
-                                </button>
+                                </button> -->
+                                    <!-- <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="insights">
+                                        <mat-icon>insights</mat-icon>
+                                    </button> -->
                                 <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="delete" (click)="deleteItem(item.id || '')">
                                     <mat-icon>delete</mat-icon>
                                 </button>
