@@ -15,59 +15,13 @@ main {
     // flex-direction: column;
     width: 650px;
     height: fit-content;
+    min-width: 50vw;
+    min-height: 400px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
     animation: popUp .5s cubic-bezier(0.33, 1, 0.68, 1);
     padding: 20px;
-
-    // .container{
-    //     padding:20px;
-    //     display: flex;
-    //     flex-direction: column;
-    //     // flex-wrap: wrap;
-    //     row-gap: 10px;
-    //     overflow-y: auto;
-    //     max-height: calc(70vh - 90px);
-    //     .balanceItem{
-    //         width: 500px;
-    //         display: flex;
-    //         justify-content: space-between;
-    //         background: white;
-    //         box-shadow: 0px 0px 20px rgba(0,0,0,0.1);
-    //         border-radius: 7px;
-    //         padding: 4px;
-    //         .unit{
-    //             padding:6px;
-    //             font-size: large;
-    //         }
-    //         .item{
-    //             width: 200px;
-    //             display: flex;
-    //             align-items: center;
-    //             justify-content: space-between;
-    //             img{
-    //                 width: 30px;
-    //                 height: 30px;
-    //                 border-radius: 50%;
-    //             }
-    //             .name{
-    //                 font-size: 12px;
-    //                 font-weight: 500;
-    //                 color: rgb(75, 75, 75);
-    //             }
-    //         }
-    //         input{
-    //             width: 40px;
-    //             border: none;
-    //             height: 40px;
-    //             font-size: 15px;
-    //             text-align: center;
-    //             border-radius: 10px;
-    //             box-shadow: 1px 1px 1px rgb(224, 224, 224);
-    //         }
-    //     }
-    // }
     .container {
         max-height: 50vh;
         overflow-y: auto;

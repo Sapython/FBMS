@@ -1,6 +1,7 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DataProvider } from 'src/app/providers/data.provider';
 import { AlertsAndNotificationsService } from 'src/app/services/alerts-and-notifications.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import { StockItem } from '../inventory.component';
@@ -18,43 +19,56 @@ export class BalanceSheetComponent implements OnInit {
   constructor(
     @Inject(DIALOG_DATA)
     public items: { type: 'rawMaterials' | 'consumables'; items: StockItem[] },
-    private databaseService:DatabaseService,
-    private alertify:AlertsAndNotificationsService
+    private databaseService: DatabaseService,
+    private alertify: AlertsAndNotificationsService,
+    private dataProvider:DataProvider
   ) {}
-  sheet:any[] = []
+  sheet: any[] = [];
+  purchaseSheet: any[] = [];
   itemsCopy: StockItem[] = [];
-  addTodaySheet:boolean = false;
+  addTodaySheet: boolean = false;
   ngOnInit(): void {
-    this.itemsCopy = JSON.parse(JSON.stringify(this.items.items))
+    this.itemsCopy = JSON.parse(JSON.stringify(this.items.items));
+    console.log(this.items);
     this.range.valueChanges.subscribe((value) => {
       console.log(value);
       if (value.start && value.end) {
-        // var daysOfYear = [];
-        // for (
-        //   var d = value.start;
-        //   d <= value.end;
-        //   d.setDate(d.getDate() + 1)
-        // ) {
-        //   daysOfYear.push(new Date(d));
-        // }
-        // console.log(daysOfYear);
-        // this.
-        this.databaseService.getBalanceHitory(value.start,value.end).then((docs:any)=>{
-          console.log(docs);
+        this.databaseService
+          .getBalanceHitory(value.start, value.end)
+          .then((docs: any) => {
+            // console.log(docs);
+            let counter = 0;
+            docs.forEach((element: any) => {
+              console.log(element);
+              this.databaseService.getBalanceHistoryIngredients(element.data().items,element.id).then((res:any)=>{
+                // console.log(res);
+                this.sheet.push({ ...element.data(), id: element.id,items:res });
+              })
+              counter++;
+            });
+            // console.log(counter);
+          });
+        this.databaseService.getPurchasesHistory(value.start, value.end).then((docs: any) => {
+          // console.log(docs);
           let counter = 0;
-          docs.forEach((element:any) => {
-            console.log(element)
-            this.sheet.push({...element.data(),id:element.id})
+          docs.forEach((element: any) => {
+            console.log(element);
+            this.databaseService.getPurchaseHistoryIngredients(element.data().items,element.id).then((res:any)=>{
+              // console.log(res);
+              this.purchaseSheet.push({ ...element.data(), id: element.id,items:res });
+              console.log(this.purchaseSheet)
+            })
             counter++;
           });
-          console.log(counter);
+
+          // console.log(counter);
         })
       }
     });
   }
   range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
+    start: new FormControl<Date | null>(null,[Validators.required]),
+    end: new FormControl<Date | null>(null,[Validators.required]),
   });
   addQuantity(index: number) {
     if (this.items.type == 'consumables') {
@@ -76,34 +90,52 @@ export class BalanceSheetComponent implements OnInit {
     }
   }
 
-  saveTodaySheet(items:any[]){
+  saveTodaySheet(items: any[]) {
     // console.log(items);
-    let differenceArray:any[] = []
+    let differenceArray: any[] = [];
+    let itemDifferenceArray: any[] = [];
     // find the difference between the two arrays using quantity or issued
-    items.forEach((item:any)=>{
-     const found = this.itemsCopy.find((element:any)=>{
-      return element.id == item.id && (element.quantity != item.quantity || element.issued != item.issued || element.ratePerUnit   != item.ratePerUnit)
-     }) 
-     if(found){
-      differenceArray.push(found)
-     }
-    })
-    console.log(differenceArray);
-    const allIds:string[] = []
-    differenceArray.forEach((item:any)=>{
-      allIds.push(item.id)
-    })
+    items.forEach((item: any) => {
+      const found = this.itemsCopy.find((element: any) => {
+        return (
+          element.id == item.id && element.closingBalance != item.closingBalance
+        );
+      });
+      if (found) {
+        differenceArray.push(found);
+        itemDifferenceArray.push(item);
+      }
+    });
+    console.log(differenceArray, itemDifferenceArray);
+    const allIds: string[] = [];
+    differenceArray.forEach((item: any) => {
+      allIds.push(item.id);
+    });
     const data = {
-      date:new Date(),
-      items:allIds
-    }
-    this.databaseService.addBalanceHistory(data,differenceArray).then((res:any)=>{
-      console.log(res);
-      this.addTodaySheet = false;
-      this.alertify.presentToast("Saved Successfully")
-    }).catch((err:any)=>{
-      console.log(err);
-      this.alertify.presentToast("Error Occured")
-    })
+      date: new Date(),
+      items: allIds,
+    };
+    this.dataProvider.pageSetting.blur = true;
+    Promise.all(
+      itemDifferenceArray.map((item) => {
+        return this.databaseService.updateIngredient(item, item.id);
+      })
+    ).then(() => {
+      this.databaseService
+        .addBalanceHistory(data, differenceArray)
+        .then((res: any) => {
+          console.log(res);
+          this.addTodaySheet = false;
+          this.alertify.presentToast('Saved Successfully');
+        })
+        .catch((err: any) => {
+          console.log(err);
+          this.alertify.presentToast('Error Occured');
+        }).finally(()=>{
+          this.dataProvider.pageSetting.blur = false;
+        });
+    }).catch((err)=>{
+      this.dataProvider.pageSetting.blur = false;
+    });
   }
 }

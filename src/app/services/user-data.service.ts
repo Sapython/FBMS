@@ -42,6 +42,9 @@ export class UserDataService {
       email: user.email || '',
       emailVerified: true,
       photoURL: user.photoURL || this.getRandomImage(),
+      access:{
+        access:'guest'
+      }
     };
     this.userDoc = doc(this.firestore, 'users/' + user.uid);
     await setDoc(this.userDoc, data).then(() => {
@@ -60,6 +63,9 @@ export class UserDataService {
       email: user.email || '',
       emailVerified: true,
       photoURL: user.photoURL || this.getRandomImage(),
+      access:{
+        access:'guest'
+      }
     };
     this.userDoc = doc(this.firestore, 'users/' + user.uid);
     await setDoc(this.userDoc, data).then(() => {

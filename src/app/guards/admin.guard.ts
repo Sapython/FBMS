@@ -14,7 +14,7 @@ import { DataProvider } from '../providers/data.provider';
 })
 export class AdminGuard implements CanActivate {
   constructor(private dataProvider: DataProvider, private router: Router) {}
-
+  allowedAdmins: string[] = ['admin', 'inventoryManager', 'generalManager'];
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -23,7 +23,7 @@ export class AdminGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (this.dataProvider.loggedIn) {
+    if (this.dataProvider.loggedIn && this.allowedAdmins.includes(this.dataProvider.userData!.access.access)) {
       return true;
     } else {
       this.router.navigate(['/sign-in']);

@@ -7,6 +7,10 @@
         <mat-icon>compare_arrows</mat-icon>
         <span>&nbsp;&nbsp;Set Opening/Closing Balance</span>
     </button>
+    <button mat-flat-button color="primary" *ngIf="categories.length>0" (click)="completePurchase()">
+        <mat-icon>compare_arrows</mat-icon>
+        <span>&nbsp;&nbsp;{{purchaseMode ? 'Save Purchases' : 'Set Purchases'}}</span>
+    </button>
     <button mat-flat-button color="primary" *ngIf="categories.length>0" (click)="updateStockQuantities()">
         <mat-icon>sync</mat-icon>
         <span>&nbsp;&nbsp;Update Stock</span>
@@ -28,7 +32,7 @@
         <span>&nbsp;&nbsp;Analytics</span>
     </button>
 </div>
-<mat-tab-group mat-align-tabs="start" (selectedTabChange)="setTab($event)" *ngIf="categories.length>0"> 
+<mat-tab-group mat-align-tabs="start" (selectedTabChange)="setTab($event)" *ngIf="categories.length>0">
     <mat-tab [label]="category" *ngFor="let category of categories">
         <div class="body">
             <table [cellSpacing]="0">
@@ -41,6 +45,10 @@
                         <th>Rate/Unit</th>
                         <th>Total Rate</th>
                         <th>Actions</th>
+                        <ng-container *ngIf="purchaseMode">
+                            <th>New Quantity</th>
+                            <th>New Rate</th>
+                        </ng-container>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,11 +73,14 @@
                         <td>
                             <div class="row">
                                 <span>{{item.quantity}}</span>
-                                <div [class]="item.quantity < (item.warningThreshold ? item.warningThreshold : 20) ? (item.quantity < (item.errorThreshold ? item.errorThreshold : 5) ? 'error' : 'warning') : ''">
-                                    <ng-container *ngIf="item.quantity < (item.errorThreshold ? item.errorThreshold : 5)">
+                                <div
+                                    [class]="item.quantity < (item.warningThreshold ? item.warningThreshold : 20) ? (item.quantity < (item.errorThreshold ? item.errorThreshold : 5) ? 'error' : 'warning') : ''">
+                                    <ng-container
+                                        *ngIf="item.quantity < (item.errorThreshold ? item.errorThreshold : 5)">
                                         <span>DANGER</span> Very low stock
                                     </ng-container>
-                                    <ng-container *ngIf="item.quantity < (item.warningThreshold ? item.warningThreshold : 20) && item.quantity >= (item.errorThreshold ? item.errorThreshold : 5)">
+                                    <ng-container
+                                        *ngIf="item.quantity < (item.warningThreshold ? item.warningThreshold : 20) && item.quantity >= (item.errorThreshold ? item.errorThreshold : 5)">
                                         <span>WARNING</span> Low stock.
                                     </ng-container>
                                 </div>
@@ -79,29 +90,47 @@
                             <p>{{item.ratePerUnit}}</p>
                         </td>
                         <td>
-                            <p>{{item.ratePerUnit * item.quantity}}</p>
+                            <p>{{item.finalPrice ? item.finalPrice : item.ratePerUnit * item.quantity}}</p>
                         </td>
                         <td class="align-center">
                             <ng-container *ngIf="!updateStockItems">
-                                <button mat-icon-button class="edit" (click)="editItem(item)">
+                                <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="edit" (click)="editItem(item)">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                                <button mat-icon-button class="copy" (click)="duplicateItem(item)">
+                                <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="copy" (click)="duplicateItem(item)">
                                     <mat-icon>content_copy</mat-icon>
                                 </button>
-                                <button mat-icon-button class="insights">
+                                <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="insights">
                                     <mat-icon>insights</mat-icon>
                                 </button>
-                                <button mat-icon-button class="delete" (click)="deleteItem(item.id || '')">
+                                <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="delete" (click)="deleteItem(item.id || '')">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </ng-container>
                             <ng-container *ngIf="updateStockItems">
-                                <button mat-icon-button color="primary" (click)="addQuantity(i,category)"><mat-icon>add</mat-icon></button>
+                                <button mat-icon-button color="primary" (click)="addQuantity(i,category)">
+                                    <mat-icon>add</mat-icon>
+                                </button>
                                 <input class="quantityInput" type="text" [(ngModel)]="item.quantity">
-                                <button mat-icon-button color="primary" (click)="removeQuantity(i,category)"><mat-icon>remove</mat-icon></button>
+                                <button mat-icon-button color="primary" (click)="removeQuantity(i,category)">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
                             </ng-container>
                         </td>
+                        <ng-container *ngIf="purchaseMode">
+                            <td>
+                                <div class="uk-flex">
+                                    <input class="quantityInput" type="number" [(ngModel)]="item.newQuantity">
+                                    <p>{{item.unit}}</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="uk-flex">
+                                    <p>&#8377;</p>
+                                    <input class="quantityInput" type="number" [(ngModel)]="item.newRatePerUnit">
+                                </div>
+                            </td>
+                        </ng-container>
                     </tr>
                     <h3 *ngIf="this.getIngredients(category).length==0">No ingredients in this category.</h3>
                 </tbody>

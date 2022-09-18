@@ -353,4 +353,57 @@ export class DatabaseService {
       );
     }));
   }
+
+  getBalanceHistoryIngredients(ingredientIds:string[],balanceSheetId:string){
+    return Promise.all(ingredientIds.map(async (id:string) => {
+      const document = await getDoc(doc(this.fs,'business/accounts/'+this.dataProvider.currentProject?.projectId+'/balanceHistory/balanceHistory/'+balanceSheetId+'/items/'+id));
+      return document.data();
+    }));
+  }
+
+  async addPurchaseHistory(data:any,items:any[]){
+    const res = await addDoc(
+      collection(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/purchaseHistory/purchaseHistory'
+      ),
+      data
+      );
+    await Promise.all(items.map((item:any) => {
+      console.log("adding item at "+'business/accounts/' + this.dataProvider.currentProject?.projectId + '/purchaseHistory/purchaseHistory/' + res.id + '/items/'+item.id);
+      return setDoc(
+        doc(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/purchaseHistory/purchaseHistory/' + res.id + '/items/'+item.id
+        ),
+        item
+      );
+    }));
+  }
+
+  getPurchasesHistory(startDate:Date,endDate:Date){
+    return getDocs(
+      query(
+        collection(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/purchaseHistory/purchaseHistory'
+        ),
+        where('date','>=',startDate),
+        where('date','<=',endDate)
+      )
+    );
+  }
+
+  getPurchaseHistoryIngredients(ingredientIds:string[],purchaseId:string){
+    return Promise.all(ingredientIds.map(async (id:string) => {
+      const document = await getDoc(doc(this.fs,'business/accounts/'+this.dataProvider.currentProject?.projectId+'/purchaseHistory/purchaseHistory/'+purchaseId+'/items/'+id));
+      return document.data();
+    }));
+  }
 }

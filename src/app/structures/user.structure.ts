@@ -7,4 +7,8 @@ export type UserData = {
   created: Timestamp;
   name: string;
   photoURL?: string;
+  access:UserAccess;
 };
+export type UserAccess = {
+  access:'admin' | 'inventoryManager'|'generalManager'|'inventoryManager'|'salesManager'|'salesPerson'|'customer'|'guest';
+}

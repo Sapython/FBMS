@@ -28,6 +28,7 @@ export class InventoryComponent implements OnInit {
   pageEvent: any;
   currentTab: string = 'Raw Material';
   copyIngredients: StockItem[] = [];
+  purchaseMode: boolean = false;
   ngOnInit(): void {
     this.allMaterials = [];
     this.categories = [];
@@ -44,11 +45,20 @@ export class InventoryComponent implements OnInit {
       this.allMaterials = [];
       ingredients.forEach((item: any) => {
         console.log('ingredients.map', item.data());
-        this.allMaterials.push({ ...item.data(), id: item.id,issued:item.issued || 0, touched: false,openingBalance:item.quantity || 0, closingBalance:item.closingBalance || 0 });
+        this.allMaterials.push({
+          ...item.data(),
+          id: item.id,
+          issued: item.data().issued,
+          touched: false,
+          openingBalance: item.data().closingBalance,
+          closingBalance: item.data().closingBalance,
+          newQuantity: item.data().quantity,
+          newRatePerUnit:item.data().ratePerUnit,
+        });
       });
       console.log('allMaterials', this.allMaterials);
       this.copyIngredients = JSON.parse(JSON.stringify(this.allMaterials));
-      console.log('ingredients', ingredients);
+      // console.log('ingredients', ingredients);
     });
   }
 
@@ -103,46 +113,55 @@ export class InventoryComponent implements OnInit {
 
   compareOpeningClosingBalance() {
     const inst = this.dialogModule.open(BalanceSheetComponent, {
-      data:{
-        type:'rawMaterials',
-        items:this.allMaterials
-      }
+      data: {
+        type: 'rawMaterials',
+        items: this.allMaterials,
+      },
     });
     inst.componentInstance!.saveOpeningBalance.subscribe((data: any) => {
       console.log('saveOpeningBalance', data);
       this.allMaterials = data;
-      let updatePromises:Promise<void>[] = [];
+      let updatePromises: Promise<void>[] = [];
       // compare from copy to allMaterials and update the quantity
       this.copyIngredients.forEach((item: StockItem) => {
-        
-        const copyItem = this.allMaterials.find(
-          (copy) => {
-            console.log('item', copy.quantity,item.quantity,copy.id,item.id,copy.quantity != item.quantity && copy.id == item.id);
-            return copy.quantity != item.quantity && copy.id == item.id
-          }
-        );
+        const copyItem = this.allMaterials.find((copy) => {
+          console.log(
+            'item',
+            copy.quantity,
+            item.quantity,
+            copy.id,
+            item.id,
+            copy.quantity != item.quantity && copy.id == item.id
+          );
+          return copy.quantity != item.quantity && copy.id == item.id;
+        });
         console.log('copyItem', copyItem);
         if (copyItem) {
-          if(copyItem.id){
+          if (copyItem.id) {
             updatePromises.push(
-              this.databaseService.updateIngredientQuantity(copyItem.quantity,copyItem.id).catch((error: any) => {
-                this.alertify.presentToast(error);
-                console.error(error);
-              }).then(() => {
-                console.log('updated');
-              })
+              this.databaseService
+                .updateIngredientQuantity(copyItem.quantity, copyItem.id)
+                .catch((error: any) => {
+                  this.alertify.presentToast(error);
+                  console.error(error);
+                })
+                .then(() => {
+                  console.log('updated');
+                })
             );
           }
         }
       });
-      console.log('updatePromises',updatePromises);
-      Promise.all(updatePromises).then(() => {
-        this.alertify.presentToast('All stock Updated Successfully');
-      }).catch((error:any)=>{
-        this.alertify.presentToast(error.message);
-      })
+      console.log('updatePromises', updatePromises);
+      Promise.all(updatePromises)
+        .then(() => {
+          this.alertify.presentToast('All stock Updated Successfully');
+        })
+        .catch((error: any) => {
+          this.alertify.presentToast(error.message);
+        });
       inst.close();
-    })
+    });
   }
 
   setTab(event: any) {
@@ -191,37 +210,100 @@ export class InventoryComponent implements OnInit {
     if (this.updateStockItems) {
       this.alertify.presentToast('Update Stock Quantity Enabled');
     } else {
-      let updatePromises:Promise<void>[] = [];
+      let updatePromises: Promise<void>[] = [];
       // compare from copy to allMaterials and update the quantity
       this.copyIngredients.forEach((item: StockItem) => {
-        
-        const copyItem = this.allMaterials.find(
-          (copy) => {
-            console.log('item', copy.quantity,item.quantity,copy.id,item.id,copy.quantity != item.quantity && copy.id == item.id);
-            return copy.quantity != item.quantity && copy.id == item.id
-          }
-        );
+        const copyItem = this.allMaterials.find((copy) => {
+          console.log(
+            'item',
+            copy.quantity,
+            item.quantity,
+            copy.id,
+            item.id,
+            copy.quantity != item.quantity && copy.id == item.id
+          );
+          return copy.quantity != item.quantity && copy.id == item.id;
+        });
         console.log('copyItem', copyItem);
         if (copyItem) {
-          if(copyItem.id){
+          if (copyItem.id) {
             updatePromises.push(
-              this.databaseService.updateIngredientQuantity(copyItem.quantity,copyItem.id).catch((error: any) => {
-                this.alertify.presentToast(error);
-                console.error(error);
-              }).then(() => {
-                console.log('updated');
-              })
+              this.databaseService
+                .updateIngredientQuantity(copyItem.quantity, copyItem.id)
+                .catch((error: any) => {
+                  this.alertify.presentToast(error);
+                  console.error(error);
+                })
+                .then(() => {
+                  console.log('updated');
+                })
             );
           }
         }
       });
-      console.log('updatePromises',updatePromises);
-      Promise.all(updatePromises).then(() => {
-        this.alertify.presentToast('All stock Updated Successfully');
-      }).catch((error:any)=>{
-        this.alertify.presentToast(error.message);
-      })
+      console.log('updatePromises', updatePromises);
+      Promise.all(updatePromises)
+        .then(() => {
+          this.alertify.presentToast('All stock Updated Successfully');
+        })
+        .catch((error: any) => {
+          this.alertify.presentToast(error.message);
+        });
       this.alertify.presentToast('Update Stock Quantity Disabled');
+    }
+  }
+
+  completePurchase() {
+    this.purchaseMode = !this.purchaseMode;
+    if (!this.purchaseMode) {
+      var differenceItems:StockItem[] = [];
+      let updatePromises: Promise<void>[] = [];
+      // compare from copy to allMaterials and update the quantity
+      this.copyIngredients.forEach((item: StockItem) => {
+        const copyItem = this.allMaterials.find((copy) => {
+          console.log(copy.closingBalance)
+          return (
+            copy.id == item.id &&
+            (copy.newQuantity != item.newQuantity ||
+              copy.newRatePerUnit != item.newRatePerUnit)
+          );
+        });
+        if (copyItem) {
+          console.log('copyItem', copyItem);
+          const finalPrice = Number(copyItem.newQuantity) * Number(copyItem.newRatePerUnit) + Number(copyItem.quantity) * Number(copyItem.ratePerUnit);
+          console.log("DIFF-ITEM",copyItem)
+          differenceItems.push(copyItem);
+          let copiedIngredient = JSON.parse(JSON.stringify(copyItem));
+          copiedIngredient.quantity = Number(copyItem.newQuantity) + Number(copyItem.quantity);
+          copiedIngredient.ratePerUnit = Number(copyItem.newRatePerUnit);
+          copiedIngredient.finalPrice = Number(finalPrice);
+          if (copyItem) {
+            if (copyItem.id) {
+              updatePromises
+                .push(this.databaseService.updateIngredient(copiedIngredient, copyItem.id));
+            }
+          }
+        }
+      });
+      if (differenceItems.length > 0){
+        const data = {
+          date: new Date(),
+          items: differenceItems.map((item) => {return item.id})
+        }
+        console.log("differenceItems",differenceItems)
+        updatePromises.push(
+          this.databaseService.addPurchaseHistory(data,differenceItems)
+        )
+        Promise.all(updatePromises).then(() => {
+          this.alertify.presentToast('All stock Updated Successfully');
+          this.ngOnInit();
+        }).catch((error: any) => {
+          this.alertify.presentToast(error.message);
+        })
+      } else {
+        this.alertify.presentToast('No Changes Made');
+      }
+      console.log('updatePromises', updatePromises,differenceItems);
     }
   }
 }
@@ -234,7 +316,7 @@ export type StockItem = {
   errorThreshold: number;
   warningThreshold: number;
   images: string[];
-  issued?: number;
+  used?: number;
   category: string;
   unit: string;
   quantity: number;
@@ -242,4 +324,7 @@ export type StockItem = {
   closingBalance: number;
   stockUsage: number;
   ratePerUnit: number;
+  newQuantity: number;
+  newRatePerUnit: number;
+  finalPrice?:number;
 };

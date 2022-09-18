@@ -2,7 +2,7 @@
   <img [src]="imageSource" [alt]="dishName" />
   <div class="dish-details" (mouseenter)="deleteHovered=true" (mouseleave)="deleteHovered=false" [@deleteHover]="deleteHovered ? 'hover' : 'default'">
     <p class="rate">₹{{dishPrice}}</p>
-    <p class="rate">{{id}}</p>
+    <!-- <p class="rate">{{id}}</p> -->
     <h4>{{dishName}}</h4>
     <p class="availability"><b
         [ngStyle]="{'color': servesLeft < 5 ? 'tomato' : 'rgb(81, 187, 122)' }">{{servesLeft}}</b> serves available</p>
