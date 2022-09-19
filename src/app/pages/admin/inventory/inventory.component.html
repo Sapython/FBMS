@@ -128,7 +128,7 @@
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </ng-container>
-                            <ng-container *ngIf="updateStockItems">
+                            <ng-container *ngIf="updateStockItems && item.ratePerUnit !=0">
                                 <button mat-icon-button color="primary" (click)="addQuantity(i,category)">
                                     <mat-icon>add</mat-icon>
                                 </button>
@@ -141,14 +141,14 @@
                         <ng-container *ngIf="purchaseMode">
                             <td>
                                 <div class="uk-flex">
-                                    <input class="quantityInput" type="number" [(ngModel)]="item.newQuantity">
+                                    <input class="quantityInput" #quantity (input)="item.newQuantity < 0 ? item.newQuantity = 0 : {}" type="number" min="0" [(ngModel)]="item.newQuantity">
                                     <p>{{item.unit}}</p>
                                 </div>
                             </td>
                             <td>
                                 <div class="uk-flex">
                                     <p>&#8377;</p>
-                                    <input class="quantityInput" type="number" [(ngModel)]="item.newRatePerUnit">
+                                    <input class="quantityInput" #rate (input)="item.newRatePerUnit < 0 ? item.newRatePerUnit = 0 : {}" type="number" min="0" [(ngModel)]="item.newRatePerUnit">
                                 </div>
                             </td>
                         </ng-container>

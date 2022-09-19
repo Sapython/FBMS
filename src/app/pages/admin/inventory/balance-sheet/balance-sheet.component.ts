@@ -28,77 +28,80 @@ export class BalanceSheetComponent implements OnInit {
   stockSheet:any[] = [];
   itemsCopy: StockItem[] = [];
   addTodaySheet: boolean = false;
-  showHistory: boolean = false;
+  showHistory: boolean = true;
   ngOnInit(): void {
+    // this.range.controls.end.setValue(new Date());
+    // this.range.controls.start.setValue(new Date());
+    
     this.itemsCopy = JSON.parse(JSON.stringify(this.items.items));
     console.log(this.items);
     this.range.valueChanges.subscribe((value) => {
       console.log(value);
-      this.showHistory = false;
+      this.showHistory = true;
+      this.setValue(value);
       // check if the start and end are same date
+      
+    });
+  }
+  setValue(value:any){
+    if (value.start && value.end) {
       if (value.start?.getTime() == value.end?.getTime()) {
         value.end?.setHours(24);
-        console.log("Same", value);
+        // console.log("Same", value);
       }
       if (value.start && value.end) {
         this.sheet = [];
+        this.stockSheet = [];
         this.purchaseSheet = [];
         this.dataProvider.pageSetting.blur = true;
         this.databaseService
           .getBalanceHitory(value.start, value.end)
-          .then((docs: any) => {
+          .then(async (docs) => {
             // console.log(docs);
             let counter = 0;
             let allDateWiseData:any = {}
-            docs.forEach((element: any) => {
-              // console.log(element);
-              this.databaseService.getBalanceHistoryIngredients(element.data().items,element.id).then((res:any)=>{
+            // docs.forEach(async (element: any) => {
+            //   // console.log(element);
+              
+            // });
+            for (let item of docs.docs){
+              const element:any = item;
+              await this.databaseService.getBalanceHistoryIngredients(element.data().items,element.id).then((res:any)=>{
                 // console.log(res);
-                // if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-                //   allDateWiseData[element.data().date.toDate().toDateString()].history.push(res);
-                // } else {
-                //   allDateWiseData[element.data().date.toDate().toDateString()].history = [res];
-                // }
-                this.sheet.push({ ...element.data(), id: element.id,items:res });
+                if (allDateWiseData[element.data().date.toDate().toDateString()]) {
+                  allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,id:element.id,date:element.data().date.toDate()});
+                } else {
+                  allDateWiseData[element.data().date.toDate().toDateString()]={history:[{items:res,id:element.id,date:element.data().date.toDate()}],date:element.data().date.toDate(),active:element.id};
+                }
+                // this.sheet.push({ ...element.data(), id: element.id,items:res });
               })
               counter++;
-            });
-            console.log("Balances "+counter);
-            console.log("allDateWiseData",allDateWiseData);
+            }
+            // console.log("Balances "+counter);
+            // console.log("allDateWiseData",allDateWiseData,Object.values(allDateWiseData));
+            this.sheet = Object.values(allDateWiseData);
           }).finally(()=>{
             this.dataProvider.pageSetting.blur =false;
           });
         this.databaseService.getPurchasesHistory(value.start, value.end).then(async (docs) => {
           let allDateWiseData:any = {}
           let counter = 0;
-          docs.forEach((element: any) => {
-            console.log(element);
-            this.databaseService.getPurchaseHistoryIngredients(element.data().items,element.id).then((res:any)=>{
-              // console.log(res);
-              this.purchaseSheet.push({ ...element.data(), id: element.id,items:res });
-              console.log(this.purchaseSheet)
-            })
-            counter++;
-          });
-          // for (var iter of docs.docs) {
-          //   console.log('Iter',iter.data())
-          //   const element:any = iter;
-          //   const res = await this.databaseService.getPurchaseHistoryIngredients(element.data().items,element.id)
-          //   console.log(res);
-          //   if (element.data().date && element.data().date.toDate() && element.data().date.toDate().toDateString()){
-          //     if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-          //       allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,date:element.data().date.toDate()});
-          //     }
-          //      else {
-          //       allDateWiseData[element.data().date.toDate().toDateString()].history = [res];
-          //     }
-          //   }
-          //     counter++;
-          // }
-          console.log("Purchases "+counter);
-          console.log("allDateWiseData",allDateWiseData);
-          // this.purchaseSheet = Object.values(allDateWiseData);
-          // console.log("this.purchaseSheet",this.purchaseSheet);
+          for (let item of docs.docs){
+            const element:any = item;
+              await this.databaseService.getPurchaseHistoryIngredients(element.data().items,element.id).then((res:any)=>{
+                // console.log(res);
+                if (allDateWiseData[element.data().date.toDate().toDateString()]) {
+                  allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,id:element.id,date:element.data().date.toDate()});
+                } else {
+                  allDateWiseData[element.data().date.toDate().toDateString()]={history:[{items:res,id:element.id,date:element.data().date.toDate()}],date:element.data().date.toDate(),active:element.id};
+                }
+                // this.sheet.push({ ...element.data(), id: element.id,items:res });
+              })
+              counter++;
+          }
+          // console.log("Purchases "+counter);
+          // console.log("allDateWiseData",allDateWiseData,Object.values(allDateWiseData));
+          this.purchaseSheet = Object.values(allDateWiseData);
         }).finally(()=>{
           this.dataProvider.pageSetting.blur =false;
         })
@@ -106,39 +109,37 @@ export class BalanceSheetComponent implements OnInit {
         this.databaseService.getStockHistory(value.start, value.end).then(async (docs) => {
           let allDateWiseData:any = {}
           let counter = 0;
-          docs.forEach((element: any) => {
-            console.log(element);
-            this.databaseService.getStockHistoryIngredients(element.data().items,element.id).then((res:any)=>{
-              // console.log(res);
-              this.stockSheet.push({ ...element.data(), id: element.id,items:res });
-              console.log(this.stockSheet)
-            })
-            counter++;
-          });
-          // for (var iter of docs.docs) {
-          //   console.log('Iter',iter.data())
-          //   const element:any = iter;
-          //   const res = await this.databaseService.getPurchaseHistoryIngredients(element.data().items,element.id)
-          //   console.log(res);
-          //   if (element.data().date && element.data().date.toDate() && element.data().date.toDate().toDateString()){
-          //     if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-          //       allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,date:element.data().date.toDate()});
-          //     }
-          //      else {
-          //       allDateWiseData[element.data().date.toDate().toDateString()].history = [res];
-          //     }
-          //   }
-          //     counter++;
-          // }
-          console.log("Stock "+counter);
-          console.log("allDateWiseData",allDateWiseData);
-          // this.purchaseSheet = Object.values(allDateWiseData);
+          // docs.forEach((element: any) => {
+          //   // console.log(element);
+          //   this.databaseService.getStockHistoryIngredients(element.data().items,element.id).then((res:any)=>{
+          //     // console.log(res);
+          //     this.stockSheet.push({ ...element.data(), id: element.id,items:res });
+          //     // console.log(this.stockSheet)
+          //   })
+          //   counter++;
+          // });
+          for (let item of docs.docs){
+            const element:any = item;
+              await this.databaseService.getStockHistoryIngredients(element.data().items,element.id).then((res:any)=>{
+                // console.log(res);
+                if (allDateWiseData[element.data().date.toDate().toDateString()]) {
+                  allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,id:element.id,date:element.data().date.toDate()});
+                } else {
+                  allDateWiseData[element.data().date.toDate().toDateString()]={history:[{items:res,id:element.id,date:element.data().date.toDate()}],date:element.data().date.toDate(),active:element.id};
+                }
+                // this.sheet.push({ ...element.data(), id: element.id,items:res });
+              })
+              counter++;
+          }
+          // console.log("Stocks "+counter);
+          // console.log("allDateWiseData",allDateWiseData,Object.values(allDateWiseData));
+          this.stockSheet = Object.values(allDateWiseData);
           // console.log("this.purchaseSheet",this.purchaseSheet);
         }).finally(()=>{
           this.dataProvider.pageSetting.blur =false;
         })
       }
-    });
+    }
   }
   range = new FormGroup({
     start: new FormControl<Date | null>(null,[Validators.required]),

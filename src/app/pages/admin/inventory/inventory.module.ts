@@ -19,7 +19,9 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component'; 
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MatDatepickerModule, MatDateSelectionModel } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import {MatCardModule} from '@angular/material/card'; 
+
 
 @NgModule({
   declarations: [
@@ -45,7 +47,11 @@ import { MatNativeDateModule } from '@angular/material/core';
     FormsModule,
     MatBadgeModule,
     MatDatepickerModule,
-    MatNativeDateModule 
+    MatNativeDateModule,
+    MatCardModule
+  ],
+  providers:[
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 })
 export class InventoryModule { }

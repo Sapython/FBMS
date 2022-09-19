@@ -58,7 +58,7 @@ export class InventoryComponent implements OnInit {
           openingBalance: item.data().quantity,
           closingBalance: item.data().quantity,
           newQuantity: 0,
-          newRatePerUnit:0,
+          newRatePerUnit:item.data().ratePerUnit,
           quantity:Number(item.data().quantity),
           used:0,
         });
@@ -248,7 +248,7 @@ export class InventoryComponent implements OnInit {
         });
         console.log('copyItem', copyItem);
         if (copyItem) {
-          historyArray.push(item)
+          historyArray.push({...item,newQuantity:copyItem.newQuantity})
           if (copyItem.id) {
             copyItem.finalPrice = (copyItem.quantity + copyItem.newQuantity) * copyItem.ratePerUnit;
             updatePromises.push(
@@ -311,8 +311,8 @@ export class InventoryComponent implements OnInit {
           }
           return (
             copy.id == item.id &&
-            (copy.newQuantity != item.newQuantity ||
-              copy.newRatePerUnit != item.newRatePerUnit)
+            (copy.newQuantity != item.newQuantity &&
+              copy.newRatePerUnit > 0)
           );
         });
         if (copyItem) {
