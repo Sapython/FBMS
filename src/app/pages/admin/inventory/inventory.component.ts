@@ -46,7 +46,7 @@ export class InventoryComponent implements OnInit {
     this.databaseService.getIngredients().then((ingredients: any) => {
       this.allMaterials = [];
       ingredients.forEach((item: any) => {
-        console.log('ingredients.map', item.data());
+        // console.log('ingredients.map', item.data());
         this.allMaterials.push({
           ...item.data(),
           id: item.id,
@@ -58,7 +58,7 @@ export class InventoryComponent implements OnInit {
           newRatePerUnit:item.data().ratePerUnit,
         });
       });
-      console.log('allMaterials', this.allMaterials);
+      // console.log('allMaterials', this.allMaterials);
       this.copyIngredients = JSON.parse(JSON.stringify(this.allMaterials));
       // console.log('ingredients', ingredients);
     });
@@ -295,13 +295,14 @@ export class InventoryComponent implements OnInit {
           console.log("DIFF-ITEM",copyItem)
           differenceItems.push(copyItem);
           let copiedIngredient = JSON.parse(JSON.stringify(copyItem));
-          copiedIngredient.quantity = Number(copyItem.newQuantity || 0) + Number(copyItem.quantity || 0);
+          copiedIngredient.quantity = Number(copyItem.newQuantity || 0) + Number(copyItem.openingBalance || 0);
           copiedIngredient.ratePerUnit = Number(copyItem.newRatePerUnit);
           copiedIngredient.finalPrice = Number(finalPrice);
           if (copyItem) {
             if (copyItem.id) {
-              updatePromises
-                .push(this.databaseService.updateIngredient(copiedIngredient, copyItem.id));
+              console.log("COPIED-ITEM",copiedIngredient)
+              // updatePromises
+              //   .push(this.databaseService.updateIngredient(copiedIngredient, copyItem.id));
             }
           }
         }
@@ -312,17 +313,18 @@ export class InventoryComponent implements OnInit {
           items: differenceItems.map((item) => {return item.id})
         }
         console.log("differenceItems",differenceItems)
-        updatePromises.push(
-          this.databaseService.addPurchaseHistory(data,differenceItems)
-        )
-        Promise.all(updatePromises).then(() => {
-          this.alertify.presentToast('All stock Updated Successfully');
-          this.ngOnInit();
-        }).catch((error: any) => {
-          this.alertify.presentToast(error.message);
-        }).finally(() => {
-          this.isActionActive = false;
-        })
+        // updatePromises.push(
+        //   this.databaseService.addPurchaseHistory(data,differenceItems)
+        // )
+
+        // Promise.all(updatePromises).then(() => {
+        //   this.alertify.presentToast('All stock Updated Successfully');
+        //   this.ngOnInit();
+        // }).catch((error: any) => {
+        //   this.alertify.presentToast(error.message);
+        // }).finally(() => {
+        //   this.isActionActive = false;
+        // })
       } else {
         this.isActionActive = false;
         this.alertify.presentToast('No Changes Made');
