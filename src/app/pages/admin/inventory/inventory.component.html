@@ -132,7 +132,7 @@
                                 <button mat-icon-button color="primary" (click)="addQuantity(i,category)">
                                     <mat-icon>add</mat-icon>
                                 </button>
-                                <input class="quantityInput" type="text" [(ngModel)]="item.quantity">
+                                <input class="quantityInput" type="number" [(ngModel)]="item.newQuantity">
                                 <button mat-icon-button color="primary" (click)="removeQuantity(i,category)">
                                     <mat-icon>remove</mat-icon>
                                 </button>

@@ -14,6 +14,7 @@ import {
   where,
   collectionChanges,
   collectionData,
+  orderBy,
 } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { SubCategory, Discount, Tax } from '../pages/admin/menu/menu.component';
@@ -69,7 +70,7 @@ export class DatabaseService {
     );
   }
 
-  updateIngredientQuantity(quantity:number, id:string){
+  updateIngredientQuantity(quantity:number,finalPrice:number, id:string){
     return updateDoc(
       doc(
         this.fs,
@@ -77,7 +78,7 @@ export class DatabaseService {
           this.dataProvider.currentProject?.projectId +
           '/ingredients/ingredients/' + id
       ),
-      { quantity:quantity }
+      { quantity:quantity, finalPrice:finalPrice }
     );
   }
 
@@ -326,7 +327,8 @@ export class DatabaseService {
             '/balanceHistory/balanceHistory'
         ),
         where('date','>=',startDate),
-        where('date','<=',endDate)
+        where('date','<=',endDate),
+        orderBy('date','desc')
       )
     );
   }
@@ -395,7 +397,8 @@ export class DatabaseService {
             '/purchaseHistory/purchaseHistory'
         ),
         where('date','>=',startDate),
-        where('date','<=',endDate)
+        where('date','<=',endDate),
+        orderBy('date','desc')
       )
     );
   }
@@ -403,6 +406,52 @@ export class DatabaseService {
   getPurchaseHistoryIngredients(ingredientIds:string[],purchaseId:string){
     return Promise.all(ingredientIds.map(async (id:string) => {
       const document = await getDoc(doc(this.fs,'business/accounts/'+this.dataProvider.currentProject?.projectId+'/purchaseHistory/purchaseHistory/'+purchaseId+'/items/'+id));
+      return document.data();
+    }));
+  }
+
+  async addStockHistory(data:any,items:any[]){
+    const res = await addDoc(
+      collection(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/stockHistory/stockHistory'
+      ),
+      data
+    );
+    await Promise.all(items.map((item:any) => {
+      return setDoc(
+        doc(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/stockHistory/stockHistory/' + res.id + '/items/'+item.id
+        ),
+        item
+      );
+    }));
+  }
+
+  getStockHistory(startDate:Date,endDate:Date){
+    return getDocs(
+      query(
+        collection(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/stockHistory/stockHistory'
+        ),
+        where('date','>=',startDate),
+        where('date','<=',endDate),
+        orderBy('date','desc')
+      )
+    );
+  }
+
+  getStockHistoryIngredients(ingredientIds:string[],stockId:string){
+    return Promise.all(ingredientIds.map(async (id:string) => {
+      const document = await getDoc(doc(this.fs,'business/accounts/'+this.dataProvider.currentProject?.projectId+'/stockHistory/stockHistory/'+stockId+'/items/'+id));
       return document.data();
     }));
   }

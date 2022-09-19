@@ -1,6 +1,7 @@
 import { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
 import { AlertsAndNotificationsService } from 'src/app/services/alerts-and-notifications.service';
+import { DataProvider } from 'src/app/providers/data.provider';
 import { DatabaseService } from 'src/app/services/database.service';
 import { AddNewItemComponent } from './add-new-item/add-new-item.component';
 import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
@@ -20,7 +21,8 @@ export class InventoryComponent implements OnInit {
   constructor(
     private dialogModule: Dialog,
     private databaseService: DatabaseService,
-    private alertify: AlertsAndNotificationsService
+    private alertify: AlertsAndNotificationsService,
+    private dataProvider:DataProvider
   ) {}
   length: number = this.allMaterials.length;
   pageSize: number = 10;
@@ -32,6 +34,7 @@ export class InventoryComponent implements OnInit {
   isActionActive:boolean = false;
   currrentAction:'quantity' | 'purchase' | '' = '';
   ngOnInit(): void {
+    this.dataProvider.pageSetting.blur = true;
     this.allMaterials = [];
     this.categories = [];
     this.databaseService.getIngredientCategories().then((categories: any) => {
@@ -52,14 +55,17 @@ export class InventoryComponent implements OnInit {
           id: item.id,
           issued: item.data().issued,
           touched: false,
-          openingBalance: item.data().closingBalance,
-          closingBalance: item.data().closingBalance,
-          newQuantity: item.data().quantity,
-          newRatePerUnit:item.data().ratePerUnit,
+          openingBalance: item.data().quantity,
+          closingBalance: item.data().quantity,
+          newQuantity: 0,
+          newRatePerUnit:0,
+          quantity:Number(item.data().quantity),
+          used:0,
         });
       });
       // console.log('allMaterials', this.allMaterials);
       this.copyIngredients = JSON.parse(JSON.stringify(this.allMaterials));
+      this.dataProvider.pageSetting.blur = false;
       // console.log('ingredients', ingredients);
     });
   }
@@ -106,15 +112,16 @@ export class InventoryComponent implements OnInit {
   }
 
   addQuantity(index: number, category: string) {
-    this.getIngredients(category)[index].quantity++;
+    this.getIngredients(category)[index].newQuantity++;
   }
 
   removeQuantity(index: number, category: string) {
-    this.getIngredients(category)[index].quantity--;
+    this.getIngredients(category)[index].newQuantity--;
   }
 
   compareOpeningClosingBalance() {
     this.isActionActive = true;
+    console.log("ALLMATS",this.allMaterials)
     const inst = this.dialogModule.open(BalanceSheetComponent, {
       data: {
         type: 'rawMaterials',
@@ -141,9 +148,10 @@ export class InventoryComponent implements OnInit {
         console.log('copyItem', copyItem);
         if (copyItem) {
           if (copyItem.id) {
+            copyItem.finalPrice = copyItem.quantity * copyItem.ratePerUnit;
             updatePromises.push(
               this.databaseService
-                .updateIngredientQuantity(copyItem.quantity, copyItem.id)
+                .updateIngredientQuantity(copyItem.quantity,copyItem.finalPrice, copyItem.id)
                 .catch((error: any) => {
                   this.alertify.presentToast(error);
                   console.error(error);
@@ -156,12 +164,15 @@ export class InventoryComponent implements OnInit {
         }
       });
       console.log('updatePromises', updatePromises);
+      this.dataProvider.pageSetting.blur = true;
       Promise.all(updatePromises)
         .then(() => {
           this.alertify.presentToast('All stock Updated Successfully');
         })
         .catch((error: any) => {
           this.alertify.presentToast(error.message);
+        }).finally(()=>{
+          this.dataProvider.pageSetting.blur = false;
         });
       inst.close();
     });
@@ -221,6 +232,7 @@ export class InventoryComponent implements OnInit {
       this.alertify.presentToast('Update Stock Quantity Enabled');
     } else {
       let updatePromises: Promise<void>[] = [];
+      const historyArray:any[] = []
       // compare from copy to allMaterials and update the quantity
       this.copyIngredients.forEach((item: StockItem) => {
         const copyItem = this.allMaterials.find((copy) => {
@@ -230,16 +242,18 @@ export class InventoryComponent implements OnInit {
             item.quantity,
             copy.id,
             item.id,
-            copy.quantity != item.quantity && copy.id == item.id
+            copy.newQuantity != item.newQuantity && copy.id == item.id
           );
-          return copy.quantity != item.quantity && copy.id == item.id;
+          return copy.newQuantity != item.newQuantity && copy.id == item.id;
         });
         console.log('copyItem', copyItem);
         if (copyItem) {
+          historyArray.push(item)
           if (copyItem.id) {
+            copyItem.finalPrice = (copyItem.quantity + copyItem.newQuantity) * copyItem.ratePerUnit;
             updatePromises.push(
               this.databaseService
-                .updateIngredientQuantity(copyItem.quantity, copyItem.id)
+                .updateIngredientQuantity(copyItem.quantity+copyItem.newQuantity,copyItem.finalPrice, copyItem.id)
                 .catch((error: any) => {
                   this.alertify.presentToast(error);
                   console.error(error);
@@ -251,7 +265,16 @@ export class InventoryComponent implements OnInit {
           }
         }
       });
+      const data = {
+        date: new Date(),
+        items: historyArray.map((item) => {return item.id})
+      }
+      console.log("differenceItems",historyArray)
+      updatePromises.push(
+        this.databaseService.addStockHistory(data,historyArray)
+      )
       console.log('updatePromises', updatePromises);
+      this.dataProvider.pageSetting.blur = true;
       Promise.all(updatePromises)
         .then(() => {
           this.alertify.presentToast('All stock Updated Successfully');
@@ -260,6 +283,8 @@ export class InventoryComponent implements OnInit {
           this.alertify.presentToast(error.message);
         }).finally(() => {
           this.isActionActive = false;
+          this.dataProvider.pageSetting.blur = false;
+          this.ngOnInit()
         });
       this.alertify.presentToast('Update Stock Quantity Disabled');
     }
@@ -274,6 +299,7 @@ export class InventoryComponent implements OnInit {
       this.alertify.presentToast('Purchase Mode Enabled');
     }
     if (!this.purchaseMode) {
+      this.dataProvider.pageSetting.blur = true;
       var differenceItems:StockItem[] = [];
       let updatePromises: Promise<void>[] = [];
       // compare from copy to allMaterials and update the quantity
@@ -301,10 +327,12 @@ export class InventoryComponent implements OnInit {
           console.log("DIFF-ITEM",copyItem)
           differenceItems.push(copyItem);
           let copiedIngredient = JSON.parse(JSON.stringify(copyItem));
-          copiedIngredient.quantity = Number(copyItem.newQuantity || 0) + Number(copyItem.openingBalance || 0);
-          copiedIngredient.openingBalance = Number(copyItem.newQuantity || 0) + Number(copyItem.openingBalance || 0);
+          copiedIngredient.quantity = Number(copyItem.newQuantity || 0) + Number(copyItem.quantity || 0);
+          copiedIngredient.openingBalance = Number(copiedIngredient.quantity);
           copiedIngredient.ratePerUnit = Number(copyItem.newRatePerUnit);
           copiedIngredient.finalPrice = Number(finalPrice);
+          copiedIngredient.newQuantity = 0;
+          copiedIngredient.newRatePerUnit = 0;
           if (copyItem) {
             if (copyItem.id) {
               console.log("COPIED-ITEM",copiedIngredient)
@@ -323,6 +351,7 @@ export class InventoryComponent implements OnInit {
         updatePromises.push(
           this.databaseService.addPurchaseHistory(data,differenceItems)
         )
+        this.dataProvider.pageSetting.blur = true;
         Promise.all(updatePromises).then(() => {
           this.alertify.presentToast('All stock Updated Successfully');
           this.ngOnInit();
@@ -330,16 +359,22 @@ export class InventoryComponent implements OnInit {
           this.alertify.presentToast(error.message);
         }).finally(() => {
           this.isActionActive = false;
+          this.dataProvider.pageSetting.blur = false;
         })
       } else {
         this.isActionActive = false;
+        this.dataProvider.pageSetting.blur = false;
         this.alertify.presentToast('No Changes Made');
       }
       console.log('updatePromises', updatePromises,differenceItems);
     }
   }
   roundOff(value: number) {
-    return value.toFixed(2);
+    try { 1
+      return value.toFixed(2);
+    } catch (error) {
+      return Number(value);
+    }
   }
 }
 

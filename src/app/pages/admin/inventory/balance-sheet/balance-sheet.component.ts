@@ -25,6 +25,7 @@ export class BalanceSheetComponent implements OnInit {
   ) {}
   sheet: any[] = [];
   purchaseSheet: any[] = [];
+  stockSheet:any[] = [];
   itemsCopy: StockItem[] = [];
   addTodaySheet: boolean = false;
   showHistory: boolean = false;
@@ -48,20 +49,27 @@ export class BalanceSheetComponent implements OnInit {
           .then((docs: any) => {
             // console.log(docs);
             let counter = 0;
+            let allDateWiseData:any = {}
             docs.forEach((element: any) => {
               // console.log(element);
               this.databaseService.getBalanceHistoryIngredients(element.data().items,element.id).then((res:any)=>{
                 // console.log(res);
+                // if (allDateWiseData[element.data().date.toDate().toDateString()]) {
+                //   allDateWiseData[element.data().date.toDate().toDateString()].history.push(res);
+                // } else {
+                //   allDateWiseData[element.data().date.toDate().toDateString()].history = [res];
+                // }
                 this.sheet.push({ ...element.data(), id: element.id,items:res });
               })
               counter++;
             });
             console.log("Balances "+counter);
+            console.log("allDateWiseData",allDateWiseData);
           }).finally(()=>{
             this.dataProvider.pageSetting.blur =false;
           });
-        this.databaseService.getPurchasesHistory(value.start, value.end).then((docs: any) => {
-          // console.log(docs);
+        this.databaseService.getPurchasesHistory(value.start, value.end).then(async (docs) => {
+          let allDateWiseData:any = {}
           let counter = 0;
           docs.forEach((element: any) => {
             console.log(element);
@@ -72,8 +80,60 @@ export class BalanceSheetComponent implements OnInit {
             })
             counter++;
           });
-
+          // for (var iter of docs.docs) {
+          //   console.log('Iter',iter.data())
+          //   const element:any = iter;
+          //   const res = await this.databaseService.getPurchaseHistoryIngredients(element.data().items,element.id)
+          //   console.log(res);
+          //   if (element.data().date && element.data().date.toDate() && element.data().date.toDate().toDateString()){
+          //     if (allDateWiseData[element.data().date.toDate().toDateString()]) {
+          //       allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,date:element.data().date.toDate()});
+          //     }
+          //      else {
+          //       allDateWiseData[element.data().date.toDate().toDateString()].history = [res];
+          //     }
+          //   }
+          //     counter++;
+          // }
           console.log("Purchases "+counter);
+          console.log("allDateWiseData",allDateWiseData);
+          // this.purchaseSheet = Object.values(allDateWiseData);
+          // console.log("this.purchaseSheet",this.purchaseSheet);
+        }).finally(()=>{
+          this.dataProvider.pageSetting.blur =false;
+        })
+
+        this.databaseService.getStockHistory(value.start, value.end).then(async (docs) => {
+          let allDateWiseData:any = {}
+          let counter = 0;
+          docs.forEach((element: any) => {
+            console.log(element);
+            this.databaseService.getStockHistoryIngredients(element.data().items,element.id).then((res:any)=>{
+              // console.log(res);
+              this.stockSheet.push({ ...element.data(), id: element.id,items:res });
+              console.log(this.stockSheet)
+            })
+            counter++;
+          });
+          // for (var iter of docs.docs) {
+          //   console.log('Iter',iter.data())
+          //   const element:any = iter;
+          //   const res = await this.databaseService.getPurchaseHistoryIngredients(element.data().items,element.id)
+          //   console.log(res);
+          //   if (element.data().date && element.data().date.toDate() && element.data().date.toDate().toDateString()){
+          //     if (allDateWiseData[element.data().date.toDate().toDateString()]) {
+          //       allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,date:element.data().date.toDate()});
+          //     }
+          //      else {
+          //       allDateWiseData[element.data().date.toDate().toDateString()].history = [res];
+          //     }
+          //   }
+          //     counter++;
+          // }
+          console.log("Stock "+counter);
+          console.log("allDateWiseData",allDateWiseData);
+          // this.purchaseSheet = Object.values(allDateWiseData);
+          // console.log("this.purchaseSheet",this.purchaseSheet);
         }).finally(()=>{
           this.dataProvider.pageSetting.blur =false;
         })
@@ -109,21 +169,21 @@ export class BalanceSheetComponent implements OnInit {
     let differenceArray: any[] = [];
     let itemDifferenceArray: any[] = [];
     // find the difference between the two arrays using quantity or issued
-    items.forEach((item: any) => {
-      const found = this.itemsCopy.find((element: any) => {
+    items.forEach((mainIngredient: any) => {
+      const forSheet = this.itemsCopy.find((element: any) => {
         return (
-          element.id == item.id && element.used != item.used
+          element.id == mainIngredient.id && mainIngredient.used > 0
         );
       });
-      if (found) {
-        // found.closingBalance = ((items.openingBalance11 || 0) - (items.used || 0))
-        found.openingBalance = item.closingBalance
-        found.quantity = item.closingBalance
-        differenceArray.push(found);
-        itemDifferenceArray.push(item);
+      if (forSheet) {
+        forSheet.closingBalance = JSON.parse(JSON.stringify((mainIngredient.openingBalance || 0) - (mainIngredient.used || 0)))
+        mainIngredient.openingBalance = JSON.parse(JSON.stringify(forSheet.closingBalance))
+        mainIngredient.quantity = mainIngredient.openingBalance
+        itemDifferenceArray.push(mainIngredient);
+        differenceArray.push(forSheet);
       }
     });
-    console.log(differenceArray, itemDifferenceArray);
+    console.log("DIFFS",differenceArray, itemDifferenceArray);
     const allIds: string[] = [];
     differenceArray.forEach((item: any) => {
       allIds.push(item.id);
@@ -133,26 +193,36 @@ export class BalanceSheetComponent implements OnInit {
       items: allIds,
     };
     this.dataProvider.pageSetting.blur = true;
-    Promise.all(
-      itemDifferenceArray.map((item) => {
-        return this.databaseService.updateIngredient(item, item.id);
-      })
-    ).then(() => {
-      this.databaseService
-        .addBalanceHistory(data, differenceArray)
-        .then((res: any) => {
-          console.log(res);
-          this.addTodaySheet = false;
-          this.alertify.presentToast('Saved Successfully');
-        })
-        .catch((err: any) => {
-          console.log(err);
-          this.alertify.presentToast('Error Occured');
-        }).finally(()=>{
-          this.dataProvider.pageSetting.blur = false;
+    if (differenceArray.length > 0) {
+      this.databaseService.getIngredients().then((docs) => {
+        this.itemsCopy = [];
+        docs.forEach((element: any) => {
+          this.itemsCopy.push({ ...element.data(), id: element.id });
         });
-    }).catch((err)=>{
-      this.dataProvider.pageSetting.blur = false;
-    });
+      })
+      Promise.all(
+        itemDifferenceArray.map((item) => {
+          return this.databaseService.updateIngredient(item, item.id);
+        })
+      ).then(() => {
+        this.databaseService
+          .addBalanceHistory(data, differenceArray)
+          .then((res: any) => {
+            console.log(res);
+            this.addTodaySheet = false;
+            this.alertify.presentToast('Saved Successfully');
+          })
+          .catch((err: any) => {
+            console.log(err);
+            this.alertify.presentToast('Error Occured');
+          }).finally(()=>{
+            this.dataProvider.pageSetting.blur = false;
+          });
+      }).catch((err)=>{
+        this.dataProvider.pageSetting.blur = false;
+      });
+    } else {
+      this.alertify.presentToast('No Items to Save');
+    }
   }
 }
