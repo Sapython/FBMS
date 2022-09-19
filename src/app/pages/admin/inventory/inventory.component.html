@@ -93,7 +93,7 @@
                         </td>
                         <td>
                             <div class="row">
-                                <span>{{item.openingBalance}}</span>
+                                <span>{{roundOff(item.quantity)}}</span>
                                 <div *ngIf="!isActionActive"
                                     [class]="item.quantity < (item.warningThreshold ? item.warningThreshold : 20) ? (item.quantity < (item.errorThreshold ? item.errorThreshold : 5) ? 'error' : 'warning') : ''">
                                     <ng-container
@@ -108,10 +108,10 @@
                             </div>
                         </td>
                         <td>
-                            <p>{{item.ratePerUnit}}</p>
+                            <p>&#8377;{{roundOff(item.ratePerUnit)}}</p>
                         </td>
                         <td>
-                            <p>{{item.finalPrice ? item.finalPrice : item.ratePerUnit * item.quantity}}</p>
+                            <p>&#8377;{{roundOff(item.finalPrice ? item.finalPrice : item.ratePerUnit * item.quantity)}}</p>
                         </td>
                         <td class="align-center" *ngIf="!isActionActive || updateStockItems">
                             <ng-container *ngIf="!isActionActive">

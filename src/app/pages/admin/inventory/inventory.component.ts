@@ -278,7 +278,7 @@ export class InventoryComponent implements OnInit {
       let updatePromises: Promise<void>[] = [];
       // compare from copy to allMaterials and update the quantity
       this.copyIngredients.forEach((item: StockItem) => {
-        const copyItem = this.allMaterials.find((copy) => {
+        const copyItem:any = this.allMaterials.find((copy) => {
           // console.log(copy.closingBalance)
           if (!copy.closingBalance){
             copy.closingBalance = 0;
@@ -290,19 +290,26 @@ export class InventoryComponent implements OnInit {
           );
         });
         if (copyItem) {
+          // set every undefined field to 0 in copyItem
+          Object.keys(copyItem).forEach((key:any) => {
+            if (copyItem[key] == undefined) {
+              copyItem[key] = 0;
+            }
+          });
           console.log('copyItem', copyItem);
           const finalPrice = Number(copyItem.newQuantity) * Number(copyItem.newRatePerUnit) + Number(copyItem.quantity) * Number(copyItem.ratePerUnit);
           console.log("DIFF-ITEM",copyItem)
           differenceItems.push(copyItem);
           let copiedIngredient = JSON.parse(JSON.stringify(copyItem));
           copiedIngredient.quantity = Number(copyItem.newQuantity || 0) + Number(copyItem.openingBalance || 0);
+          copiedIngredient.openingBalance = Number(copyItem.newQuantity || 0) + Number(copyItem.openingBalance || 0);
           copiedIngredient.ratePerUnit = Number(copyItem.newRatePerUnit);
           copiedIngredient.finalPrice = Number(finalPrice);
           if (copyItem) {
             if (copyItem.id) {
               console.log("COPIED-ITEM",copiedIngredient)
-              // updatePromises
-              //   .push(this.databaseService.updateIngredient(copiedIngredient, copyItem.id));
+              updatePromises
+                .push(this.databaseService.updateIngredient(copiedIngredient, copyItem.id));
             }
           }
         }
@@ -313,24 +320,26 @@ export class InventoryComponent implements OnInit {
           items: differenceItems.map((item) => {return item.id})
         }
         console.log("differenceItems",differenceItems)
-        // updatePromises.push(
-        //   this.databaseService.addPurchaseHistory(data,differenceItems)
-        // )
-
-        // Promise.all(updatePromises).then(() => {
-        //   this.alertify.presentToast('All stock Updated Successfully');
-        //   this.ngOnInit();
-        // }).catch((error: any) => {
-        //   this.alertify.presentToast(error.message);
-        // }).finally(() => {
-        //   this.isActionActive = false;
-        // })
+        updatePromises.push(
+          this.databaseService.addPurchaseHistory(data,differenceItems)
+        )
+        Promise.all(updatePromises).then(() => {
+          this.alertify.presentToast('All stock Updated Successfully');
+          this.ngOnInit();
+        }).catch((error: any) => {
+          this.alertify.presentToast(error.message);
+        }).finally(() => {
+          this.isActionActive = false;
+        })
       } else {
         this.isActionActive = false;
         this.alertify.presentToast('No Changes Made');
       }
       console.log('updatePromises', updatePromises,differenceItems);
     }
+  }
+  roundOff(value: number) {
+    return value.toFixed(2);
   }
 }
 
