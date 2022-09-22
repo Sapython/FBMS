@@ -25,7 +25,21 @@ main {
     .container {
         max-height: 50vh;
         overflow-y: auto;
-
+        .row{
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+            .heading{
+                font-size: 20px;
+                font-weight: 600;
+            }
+            .badge{
+                border:2px solid var(--primary-color);
+                color:var(--primary-color);
+                padding:5px;
+                border-radius: 16px;
+            }
+        }
         table {
             width: 100%;
 

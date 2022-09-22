@@ -25,15 +25,17 @@
     <mat-tab-group *ngIf="range.valid && showHistory">
         <mat-tab label="Balance History" *ngIf="sheet.length > 0">
             <mat-tab-group>
-                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of sheet">
+                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of sheet;let i = index">
+                    <p>Total Price Of The Day{{roundOff(sheetsFinalPrices[i])}}</p>
+                    <hr>
                     <div class="container">
                         <mat-card *ngFor="let sheets of dateKey.history">
-                            <h3>Date: {{sheets.date | date:'h:mm a'}}</h3>
+                            <div class="row"><div class="heading">Date: {{sheets.date | date:'h:mm a'}}</div> <div class="badge">Total Price: {{roundOff(sheets.sectionPrice)}}</div></div>
                             <div class="container">
                                 <table>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Price</th>
+                                        <th>Rate</th>
                                         <th>OB</th>
                                         <th>CB</th>
                                         <th>Issued</th>
@@ -46,10 +48,10 @@
                                                 <p class="name">{{item?.name}}</p>
                                             </div>
                                         </td>
-                                        <td>{{item?.ratePerUnit}}</td>
-                                        <td>{{item?.openingBalance}}</td>
-                                        <td>{{item?.closingBalance}}</td>
-                                        <td>{{item.openingBalance - item.closingBalance}}</td>
+                                        <td>{{roundOff(item?.newRatePerUnit)}}</td>
+                                        <td>{{roundOff(item?.openingBalance)}}</td>
+                                        <td>{{roundOff(item?.closingBalance)}}</td>
+                                        <td>{{roundOff(item.openingBalance - item.closingBalance)}}</td>
                                         <p class="unit">{{item?.unit}}</p>
                                     </tr>
                                 </table>
@@ -61,21 +63,23 @@
         </mat-tab>
         <mat-tab label="Purchase History" *ngIf="purchaseSheet.length>0">
             <mat-tab-group>
-                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of purchaseSheet">
+                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of purchaseSheet;let i = index;">
+                    <p>Total Price Of The Day{{roundOff(purchaseSheetsFinalPrices[i])}}</p>
+                    <hr>
                     <div class="container">
                         <mat-card *ngFor="let sheets of dateKey.history">
-                            <h3>Date: {{sheets.date | date:'h:mm a'}}</h3>
+                            <div class="row"><div class="heading">Date: {{sheets.date | date:'h:mm a'}}</div> <div class="badge">Total Price: {{roundOff(sheets.sectionPrice)}}</div></div>
                             <div class="container">
                                 <table>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Previous Price</th>
-                                        <th>Previous Quantity</th>
-                                        <th>Purchased Quantity</th>
-                                        <th>Purchased Rate</th>
-                                        <th>Total Quantity</th>
-                                        <th>Total Gross Value</th>
-                                        <th>New Rate</th>
+                                        <th>Prev. Rt</th>
+                                        <th>Prev. Qty</th>
+                                        <th>Purchased Qty</th>
+                                        <th>Purchased Rt</th>
+                                        <th>Ttl Qty</th>
+                                        <th>Ttl Gross Val</th>
+                                        <th>New Rt.</th>
                                         <th>Unit</th>
                                     </tr>
                                     <tr *ngFor="let item of sheets.items;let i = index" class="balanceItem">
@@ -85,13 +89,13 @@
                                                 <p class="name">{{item?.name}}</p>
                                             </div>
                                         </td>
-                                        <td>{{item?.ratePerUnit}}</td>
-                                        <td>{{item?.quantity}}</td>
-                                        <td>{{item?.newQuantity}}</td>
-                                        <td>{{item?.newRatePerUnit}}</td>
-                                        <td>{{item?.newQuantity + item.quantity}}</td>
-                                        <td>{{(item?.ratePerUnit * item.quantity) + (item.newRatePerUnit * item.newQuantity)}}</td>
-                                        <td>{{item?.newRatePerUnit}}</td>
+                                        <td>{{roundOff(item?.ratePerUnit)}}</td>
+                                        <td>{{roundOff(item?.quantity)}}</td>
+                                        <td>{{roundOff(item?.newQuantity)}}</td>
+                                        <td>{{roundOff(item?.newRatePerUnit)}}</td>
+                                        <td>{{roundOff(item?.newQuantity + item.quantity)}}</td>
+                                        <td>{{roundOff((item?.ratePerUnit * item.quantity) + (item.newRatePerUnit * item.newQuantity))}}</td>
+                                        <td>{{roundOff(item?.newRatePerUnit)}}</td>
                                         <p class="unit">{{item?.unit}}</p>
                                     </tr>
                                 </table>
@@ -103,17 +107,19 @@
         </mat-tab>
         <mat-tab label="Stock History" *ngIf="stockSheet.length>0">
             <mat-tab-group>
-                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of stockSheet">
+                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of stockSheet;let i = index">
+                    <p>Total Price Of The Day{{roundOff(stockSheetFinalPrices[i])}}</p>
+                    <hr>
                     <div class="container">
                         <mat-card *ngFor="let sheets of dateKey.history">
-                            <h3>Date: {{sheets.date | date:'h:mm a'}}</h3>
+                            <div class="row"><div class="heading">Date: {{sheets.date | date:'h:mm a'}}</div> <div class="badge">Total Price: {{roundOff(sheets.sectionPrice)}}</div></div>
                             <div class="container">
                                 <table>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Old Quantity</th>
-                                        <th>Update In Quantity</th>
-                                        <th>New Quantity</th>
+                                        <th>Old Qty</th>
+                                        <th>Update In Qty</th>
+                                        <th>New Qty</th>
                                         <th>Unit</th>
                                     </tr>
                                     <tr *ngFor="let item of sheets.items;let i = index" class="balanceItem">
@@ -123,9 +129,9 @@
                                                 <p class="name">{{item?.name}}</p>
                                             </div>
                                         </td>
-                                        <td>{{item?.quantity}}</td>
-                                        <td>{{item?.newQuantity}}</td>
-                                        <td>{{item?.newQuantity + item?.quantity}}</td>
+                                        <td>{{roundOff(item?.quantity)}}</td>
+                                        <td>{{roundOff(item?.newQuantity)}}</td>
+                                        <td>{{roundOff(item?.newQuantity + item?.quantity)}}</td>
                                         <p class="unit">{{item?.unit}}</p>
                                     </tr>
                                 </table>

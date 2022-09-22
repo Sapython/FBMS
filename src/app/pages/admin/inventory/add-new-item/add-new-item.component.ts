@@ -34,8 +34,16 @@ export class AddNewItemComponent implements OnInit {
       name:'milligrams'
     },
     {
-      id:'kg',
-      name:'kilogram'
+      id:'tin',
+      name:'Tin'
+    },
+    {
+      id:'btl',
+      name:'Bottle'
+    },
+    {
+      id:'pcs',
+      name:'pieces'
     },
     {
       id:'dozen',
@@ -95,9 +103,11 @@ export class AddNewItemComponent implements OnInit {
   dropped(event:any){
     console.log(event);
   }
+  
   removeFile(index:number){
     this.files.splice(index,1)
   }
+
   addFile(file:FileList){
     console.log(file);
     let problem = false;

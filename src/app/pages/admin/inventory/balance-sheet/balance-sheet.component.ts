@@ -21,33 +21,80 @@ export class BalanceSheetComponent implements OnInit {
     public items: { type: 'rawMaterials' | 'consumables'; items: StockItem[] },
     private databaseService: DatabaseService,
     private alertify: AlertsAndNotificationsService,
-    private dataProvider:DataProvider
+    private dataProvider: DataProvider
   ) {}
   sheet: any[] = [];
+  sheetsFinalPrices:any[] = []
+  purchaseSheetsFinalPrices:any[] = []
+  stockSheetFinalPrices:any[] = []
   purchaseSheet: any[] = [];
-  stockSheet:any[] = [];
+  stockSheet: any[] = [];
   itemsCopy: StockItem[] = [];
   addTodaySheet: boolean = false;
   showHistory: boolean = true;
+  totalSectionPrices: number[] = [];
   ngOnInit(): void {
-    // this.range.controls.end.setValue(new Date());
-    // this.range.controls.start.setValue(new Date());
-    
     this.itemsCopy = JSON.parse(JSON.stringify(this.items.items));
     console.log(this.items);
     this.range.valueChanges.subscribe((value) => {
       console.log(value);
       this.showHistory = true;
       this.setValue(value);
-      // check if the start and end are same date
-      
     });
   }
-  setValue(value:any){
+  addItems(item: any[], key: string) {
+    // sum items and return value
+    let sum = 0;
+    item.forEach((element: any) => {
+      sum += element[key];
+    });
+    return sum;
+  }
+  getFinalPrice(index: string, sheet: any[]) {
+    console.log('SHEET',sheet)
+    if (sheet && sheet.length > 0) {
+      let total = 0;
+      console.log(sheet);
+      const foundItem = sheet.find((element: any) => {
+        console.log('dateText', element, element.dateText);
+        return true;
+      });
+      console.log('foundItem', foundItem);
+      foundItem.history.forEach((element: any) => {
+        total += element.sectionPrice;
+      });
+    }
+    return 0;
+  }
+  setValue(value: any) {
+    function addBalanceHistoryValue(item: any[], key: string){
+      // console.log("BIS",item)
+      let sum = 0;
+      item.forEach((element: any) => {
+        sum += (element.openingBalance - element.closingBalance) * element.newRatePerUnit;
+      });
+      return sum;
+    }
+    function addPurchaseItems(item:any[]){
+      console.log("BIS",item)
+      let sum = 0;
+      item.forEach((element: any) => {
+        sum += element.newQuantity * element.newRatePerUnit;
+      });
+      return sum;
+    }
+    function sumStockItems(item:any[]){
+      // console.log("BIS",item)
+      let sum = 0;
+      item.forEach((element: any) => {
+        sum += (element.newQuantity + element.quantity)  * element.newRatePerUnit;
+      });
+      return sum;
+    }
+    
     if (value.start && value.end) {
       if (value.start?.getTime() == value.end?.getTime()) {
         value.end?.setHours(24);
-        // console.log("Same", value);
       }
       if (value.start && value.end) {
         this.sheet = [];
@@ -57,93 +104,187 @@ export class BalanceSheetComponent implements OnInit {
         this.databaseService
           .getBalanceHitory(value.start, value.end)
           .then(async (docs) => {
-            // console.log(docs);
             let counter = 0;
-            let allDateWiseData:any = {}
-            // docs.forEach(async (element: any) => {
-            //   // console.log(element);
-              
-            // });
-            for (let item of docs.docs){
-              const element:any = item;
-              await this.databaseService.getBalanceHistoryIngredients(element.data().items,element.id).then((res:any)=>{
-                // console.log(res);
-                if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-                  allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,id:element.id,date:element.data().date.toDate()});
-                } else {
-                  allDateWiseData[element.data().date.toDate().toDateString()]={history:[{items:res,id:element.id,date:element.data().date.toDate()}],date:element.data().date.toDate(),active:element.id};
-                }
-                // this.sheet.push({ ...element.data(), id: element.id,items:res });
-              })
+            let allDateWiseData: any = {};
+            let allPrices: number = 0;
+            for (let item of docs.docs) {
+              const element: any = item;
+              await this.databaseService
+                .getBalanceHistoryIngredients(element.data().items, element.id)
+                .then((res: any) => {
+                  if (
+                    allDateWiseData[element.data().date.toDate().toDateString()]
+                  ) {
+                    allDateWiseData[
+                      element.data().date.toDate().toDateString()
+                    ].history.push({
+                      items: res,
+                      id: element.id,
+                      date: element.data().date.toDate(),
+                      sectionPrice: addBalanceHistoryValue(res, 'finalPrice'),
+                    });
+                  } else {
+                    console.log(res);
+                    allDateWiseData[
+                      element.data().date.toDate().toDateString()
+                    ] = {
+                      history: [
+                        {
+                          items: res,
+                          id: element.id,
+                          date: element.data().date.toDate(),
+                          sectionPrice: addBalanceHistoryValue(res, 'finalPrice'),
+                        },
+                      ],
+                      date: element.data().date.toDate(),
+                      dateText: element.data().date.toDate().toDateString(),
+                      active: element.id,
+                      
+                    };
+                    allPrices += this.addItems(res, 'finalPrice');
+                  }
+                });
               counter++;
             }
-            // console.log("Balances "+counter);
-            // console.log("allDateWiseData",allDateWiseData,Object.values(allDateWiseData));
             this.sheet = Object.values(allDateWiseData);
-          }).finally(()=>{
-            this.dataProvider.pageSetting.blur =false;
+            this.sheetsFinalPrices = []
+            this.sheet.forEach((element:any)=>{
+              console.log("element.history",element.history)
+              let finalPrice = 0
+              element.history.forEach((history:any)=>{
+                finalPrice+=history.sectionPrice
+              })
+              console.log(finalPrice)
+              this.sheetsFinalPrices.push(finalPrice)
+            })
+            console.log(this.sheet);
+          })
+          .finally(() => {
+            this.dataProvider.pageSetting.blur = false;
           });
-        this.databaseService.getPurchasesHistory(value.start, value.end).then(async (docs) => {
-          let allDateWiseData:any = {}
-          let counter = 0;
-          for (let item of docs.docs){
-            const element:any = item;
-              await this.databaseService.getPurchaseHistoryIngredients(element.data().items,element.id).then((res:any)=>{
-                // console.log(res);
-                if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-                  allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,id:element.id,date:element.data().date.toDate()});
-                } else {
-                  allDateWiseData[element.data().date.toDate().toDateString()]={history:[{items:res,id:element.id,date:element.data().date.toDate()}],date:element.data().date.toDate(),active:element.id};
-                }
-                // this.sheet.push({ ...element.data(), id: element.id,items:res });
-              })
+        this.databaseService
+          .getPurchasesHistory(value.start, value.end)
+          .then(async (docs) => {
+            let allDateWiseData: any = {};
+            let counter = 0;
+            for (let item of docs.docs) {
+              const element: any = item;
+              await this.databaseService
+                .getPurchaseHistoryIngredients(element.data().items, element.id)
+                .then((res: any) => {
+                  if (
+                    allDateWiseData[element.data().date.toDate().toDateString()]
+                  ) {
+                    allDateWiseData[
+                      element.data().date.toDate().toDateString()
+                    ].history.push({
+                      items: res,
+                      id: element.id,
+                      date: element.data().date.toDate(),
+                      sectionPrice: addPurchaseItems(res),
+                    });
+                  } else {
+                    allDateWiseData[
+                      element.data().date.toDate().toDateString()
+                    ] = {
+                      history: [
+                        {
+                          items: res,
+                          id: element.id,
+                          date: element.data().date.toDate(),
+                          sectionPrice: addPurchaseItems(res),
+                        },
+                      ],
+                      date: element.data().date.toDate(),
+                      active: element.id,
+                      sectionPrice: this.addItems(res, 'finalPrice'),
+                    };
+                  }
+                });
               counter++;
-          }
-          // console.log("Purchases "+counter);
-          // console.log("allDateWiseData",allDateWiseData,Object.values(allDateWiseData));
-          this.purchaseSheet = Object.values(allDateWiseData);
-        }).finally(()=>{
-          this.dataProvider.pageSetting.blur =false;
-        })
+            }
 
-        this.databaseService.getStockHistory(value.start, value.end).then(async (docs) => {
-          let allDateWiseData:any = {}
-          let counter = 0;
-          // docs.forEach((element: any) => {
-          //   // console.log(element);
-          //   this.databaseService.getStockHistoryIngredients(element.data().items,element.id).then((res:any)=>{
-          //     // console.log(res);
-          //     this.stockSheet.push({ ...element.data(), id: element.id,items:res });
-          //     // console.log(this.stockSheet)
-          //   })
-          //   counter++;
-          // });
-          for (let item of docs.docs){
-            const element:any = item;
-              await this.databaseService.getStockHistoryIngredients(element.data().items,element.id).then((res:any)=>{
-                // console.log(res);
-                if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-                  allDateWiseData[element.data().date.toDate().toDateString()].history.push({items:res,id:element.id,date:element.data().date.toDate()});
-                } else {
-                  allDateWiseData[element.data().date.toDate().toDateString()]={history:[{items:res,id:element.id,date:element.data().date.toDate()}],date:element.data().date.toDate(),active:element.id};
-                }
-                // this.sheet.push({ ...element.data(), id: element.id,items:res });
+            this.purchaseSheet = Object.values(allDateWiseData);
+            console.log(this.purchaseSheet);
+            this.purchaseSheetsFinalPrices = []
+            this.purchaseSheet.forEach((element:any)=>{
+              console.log("element.history",element.history)
+              let finalPrice = 0
+              element.history.forEach((history:any)=>{
+                finalPrice+=history.sectionPrice
               })
+              console.log(finalPrice)
+              this.purchaseSheetsFinalPrices.push(finalPrice)
+            })
+            
+          })
+          .finally(() => {
+            this.dataProvider.pageSetting.blur = false;
+          });
+        this.databaseService
+          .getStockHistory(value.start, value.end)
+          .then(async (docs) => {
+            let allDateWiseData: any = {};
+            let counter = 0;
+            for (let item of docs.docs) {
+              const element: any = item;
+              await this.databaseService
+                .getStockHistoryIngredients(element.data().items, element.id)
+                .then((res: any) => {
+                  if (
+                    allDateWiseData[element.data().date.toDate().toDateString()]
+                  ) {
+                    allDateWiseData[
+                      element.data().date.toDate().toDateString()
+                    ].history.push({
+                      items: res,
+                      id: element.id,
+                      date: element.data().date.toDate(),
+                      sectionPrice: sumStockItems(res),
+                    });
+                  } else {
+                    allDateWiseData[
+                      element.data().date.toDate().toDateString()
+                    ] = {
+                      history: [
+                        {
+                          items: res,
+                          id: element.id,
+                          date: element.data().date.toDate(),
+                          sectionPrice: sumStockItems(res),
+                        },
+                      ],
+                      date: element.data().date.toDate(),
+                      active: element.id,
+                      sectionPrice: this.addItems(res, 'finalPrice'),
+                    };
+                  }
+                });
               counter++;
-          }
-          // console.log("Stocks "+counter);
-          // console.log("allDateWiseData",allDateWiseData,Object.values(allDateWiseData));
-          this.stockSheet = Object.values(allDateWiseData);
-          // console.log("this.purchaseSheet",this.purchaseSheet);
-        }).finally(()=>{
-          this.dataProvider.pageSetting.blur =false;
-        })
+            }
+            this.stockSheet = Object.values(allDateWiseData);
+            console.log(this.stockSheet);
+            this.stockSheetFinalPrices = []
+            this.stockSheet.forEach((element:any)=>{
+              console.log("element.history",element.history)
+              let finalPrice = 0
+              element.history.forEach((history:any)=>{
+                finalPrice+=history.sectionPrice
+              })
+              console.log(finalPrice)
+              this.stockSheetFinalPrices.push(finalPrice)
+            })
+
+          })
+          .finally(() => {
+            this.dataProvider.pageSetting.blur = false;
+          });
       }
     }
   }
   range = new FormGroup({
-    start: new FormControl<Date | null>(null,[Validators.required]),
-    end: new FormControl<Date | null>(null,[Validators.required]),
+    start: new FormControl<Date | null>(null, [Validators.required]),
+    end: new FormControl<Date | null>(null, [Validators.required]),
   });
   addQuantity(index: number) {
     if (this.items.type == 'consumables') {
@@ -165,6 +306,14 @@ export class BalanceSheetComponent implements OnInit {
     }
   }
 
+  roundOff(value: number) {
+    if (value){
+      return value.toFixed(2);
+    } else {
+      return '0.00'
+    }
+  }
+
   saveTodaySheet(items: any[]) {
     // console.log(items);
     let differenceArray: any[] = [];
@@ -172,19 +321,23 @@ export class BalanceSheetComponent implements OnInit {
     // find the difference between the two arrays using quantity or issued
     items.forEach((mainIngredient: any) => {
       const forSheet = this.itemsCopy.find((element: any) => {
-        return (
-          element.id == mainIngredient.id && mainIngredient.used > 0
-        );
+        return element.id == mainIngredient.id && mainIngredient.used > 0;
       });
       if (forSheet) {
-        forSheet.closingBalance = JSON.parse(JSON.stringify((mainIngredient.openingBalance || 0) - (mainIngredient.used || 0)))
-        mainIngredient.openingBalance = JSON.parse(JSON.stringify(forSheet.closingBalance))
-        mainIngredient.quantity = mainIngredient.openingBalance
+        forSheet.closingBalance = JSON.parse(
+          JSON.stringify(
+            (mainIngredient.openingBalance || 0) - (mainIngredient.used || 0)
+          )
+        );
+        mainIngredient.openingBalance = JSON.parse(
+          JSON.stringify(forSheet.closingBalance)
+        );
+        mainIngredient.quantity = mainIngredient.openingBalance;
         itemDifferenceArray.push(mainIngredient);
         differenceArray.push(forSheet);
       }
     });
-    console.log("DIFFS",differenceArray, itemDifferenceArray);
+    console.log('DIFFS', differenceArray, itemDifferenceArray);
     const allIds: string[] = [];
     differenceArray.forEach((item: any) => {
       allIds.push(item.id);
@@ -200,28 +353,31 @@ export class BalanceSheetComponent implements OnInit {
         docs.forEach((element: any) => {
           this.itemsCopy.push({ ...element.data(), id: element.id });
         });
-      })
+      });
       Promise.all(
         itemDifferenceArray.map((item) => {
           return this.databaseService.updateIngredient(item, item.id);
         })
-      ).then(() => {
-        this.databaseService
-          .addBalanceHistory(data, differenceArray)
-          .then((res: any) => {
-            console.log(res);
-            this.addTodaySheet = false;
-            this.alertify.presentToast('Saved Successfully');
-          })
-          .catch((err: any) => {
-            console.log(err);
-            this.alertify.presentToast('Error Occured');
-          }).finally(()=>{
-            this.dataProvider.pageSetting.blur = false;
-          });
-      }).catch((err)=>{
-        this.dataProvider.pageSetting.blur = false;
-      });
+      )
+        .then(() => {
+          this.databaseService
+            .addBalanceHistory(data, differenceArray)
+            .then((res: any) => {
+              console.log(res);
+              this.addTodaySheet = false;
+              this.alertify.presentToast('Saved Successfully');
+            })
+            .catch((err: any) => {
+              console.log(err);
+              this.alertify.presentToast('Error Occured');
+            })
+            .finally(() => {
+              this.dataProvider.pageSetting.blur = false;
+            });
+        })
+        .catch((err) => {
+          this.dataProvider.pageSetting.blur = false;
+        });
     } else {
       this.alertify.presentToast('No Items to Save');
     }
