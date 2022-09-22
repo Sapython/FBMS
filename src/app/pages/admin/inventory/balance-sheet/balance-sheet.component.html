@@ -167,12 +167,12 @@
                             <p class="name">{{item?.name}}</p>
                         </div>
                     </td>
-                    <td>{{item?.ratePerUnit}}</td>
+                    <td>{{roundOff(item?.ratePerUnit || 0)}}</td>
                     <td>
-                        <p>{{item?.openingBalance}}</p>
+                        <p>{{roundOff(item?.openingBalance || 0)}}</p>
                     </td>
                     <td>
-                        <p>{{(item?.openingBalance || 0) - (item?.used || 0)}}</p>
+                        <p>{{roundOff((item?.openingBalance || 0) - (item?.used || 0))}}</p>
                     </td>
                     <!-- <td>
                         <p>{{item?.quantity}}</p>
