@@ -1,5 +1,5 @@
 <main>
-    <form [formGroup]="tableForm" (ngSubmit)="addCategory()">
+    <form [formGroup]="roomForm" (ngSubmit)="addRoom()">
         <div class="header">
             <h1>{{title}}</h1>
         </div>
@@ -9,11 +9,11 @@
                 <div class="mainData">
                     <mat-form-field appearance="outline">
                         <mat-label>Room Name</mat-label>
-                        <input formControlName="name" matInput placeholder="Table Name">
+                        <input formControlName="name" matInput placeholder="Room Name">
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Room No</mat-label>
-                        <input formControlName="tableNo" type="number   " matInput placeholder="Table Number">
+                        <input formControlName="tableNo" type="number" matInput placeholder="Room Number">
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Max Occupancy</mat-label>
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="actions">
-            <button type="submit" mat-raised-button color="primary" [disabled]="!tableForm.valid">{{title}}</button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="!roomForm.valid">{{title}}</button>
         </div>
     </form>
 </main>

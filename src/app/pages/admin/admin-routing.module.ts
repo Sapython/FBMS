@@ -10,7 +10,7 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'dashboard',
@@ -73,6 +73,11 @@ const routes: Routes = [
         path: 'feedback',
         loadChildren: () =>
           import('./feedback/feedback.module').then((m) => m.FeedbackModule),
+      },
+      {
+        path: 'rooms',
+        loadChildren: () =>
+          import('./rooms/rooms.module').then((m) => m.RoomsModule),
       },
     ],
   },

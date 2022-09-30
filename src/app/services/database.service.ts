@@ -304,6 +304,33 @@ export class DatabaseService {
     );
   }
 
+  getRooms(){
+    return collectionData(query(collection(this.fs, 'business/accounts/' + this.dataProvider.currentProject?.projectId + '/rooms/rooms'),orderBy('tableNo')), {idField:'id'});
+  }
+
+  addRoom(data:any){
+    return addDoc(
+      collection(
+        this.fs,
+        'business/accounts/' +  
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms'
+      ),
+      data
+    );
+  }
+
+  deleteRoom(id:string){
+    return deleteDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms/' + id
+      )
+    );
+  }
+
   addMainCategory(data:any){
     return addDoc(collection(this.fs,'business/accounts/'+ this.dataProvider.currentProject?.projectId +'/recipes/categoryGroups'),data);
   }
