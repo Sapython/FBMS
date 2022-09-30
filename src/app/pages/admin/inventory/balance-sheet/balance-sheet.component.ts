@@ -24,6 +24,7 @@ export class BalanceSheetComponent implements OnInit {
     private dataProvider: DataProvider
   ) {}
   sheet: any[] = [];
+  finalValueSheet: any[] = [];
   sheetsFinalPrices:any[] = []
   purchaseSheetsFinalPrices:any[] = []
   stockSheetFinalPrices:any[] = []
@@ -33,6 +34,9 @@ export class BalanceSheetComponent implements OnInit {
   addTodaySheet: boolean = false;
   showHistory: boolean = true;
   totalSectionPrices: number[] = [];
+  getKey(item: any) {
+    return Object.keys(item);
+  }
   ngOnInit(): void {
     this.itemsCopy = JSON.parse(JSON.stringify(this.items.items));
     console.log(this.items);
@@ -279,6 +283,30 @@ export class BalanceSheetComponent implements OnInit {
           .finally(() => {
             this.dataProvider.pageSetting.blur = false;
           });
+        this.databaseService
+        .getFinalValueHistory(value.start, value.end)
+        .then((docs) => {
+          let allDateWiseData: any = {};
+          let counter = 0;
+          docs.forEach((element: any) => {
+            console.log("PADFOOT",element.data())
+            if (allDateWiseData[element.data().date.toDate().toDateString()]) {
+              allDateWiseData[element.data().date.toDate().toDateString()].items.push(element.data());
+            } else {
+              allDateWiseData[element.data().date.toDate().toDateString()] = {
+                items:[
+                  element.data()
+                ],
+                date: element.data().date.toDate(),
+              };
+            }
+          })
+          this.finalValueSheet = Object.values(allDateWiseData);
+          console.log("finalValueSheet",this.finalValueSheet);
+        })
+        .finally(() => {
+          this.dataProvider.pageSetting.blur = false;
+        });
       }
     }
   }
@@ -328,7 +356,7 @@ export class BalanceSheetComponent implements OnInit {
           JSON.stringify(
             (mainIngredient.openingBalance || 0) - (mainIngredient.used || 0)
           )
-        );
+        ) || 0;
         mainIngredient.openingBalance = JSON.parse(
           JSON.stringify(forSheet.closingBalance)
         );

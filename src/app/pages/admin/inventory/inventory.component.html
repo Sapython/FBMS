@@ -54,6 +54,7 @@
 </div>
 <mat-tab-group mat-align-tabs="start" (selectedTabChange)="setTab($event)" *ngIf="categories.length>0">
     <mat-tab [label]="category" *ngFor="let category of categories">
+        <div class="titleBadge">Total Stock Value For This Category: <b> &#8377;{{categoryWisePrices[category]}}</b></div>
         <div class="body">
             <table [cellSpacing]="0">
                 <thead>
@@ -89,7 +90,7 @@
                             </div>
                         </td>
                         <td>
-                            <p>{{item.unit}}</p>
+                            <p>{{item.id}}</p>
                         </td>
                         <td>
                             <div class="row">

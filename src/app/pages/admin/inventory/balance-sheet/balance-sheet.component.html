@@ -141,6 +141,43 @@
                 </mat-tab>
             </mat-tab-group>
         </mat-tab>
+        <mat-tab label="Prices History" *ngIf="stockSheet.length>0">
+            <mat-tab-group>
+                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of finalValueSheet;let i = index">
+                    <div class="container">
+                        <mat-card *ngFor="let sheets of dateKey.items">
+                            <div class="row"><div class="heading">Date: {{sheets.date.toDate() | date:'h:mm a'}}</div> <div class="badge">Action: {{sheets.action}}</div></div>
+                            <!-- <p>Action{{sheets.action}}</p> -->
+                            <ol>
+                                <li *ngFor="let key of getKey(sheets.categoryWisePrices)">
+                                    {{key}}:&nbsp;&nbsp;<b>{{sheets.categoryWisePrices[key]}}</b>
+                                </li>
+                            </ol>
+                            <!-- <div class="container">
+                                <table>
+                                    <tr>
+                                        <th>Action</th>
+                                        <th>Value</th>
+                                        <th>Time</th>
+                                    </tr>
+                                    <tr *ngFor="let item of sheets.items;let i = index" class="balanceItem">
+                                        <td>{{item.action}}</td>
+                                        <td>
+                                            <ol>
+                                                <li *ngFor="let key of getKey(item.categoryWisePrices)">
+                                                    {{key}}:&nbsp;&nbsp;<b>{{item.categoryWisePrices[key]}}</b>
+                                                </li>
+                                            </ol>
+                                        </td>
+                                        <td>{{item.date.toDate() | date}}</td>
+                                    </tr>
+                                </table>
+                            </div> -->
+                        </mat-card>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-tab>
     </mat-tab-group>
     <ng-container *ngIf="!(sheet.length >0 || purchaseSheet.length > 0) && range.valid">
         <h4>No Balance Sheets or Purchase Sheet Found</h4>
@@ -156,7 +193,6 @@
                     <th>Price</th>
                     <th>OB</th>
                     <th>CB</th>
-                    <!-- <th>Quantity</th> -->
                     <th>Issued</th>
                     <th>Unit</th>
                 </tr>
@@ -174,9 +210,6 @@
                     <td>
                         <p>{{roundOff((item?.openingBalance || 0) - (item?.used || 0))}}</p>
                     </td>
-                    <!-- <td>
-                        <p>{{item?.quantity}}</p>
-                    </td> -->
                     <td>
                         <input class="quantityInput" step="0.1" type="number"
                             (input)="item.closingBalance = ((item.openingBalance || 0) - (item.used || 0))"

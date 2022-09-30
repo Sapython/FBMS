@@ -45,7 +45,10 @@ export class AppComponent implements OnInit {
                     this.router.navigate(['/admin']);
                   }
                 } else {
-                  this.router.navigate(['/onboarding']);
+                  // this.dataProvider.currentProject = projects[0];
+                  alert("Please ask an admin to register a project to this email id.")
+                  this.router.navigate(['sign-in']);
+                  // this.router.navigate(['/onboarding']);
                 }
               } else {
                 this.router.navigate(['/onboarding']);

@@ -455,4 +455,44 @@ export class DatabaseService {
       return document.data();
     }));
   }
+
+  addDebugLog(data:any){
+    return addDoc(
+      collection(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/debug/debug'
+      ),
+      data
+    );
+  }
+
+  addFinalValueHistory(data:any){
+    return addDoc(
+      collection(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/finalValueHistory/finalValueHistory'
+      ),
+      data
+    );
+  }
+
+  getFinalValueHistory(startDate:Date,endDate:Date){
+    return getDocs(
+      query(
+        collection(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/finalValueHistory/finalValueHistory'
+        ),
+        where('date','>=',startDate),
+        where('date','<=',endDate),
+        orderBy('date','desc')
+      )
+    );
+  }
 }
