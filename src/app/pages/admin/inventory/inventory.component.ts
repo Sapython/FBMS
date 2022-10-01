@@ -6,6 +6,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { AddNewItemComponent } from './add-new-item/add-new-item.component';
 import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
 import { UpdateStockComponent } from './update-stock/update-stock.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-inventory',
@@ -35,6 +36,7 @@ export class InventoryComponent implements OnInit {
   currrentAction: 'quantity' | 'purchase' | '' = '';
   categoryWisePrices: any = {};
   currentUpdateAction: 'quantity' | 'purchase' | 'balance' | 'addItem' | 'updateItem'| 'duplicateItem' | 'deleteItem' | '' = '';
+  dataSource = new MatTableDataSource(this.allMaterials);
   ngOnInit(): void {
     this.dataProvider.pageSetting.blur = true;
     this.allMaterials = [];

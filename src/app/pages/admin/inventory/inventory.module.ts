@@ -21,7 +21,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { MatDatepickerModule, MatDateSelectionModel } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MatCardModule} from '@angular/material/card'; 
-
+import {MatTableModule} from '@angular/material/table'; 
 
 @NgModule({
   declarations: [
@@ -48,7 +48,8 @@ import {MatCardModule} from '@angular/material/card';
     MatBadgeModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatCardModule
+    MatCardModule,
+    MatTableModule
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
