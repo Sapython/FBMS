@@ -21,6 +21,12 @@ export class MenuComponent implements OnInit {
       link: 'baseMenu',
     },
     {
+      feature_Name: 'Room Menu',
+      button_Name: 'Manage',
+      src: 'assets/menu1.png',
+      link: 'baseMenu',
+    },
+    {
       feature_Name: 'Swiggy',
       button_Name: 'Manage',
       src: 'assets/menu2.png',
@@ -43,13 +49,7 @@ export class MenuComponent implements OnInit {
       button_Name: 'Manage',
       src: 'assets/menu5.png',
       link: 'homeDelivery',
-    },
-    {
-      feature_Name: 'Dine In',
-      button_Name: 'Manage',
-      src: 'assets/menu6.png',
-      link: 'dineIn',
-    },
+    }
   ];
   subcategories: SubCategory[] = [];
   categories: Category[] = [];

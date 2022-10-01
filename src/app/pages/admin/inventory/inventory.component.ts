@@ -70,6 +70,8 @@ export class InventoryComponent implements OnInit {
       if (this.currentUpdateAction){
         this.setStockFinalValueHistory(this.currentUpdateAction);
       }
+      // sort allMaterials by name
+      this.allMaterials.sort((a, b) => a.name.localeCompare(b.name));
       // console.log('allMaterials', this.allMaterials);
       this.copyIngredients = JSON.parse(JSON.stringify(this.allMaterials));
       this.dataProvider.pageSetting.blur = false;

@@ -1,0 +1,11 @@
+<div [class]="{ 'table-card': true, available: available, booked: !available }">
+    <div class="card-content">
+        <h3>{{ name }}</h3>
+        <h4>Room {{ number }}</h4>
+        <p class="status">{{ available ? "Available" : "Booked" }}</p>
+        <div class="row">
+            <button mat-icon-button (click)="delete()"><mat-icon>delete</mat-icon></button>
+            <mat-icon>king_bed</mat-icon>
+        </div>
+    </div>
+</div>

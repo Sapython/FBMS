@@ -1,0 +1,54 @@
+.table-card {
+    box-shadow: var(--normal-shadow);
+    border-radius: 15px;
+    padding: 1em;
+    width: 150px;
+    .card-content {
+        position: relative;
+        h3 {
+            font-family: var(--primary-font);
+            font-size: var(--large);
+            font-weight: 500;
+            margin-bottom: 1em;
+        }
+        .status {
+            font-family: var(--primary-font);
+            font-size: var(--small);
+            margin: 0;
+        }
+    }
+    &.available {
+        border: 2px solid var(--quinary-color);
+        cursor: pointer;
+        transition: all .3s;
+
+        &:hover {
+            transform: scale(1.03);
+        }
+    }
+    .row {
+        display: flex;
+        justify-content: space-between;
+
+        mat-icon:nth-child(1) {
+            width: 25px;
+            height: 25px;
+            color: #eb4034;
+        }
+        mat-icon:nth-child(2) {
+            font-size: 50px !important;
+            height: 50px;
+            width: 50px;
+            animation: popIn 0.2s ease-out;
+        }
+    }
+    &.booked {
+        background-color: var(--primary-color);
+
+        h3,
+        p,
+        mat-icon {
+            color: var(--primary-contrast-color);
+        }
+    }
+}

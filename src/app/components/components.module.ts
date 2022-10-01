@@ -21,6 +21,7 @@ import { KotPendingCardComponent } from './kot-pending-card/kot-pending-card.com
 import { KotDetailsCardComponent } from './kot-details-card/kot-details-card.component';
 import { CategoriesPosWidgetComponent } from './categories-pos-widget/categories-pos-widget.component';
 import { CategoriesPosTableWidgetComponent } from './categories-pos-table-widget/categories-pos-table-widget.component';
+import { RoomCardComponent } from './room-card/room-card.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { CategoriesPosTableWidgetComponent } from './categories-pos-table-widget
     KotDetailsCardComponent,
     CategoriesPosWidgetComponent,
     CategoriesPosTableWidgetComponent,
+    RoomCardComponent,
   ],
   imports: [CommonModule, MatIconModule,RouterModule,MatButtonModule,MatFormFieldModule,MatInputModule,MatMenuModule],
   exports: [
@@ -55,7 +57,8 @@ import { CategoriesPosTableWidgetComponent } from './categories-pos-table-widget
     KotPendingCardComponent,
     KotDetailsCardComponent,
     CategoriesPosWidgetComponent,
-    CategoriesPosTableWidgetComponent
+    CategoriesPosTableWidgetComponent,
+    RoomCardComponent
   ],
 })
 export class ComponentsModule {}
