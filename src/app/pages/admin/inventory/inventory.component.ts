@@ -1,5 +1,5 @@
 import { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { AlertsAndNotificationsService } from 'src/app/services/alerts-and-notifications.service';
 import { DataProvider } from 'src/app/providers/data.provider';
 import { DatabaseService } from 'src/app/services/database.service';
@@ -7,13 +7,14 @@ import { AddNewItemComponent } from './add-new-item/add-new-item.component';
 import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
 import { UpdateStockComponent } from './update-stock/update-stock.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss'],
 })
-export class InventoryComponent implements OnInit {
+export class InventoryComponent implements OnInit, AfterViewInit {
   allMaterials: StockItem[] = [];
 
   categories: string[] = ['rawMaterials'];
@@ -37,6 +38,12 @@ export class InventoryComponent implements OnInit {
   categoryWisePrices: any = {};
   currentUpdateAction: 'quantity' | 'purchase' | 'balance' | 'addItem' | 'updateItem'| 'duplicateItem' | 'deleteItem' | '' = '';
   dataSource = new MatTableDataSource(this.allMaterials);
+  @ViewChild(MatSort) sort: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   ngOnInit(): void {
     this.dataProvider.pageSetting.blur = true;
     this.allMaterials = [];
@@ -70,8 +77,9 @@ export class InventoryComponent implements OnInit {
       if (this.currentUpdateAction){
         this.setStockFinalValueHistory(this.currentUpdateAction);
       }
-      // sort allMaterials by name
-      this.allMaterials.sort((a, b) => a.name.localeCompare(b.name));
+      this.allMaterials.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
       // console.log('allMaterials', this.allMaterials);
       this.copyIngredients = JSON.parse(JSON.stringify(this.allMaterials));
       this.dataProvider.pageSetting.blur = false;

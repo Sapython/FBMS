@@ -28,7 +28,7 @@ export class DatabaseService {
   constructor(private fs: Firestore, private dataProvider: DataProvider) {}
 
   setupBusiness(newProject: any) {
-    return setDoc(doc(this.fs, 'business/accounts'), {
+    return updateDoc(doc(this.fs, 'business/accounts'), {
       projects: arrayUnion(newProject),
     });
   }
@@ -515,6 +515,22 @@ export class DatabaseService {
           'business/accounts/' +
             this.dataProvider.currentProject?.projectId +
             '/finalValueHistory/finalValueHistory'
+        ),
+        where('date','>=',startDate),
+        where('date','<=',endDate),
+        orderBy('date','desc')
+      )
+    );
+  }
+
+  getAllBills(startDate:Date,endDate:Date){
+    return getDocs(
+      query(
+        collection(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/bills/bills'
         ),
         where('date','>=',startDate),
         where('date','<=',endDate),
