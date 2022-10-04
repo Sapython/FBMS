@@ -41,7 +41,7 @@ export class AddRoomsComponent implements OnInit {
     if (this.roomForm.valid){
       console.log(this.roomForm.value);
       this.dataProvider.pageSetting.blur = true;
-      this.databaseService.addRoom({...this.roomForm.value,booked:false}).then((res:any)=>{
+      this.databaseService.addRoom({...this.roomForm.value,booked:false,type:'room'}).then((res:any)=>{
         this.dataProvider.pageSetting.blur = false;
         this.alertify.presentToast('Room Added Successfully')
         this.closeModal.emit()

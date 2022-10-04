@@ -42,7 +42,7 @@ export class AddTableComponent implements OnInit {
     if (this.tableForm.valid){
       console.log(this.tableForm.value);
       this.dataProvider.pageSetting.blur = true;
-      this.databaseService.addTable({...this.tableForm.value,booked:false}).then((res:any)=>{
+      this.databaseService.addTable({...this.tableForm.value,booked:false,type:'table'}).then((res:any)=>{
         this.dataProvider.pageSetting.blur = false;
         this.alertify.presentToast('Table Added Successfully')
         this.closeModal.emit()
