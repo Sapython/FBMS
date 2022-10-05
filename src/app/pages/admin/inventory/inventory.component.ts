@@ -9,6 +9,9 @@ import { UpdateStockComponent } from './update-stock/update-stock.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -127,6 +130,31 @@ export class InventoryComponent implements OnInit, AfterViewInit {
         });
     }, 5000);
   }
+
+  exportReport(category:string){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Total Ingredients','Total Quantity','Total Price']],
+      body:[
+        [
+          this.allMaterials.length,
+          (this.allMaterials.reduce((a,b)=>a+b.quantity,0)).toFixed(2),
+          this.categoryWisePrices[category]
+        ]
+      ]
+    })
+    doc.autoTable({
+      head: [['Name','Price','Quantity','Total Gross Value']],
+      body: this.allMaterials.map((item) => [
+        item.name,
+        item.ratePerUnit.toFixed(2),
+        item.quantity.toFixed(2),
+        (item.ratePerUnit * item.quantity).toFixed(2)
+      ]),
+    });
+    doc.save('report.pdf');
+  }
+
   getIngredients(type: string) {
     const filtered = this.allMaterials.filter((item) => {
       return item.category == type;

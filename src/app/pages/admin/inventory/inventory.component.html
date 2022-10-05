@@ -5,7 +5,7 @@
     </button>
     <button mat-flat-button color="primary" *ngIf="categories.length>0 && !isActionActive" (click)="compareOpeningClosingBalance()">
         <mat-icon>compare_arrows</mat-icon>
-        <span>&nbsp;&nbsp;Set Opening/Closing Balance</span>
+        <span>&nbsp;&nbsp;Set Issued/See History</span>
     </button>
     <ng-container  *ngIf="categories.length>0 && isActionActive && currrentAction=='quantity'">
         <button mat-stroked-button color="primary" (click)="isActionActive=false;currrentAction='';updateStockItems=false; ngOnInit()">
@@ -54,7 +54,10 @@
 </div>
 <mat-tab-group mat-align-tabs="start" (selectedTabChange)="setTab($event)" *ngIf="categories.length>0">
     <mat-tab [label]="category" *ngFor="let category of categories">
-        <div class="titleBadge">Total Stock Value For This Category: <b> &#8377;{{categoryWisePrices[category]}}</b></div>
+        <div class="row">
+            <div class="titleBadge">Total Stock Value For This Category: <b> &#8377;{{categoryWisePrices[category]}}</b></div>
+            <button mat-flat-button (click)="exportReport(category)" color="primary">Export Pdf</button>
+        </div>
         <div class="body">
             <table [cellSpacing]="0">
                 <thead>

@@ -59,6 +59,12 @@
   width: fit-content;
   margin: 20px 5px;
 }
+.row{
+  display: flex;
+  gap:20px;
+  align-items: center;
+  justify-content: space-between;
+}
 .body {
   display: block;
   margin-top: 20px;
