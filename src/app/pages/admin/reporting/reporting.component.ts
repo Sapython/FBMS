@@ -16,12 +16,17 @@ export class ReportingComponent implements OnInit {
   allDishes: any[] = [];
   saleWiseReport: any[] = [];
   ncBills: any[] = [];
+  incompleteBills: any[] = [];
+
   totalReports: any;
   totalSales: number = 0;
   totalNonChargableSales: number = 0
   totalChargableSales:number = 0
   newCustomers:number = 0;
   cancelledKots:number = 0;
+  cancelledBills: any[] = [];
+  discountedBills: any[] = [];
+  totalDiscountCost:number = 0;
   cancelledKotItems:any[] = []
   completedKots:number = 0;
   customers:any[] = []
@@ -30,6 +35,11 @@ export class ReportingComponent implements OnInit {
     start: new FormControl<Date | null>(null, [Validators.required]),
     end: new FormControl<Date | null>(null, [Validators.required]),
   });
+
+  toFixed(num:number){
+    return num.toFixed(2)
+  }
+
   ngOnInit(): void {
     this.range.valueChanges.subscribe((value) => {
       if (value.start && value.end) {
@@ -38,25 +48,89 @@ export class ReportingComponent implements OnInit {
           value.end?.setMinutes(59);
           value.end?.setSeconds(59);
         }
+        // reset all values
+        this.bills = [];
+        this.itemWiseReport = [];
+        this.allDishes = [];
+        this.saleWiseReport = [];
+        this.ncBills = [];
+        this.incompleteBills = [];
+        this.totalReports = null;
+        this.totalSales = 0;
+        this.totalNonChargableSales = 0
+        this.totalChargableSales = 0
+        this.newCustomers = 0;
+        this.cancelledKots = 0;
+        this.cancelledBills = [];
+        this.cancelledKotItems = []
+        this.completedKots = 0;
+        this.customers = []
+        this.loadedAllData = false;
         this.databaseService
           .getAllBills(value.start, value.end)
           .then((data) => {
             console.log("Docs",data)
-            data.forEach((bill) => {
-              if (bill.data()['completed'] == true) {
-                // this.bills.push(bill.data());
+            let bills:any[] = []
+            data.forEach((doc) => {
+              // console.log( ,doc.data()['selectedDiscounts'])
+              if(doc.data()['deleted']==true){
+                this.cancelledBills.push(doc.data())
+              } else {
+                if (doc.data()['selectedDiscounts'].length>0 && doc.data()['selectedDiscounts'].length<5){
+                  console.log(doc.data()['selectedDiscounts'])
+                  let disc = 0;
+                  let subtotal = 0;
+                  doc.data()['kots'].forEach((kot:any)=>{
+                    if (kot['cancelled']==false){
+                      kot.products.forEach((product:any) => {
+                        subtotal += product.shopPrice * product.quantity;
+                      });
+                    }
+                  })
+                  doc.data()['selectedDiscounts'].forEach((discount:any)=>{
+                    if(discount.discountType == 'percentage'){
+                      disc += subtotal * (Number(discount.discountValue)/100)
+                    } else {
+                      disc += Number(discount.discountValue)
+                    }
+                    console.log(subtotal,discount.discountType,discount.discountValue)
+                  })
+                  console.log(disc,subtotal)
+                  this.totalDiscountCost += disc
+                  bills.push({...doc.data(),discount:disc,afterDisc:subtotal-disc});
+                  this.discountedBills.push({...doc.data(),discount:disc,afterDisc:subtotal-disc});
+                } else {
+                  bills.push(doc.data());
+                }
+              }
+            })
+            // remove duplicate bills by matching bill no
+            bills = bills.filter((bill,index) => {
+              return bills.findIndex(b => b.billNo == bill.billNo) == index
+            })
+            bills.forEach((bill) => {
+              if (bill['completed'] == true) {
                 if (!this.bills.find((b) => b.id == bill.id)) {
-                  if(bill.data()['isNonChargeable']){
-                    this.ncBills.push(bill.data())
-                    this.totalNonChargableSales += bill.data()['grandTotal']
-                    this.totalSales += bill.data()['grandTotal']
+                  const grandTotal = Number(bill['grandTotal']);
+                  if(bill['isNonChargeable'] || bill['grandTotal']==0){
+                    this.ncBills.push(bill)
+                    let total = 0;
+                    bill['kots'].forEach((kot:any) => {
+                      if (kot.cancelled == false && kot.finalized){
+                        kot.products.forEach((item:any) => {
+                          total += item.quantity * item.shopPrice
+                        })
+                      }
+                    })
+                    this.totalNonChargableSales += total
+                    this.totalSales += grandTotal
                   } else {
-                    this.bills.push(bill.data());
-                    this.totalSales += bill.data()['grandTotal']
-                    this.totalChargableSales += bill.data()['grandTotal']
+                    this.bills.push({...bill,grandTotal:grandTotal});
+                    this.totalSales += grandTotal
+                    this.totalChargableSales += grandTotal
                   }
-                  bill.data()['kots'].forEach((kot:any)=>{
-                    if(kot.cancelled){
+                  bill['kots'].forEach((kot:any)=>{
+                    if(kot.cancelled && kot.finalized){
                       this.cancelledKots++
                       kot.products.forEach((item:any)=>{
                         this.cancelledKotItems.push(item)
@@ -66,17 +140,19 @@ export class ReportingComponent implements OnInit {
                     }
                   })
                 }
-                if (bill.data()['customerInfo']['name'] || bill.data()['customerInfo']['email'] || bill.data()['customerInfo']['phoneNumber'] || bill.data()['customerInfo']['address']){
+                if (bill['customerInfo']['name'] || bill['customerInfo']['email'] || bill['customerInfo']['phoneNumber'] || bill['customerInfo']['address']){
                   this.newCustomers += 1
-                  this.customers.push(bill.data()['customerInfo'])
+                  this.customers.push(bill['customerInfo'])
                 }
+              } else {
+                this.incompleteBills.push(bill);
               }
             });
             // sort bills on the basis of bill number
             this.bills.sort((a, b) => {
               return a.billNo - b.billNo;
             });
-            console.log('this.bills', this.bills);
+            // console.log('this.bills', this.bills);
             // add all dishes
             let prc = 0
             this.allDishes = []
@@ -88,7 +164,7 @@ export class ReportingComponent implements OnInit {
                   let index = this.allDishes.findIndex(
                     (dish) => dish.id == product.id
                     );
-                    console.log(index)
+                    // console.log(index)
                   if (index == -1) {
                     this.allDishes.push({
                       ...product,
@@ -104,7 +180,7 @@ export class ReportingComponent implements OnInit {
                 });
               });
             });
-            console.log('this.allDishes',prc, this.allDishes);
+            // console.log('this.allDishes',prc, this.allDishes);
             // generate item wise sales report
             this.allDishes.forEach((dish) => {
               let index = this.itemWiseReport.findIndex(
@@ -124,7 +200,6 @@ export class ReportingComponent implements OnInit {
       }
     });
   }
-
   exportSales() {
     var doc:any = new jsPDF();
     doc.autoTable({
@@ -148,7 +223,7 @@ export class ReportingComponent implements OnInit {
         item.quantity * item.shopPrice,
       ]),
     });
-    doc.save('report.pdf');
+    doc.save('Sales Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +' .pdf');
   }
   exportBills(){
     var doc:any = new jsPDF();
@@ -161,20 +236,24 @@ export class ReportingComponent implements OnInit {
         bill.billNo,
       ]),
     });
-    doc.save('report.pdf');
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.bills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
+    doc.save('Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
   exportAllNonChargableBills(){
     var doc:any = new jsPDF();
     doc.autoTable({
-      head: [['Bill Number','Kots','Grand Total','Id']],
+      head: [['Bill Number','Kots','Sub Total','Id']],
       body: this.ncBills.map((bill) => [
         bill.billNo,
         bill.kotTokens.join(','),
-        bill.grandTotal,
+        bill.subTotal,
         bill.id,
       ]),
     });
-    doc.save('report.pdf');
+    doc.save('All Non Chargable Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
   exportCancelledKots(){
     var doc:any = new jsPDF();
@@ -187,7 +266,7 @@ export class ReportingComponent implements OnInit {
         item.quantity * item.shopPrice,
       ]),
     });
-    doc.save('report.pdf');
+    doc.save('All Cancelled Kot Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
   exportCustomers(){
     var doc:any = new jsPDF();
@@ -200,6 +279,71 @@ export class ReportingComponent implements OnInit {
         customer.address,
       ]),
     });
-    doc.save('report.pdf');
+    doc.save('All Customers Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
+  }
+  exportIncompleteBills(){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Bill Number','Kots','Grand Total','Bill No.']],
+      body: this.incompleteBills.map((bill) => [
+        bill.billNo,
+        bill.kotTokens.join(','),
+        bill.grandTotal,
+        bill.billNo,
+      ]),
+    });
+    doc.save('All Incomplete Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
+  }
+  exportCancelledBills(){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Bill Number','Kots','Grand Total','Bill No.']],
+      body: this.cancelledBills.map((bill) => [
+        bill.billNo,
+        bill.kotTokens.join(','),
+        bill.grandTotal,
+        bill.billNo,
+      ]),
+    });
+  }
+  exportDiscountedBills(){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Bill Number','Kots','Grand Total','Discount','Bill No.']],
+      body: this.discountedBills.map((bill) => [
+        bill.billNo,
+        bill.kotTokens.join(','),
+        bill.grandTotal,
+        bill.discount || 0,
+        bill.billNo,
+      ]),
+    });
+  }
+
+  calculateGrandTotal(bill:any){
+    let subtotal = 0;
+    bill['kots'].forEach((kot:any) => {
+      if (kot.cancelled == false){
+        kot.products.forEach((item:any) => {
+          subtotal += item.quantity * item.shopPrice
+        })
+      }
+    })
+    let disc = 0
+    if (bill['selectedDiscounts'].length > 0 && bill['selectedDiscounts'].length < 5){
+      bill['selectedDiscounts'].forEach((discount:any)=>{
+        if(discount.discountType == 'percentage'){
+          disc += (subtotal/100)*Number(discount.discountValue)
+        } else {
+          disc += Number(discount.discountValue)
+        }
+      })
+    }
+    console.log("disc",disc)
+    subtotal = subtotal - disc
+    let cgst = (subtotal/100) * 2.5
+    let sgst = (subtotal/100) * 2.5
+    let total = subtotal + cgst + sgst
+    return [total,subtotal]
   }
 }

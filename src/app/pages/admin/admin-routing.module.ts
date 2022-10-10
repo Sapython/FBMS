@@ -80,6 +80,7 @@ const routes: Routes = [
           import('./rooms/rooms.module').then((m) => m.RoomsModule),
       },
       { path: 'reports', loadChildren: () => import('./reporting/reporting.module').then(m => m.ReportingModule) },
+      { path: 'qrmenu', loadChildren: () => import('./qr-menu/qr-menu.module').then(m => m.QrMenuModule) },
     ],
   },
 ];

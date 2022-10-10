@@ -1,7 +1,84 @@
-<mat-tab-group>
-  <mat-tab label="All orders">
-    <canvas></canvas>
-  </mat-tab>
-  <mat-tab label="Dine in"></mat-tab>
-  <mat-tab label="Online delivery"></mat-tab>
-</mat-tab-group>
+<main>
+  <mat-tab-group>
+      <mat-tab label="Saved Orders">
+          <div class="savedOrdersContainer">
+              <mat-form-field appearance="outline">
+                  <mat-label>Enter a date range</mat-label>
+                  <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                      <input matStartDate formControlName="start" placeholder="Start date">
+                      <input matEndDate formControlName="end" placeholder="End date">
+                  </mat-date-range-input>
+                  <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+      
+                  <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+                  <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+              </mat-form-field>
+              <div class="savedOrder" *ngFor="let savedMenu of bills">
+                  <p><b>Total KOTs:</b> {{savedMenu.kots?.length}}</p>
+                  <p><b>Total Products:</b> {{savedMenu.user}}</p>
+                  <p><b>Date:</b> {{savedMenu.date.toDate() | date}}</p>
+                  <p><b>Amount:</b> {{savedMenu.grandTotal}}</p>
+                  <p><b>Bill Id:</b> {{savedMenu.billNo}}</p>
+                  <p><b>Payment Type:</b> {{savedMenu.paymentType}}</p>
+                  <p><b>Table/Room No:</b> {{savedMenu.table.tableNo}}</p>
+              </div>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <h3 *ngIf="bills.length==0">No customers found</h3>
+          </div>
+      </mat-tab>
+      <mat-tab label="Customers">
+          <div class="customerContainer">
+              <div class="customer" *ngFor="let bill of customers">
+                  <img src="assets/person.svg">
+                  <p>{{bill?.customerInfoForm?.fullName || 'N/P'}}</p>
+                  <p>{{bill?.customerInfoForm?.email || 'N/P'}}</p>
+                  <p>{{bill?.customerInfoForm?.phoneNumber || 'N/P'}}</p>
+                  <p>Total KOTs: {{bill?.kots?.length}}</p>
+                  <p>Table: {{bill?.table?.name}}</p>
+                  <p>Date: {{bill?.date?.toDate() | date}}</p>
+                  <!-- <p>{{18/02/1996}}</p> -->
+                  <!-- <p></p> -->
+              </div>
+              <h3 *ngIf="customers.length==0">No customers found</h3>
+              <p>*Records are based on customer data inside bills.</p>
+          </div>
+      </mat-tab>
+      <mat-tab label="Cancelled Orders">
+          <div class="savedOrdersContainer">
+              <ng-container *ngFor="let deletedMenu of cancelledBills">
+                  <div class="savedOrder cancelled" *ngIf="deletedMenu.deleted">
+                      <p><b>Total Kots:</b> {{deletedMenu?.kots.length}}</p>
+                      <p><b>User Id:</b> {{deletedMenu?.user}}</p>
+                      <p><b>Reason:</b> {{deletedMenu?.reason}}</p>
+                      <p><b>Phone:</b> {{deletedMenu?.phone}}</p>
+                      <p><b>Date:</b> {{deletedMenu?.date.toDate() | date}}</p>
+                      <p *ngIf="deletedMenu?.date.table">Table No: {{deletedMenu?.date.table.tableNo}}</p>
+                  </div>
+              </ng-container>
+              <h3 *ngIf="cancelledBills.length==0">No customers found</h3>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+              <p></p>
+          </div>
+      </mat-tab>
+  </mat-tab-group>
+</main>

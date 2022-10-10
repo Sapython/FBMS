@@ -13,7 +13,7 @@ import {
   UserTrackingService,
 } from '@angular/fire/analytics';
 import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideFirestore, getFirestore, connectFirestoreEmulator } from '@angular/fire/firestore';
 import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { provideMessaging, getMessaging } from '@angular/fire/messaging';
 import { providePerformance, getPerformance } from '@angular/fire/performance';
@@ -36,7 +36,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     BrowserAnimationsModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
-    provideFirestore(() => getFirestore()),
+    provideFirestore(() => {
+      const fs = getFirestore();
+      // connectFirestoreEmulator(fs, 'localhost', 8080);
+      return fs;
+    }),
     provideAuth(() => getAuth()),
     provideFunctions(() => getFunctions()),
     provideMessaging(() => getMessaging()),

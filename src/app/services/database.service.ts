@@ -15,6 +15,7 @@ import {
   collectionChanges,
   collectionData,
   orderBy,
+  collectionSnapshots,
 } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { SubCategory, Discount, Tax } from '../pages/admin/menu/menu.component';
@@ -535,6 +536,73 @@ export class DatabaseService {
         where('date','>=',startDate),
         where('date','<=',endDate),
         orderBy('date','desc')
+      )
+    );
+  }
+
+
+  getCustomers() {
+    return collectionSnapshots(
+      query(
+        collection(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/bills/bills'
+        ),
+        where('customerInfoForm.phoneNumber', '!=', '')
+      )
+    );
+  }
+
+  getCancelledBills() {
+    return collectionSnapshots(
+      query(
+        collection(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/bills/bills'
+        ),
+        where('deleted', '==', true)
+      )
+    );
+  }
+
+  getCompletedBills(startDate:Date,endDate:Date) {
+    return collectionSnapshots(
+      query(
+        collection(
+          this.fs,
+          'business/accounts/' +
+            this.dataProvider.currentProject?.projectId +
+            '/bills/bills'
+        ),
+        where('date', '>=', startDate),
+        where('date', '<=', endDate),
+      )
+    );
+  }
+
+  setQrSettings(data:any){
+    return setDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/qrSettings'
+      ),
+      data
+    );
+  }
+
+  getQrSettings(){
+    return getDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/qrSettings'
       )
     );
   }

@@ -1,0 +1,24 @@
+<form [formGroup]="qrMenuConfig" (ngSubmit)="saveData()">
+    <div class="grid">
+        <mat-form-field appearance="outline">
+            <mat-label>Page Title</mat-label>
+            <input formControlName="pageTitle" matInput placeholder="Page Title">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Sub Title</mat-label>
+            <input formControlName="pageSubtitle" matInput placeholder="Sub Title">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Start Time</mat-label>
+            <input formControlName="startTime" matInput type="time" placeholder="Start Time">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>End Time</mat-label>
+            <input formControlName="endTime" matInput type="time" placeholder="End Time">
+        </mat-form-field>
+        <img [src]="imageUrl" alt="">
+        <input hidden #file (change)="setFile($event)" type="file" name="logo" id="logo" placeholder="QR Menu Logo">
+        <button type="button" (click)="file.click()" mat-stroked-button color="primary">Upload Logo <mat-icon>upload</mat-icon></button>
+    </div>
+    <button mat-flat-button color="primary" type="submit">Save <mat-icon>save</mat-icon></button>
+</form>

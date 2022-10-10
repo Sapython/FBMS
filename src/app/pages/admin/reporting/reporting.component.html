@@ -13,15 +13,19 @@
     </mat-form-field>
     <ng-container *ngIf="loadedAllData">
         <div class="counters">
-            <h3>Overview</h3><p></p>
+            <h3>Overview</h3>
+            <p></p>
             <span>Total Bills: <b>{{bills.length}}</b></span>
             <span>Total Dishes: <b>{{allDishes.length}}</b></span>
-            <span>Total Non Chargeables: <b>{{ncBills.length}}</b></span>
+            <span>Total Non Chargeable: <b>{{ncBills.length}}</b></span>
             <span>Cancelled KOTs: <b>{{cancelledKots}}</b></span>
             <span>New Customers: <b>{{newCustomers}}</b></span>
             <span>Completed KOTs: <b>{{completedKots}}</b></span>
-            <span>Non Chargeable Sales: <b>{{totalNonChargableSales}}</b></span>
-            <span>Chargeables Sales: <b>{{totalChargableSales}}</b></span>
+            <span>Non Chargeable Sales: <b>{{toFixed(totalNonChargableSales)}}</b></span>
+            <span>Chargeable Sales: <b>{{toFixed(totalChargableSales)}}</b></span>
+            <span>Cancelled Bills: <b>{{cancelledBills.length}}</b></span>
+            <span>Discounted Bills: <b>{{discountedBills.length}}</b></span>
+            <span>Discount Cost: <b>{{toFixed(totalDiscountCost)}}</b></span>
         </div>
         <section>
             <div class="report">
@@ -56,6 +60,8 @@
                         <tr>
                             <th>Bill No</th>
                             <th>Kots</th>
+                            <th>Applied Disc</th>
+                            <th>id</th>
                             <th>Price</th>
                         </tr>
                     </thead>
@@ -65,6 +71,8 @@
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
+                            <td>{{bill.discount || 0}}</td>
+                            <td>{{bill.id}}</td>
                             <td>{{bill.grandTotal}}</td>
                         </tr>
                     </tbody>
@@ -80,7 +88,7 @@
                         <tr>
                             <th>Bill No</th>
                             <th>Kots</th>
-                            <th>Grand Total</th>
+                            <th>Sub Total</th>
                             <th>Id</th>
                         </tr>
                     </thead>
@@ -90,7 +98,7 @@
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
-                            <td>{{bill.grandTotal}}</td>
+                            <td>{{bill.subTotal}}</td>
                             <td>{{bill.billNo}}</td>
                         </tr>
                     </tbody>
@@ -147,7 +155,80 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>  
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>Incomplete Bills from {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportIncompleteBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Kots</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bill of incompleteBills">
+                            <td>{{bill.billNo}}</td>
+                            <td>
+                                <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
+                            </td>
+                            <td>{{bill.grandTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>Cancelled Bills from {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportCancelledBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Kots</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bill of cancelledBills">
+                            <td>{{bill.billNo}}</td>
+                            <td>
+                                <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
+                            </td>
+                            <td>{{bill.grandTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>Discounted Bills from {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportDiscountedBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Kots</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bill of discountedBills">
+                            <td>{{bill.billNo}}</td>
+                            <td>
+                                <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
+                            </td>
+                            <td>{{bill.discount || 0}}</td>
+                            <td>{{bill.grandTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </ng-container>
 </main>
