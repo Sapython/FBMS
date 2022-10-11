@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/services/database.service';
 import { slot, timeSlots } from 'src/app/structures/time-slot.structure';
 import { AddRoomsComponent } from './add-rooms/add-rooms.component';
+import { BookRoomComponent } from './book-room/book-room.component';
 
 @Component({
   selector: 'app-rooms',
@@ -68,5 +69,13 @@ export class RoomsComponent implements OnInit {
         this.showSlots = false;
       }
     });
+  }
+
+  bookRoom(table:any){
+    console.log("book room",table);
+    // this.databaseService.bookRoom()
+    const inst = this.dialog.open(BookRoomComponent)
+
+    // inst.componentInstance.
   }
 }

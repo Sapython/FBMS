@@ -41,7 +41,7 @@
     </div>
   </div>
   <div *ngIf="!viewBookedTables" class="table-cards">
-    <app-room-card [number]="table.tableNo" [id]="table.id" [name]="table.name" [available]="!(table.booked ? table.booked  : false)" *ngFor="let table of rooms"></app-room-card>
+    <app-room-card [number]="table.tableNo" (book)="bookRoom(table)" [id]="table.id" [name]="table.name" [available]="!(table.booked ? table.booked  : false)" *ngFor="let table of rooms"></app-room-card>
   </div>
   <div *ngIf="viewBookedTables" class="table-cards">
     <app-booked-table-card [number]="13" name="Rohit Sharma" slot="10AM-11AM" [guests]="1"></app-booked-table-card>

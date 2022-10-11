@@ -112,6 +112,7 @@ export class ReportingComponent implements OnInit {
               if (bill['completed'] == true) {
                 if (!this.bills.find((b) => b.id == bill.id)) {
                   const grandTotal = Number(bill['grandTotal']);
+                  console.log("grandTotal",bill['grandTotal'],bill['billNo'])
                   if(bill['isNonChargeable'] || bill['grandTotal']==0){
                     this.ncBills.push(bill)
                     let total = 0;

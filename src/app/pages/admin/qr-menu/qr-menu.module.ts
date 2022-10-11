@@ -8,11 +8,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
+import { QrSettingsComponent } from './qr-settings/qr-settings.component'; 
 
 @NgModule({
   declarations: [
-    QrMenuComponent
+    QrMenuComponent,
+    QrSettingsComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ]
 })
 export class QrMenuModule { }

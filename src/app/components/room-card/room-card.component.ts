@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DataProvider } from 'src/app/providers/data.provider';
 import { AlertsAndNotificationsService } from 'src/app/services/alerts-and-notifications.service';
 import { DatabaseService } from 'src/app/services/database.service';
@@ -10,9 +10,11 @@ import { DatabaseService } from 'src/app/services/database.service';
 })
 export class RoomCardComponent implements OnInit {
   @Input() number: string | number;
-  @Input() available: boolean;
+  @Input() available: boolean  = false;
   @Input() name: any;
   @Input() id: string;
+
+  @Output() book:EventEmitter<any> = new EventEmitter<any>();
   constructor(
     private databaseService: DatabaseService,
     private dataProvider: DataProvider,
@@ -36,4 +38,5 @@ export class RoomCardComponent implements OnInit {
         });
     }
   }
+
 }

@@ -320,6 +320,19 @@ export class DatabaseService {
       data
     );
   }
+  
+
+  bookRoom(roomId:string){
+    return updateDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms/' + roomId
+      ),
+      {isBooked:true}
+    );
+  }
 
   deleteRoom(id:string){
     return deleteDoc(

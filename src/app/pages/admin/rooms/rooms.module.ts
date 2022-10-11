@@ -14,12 +14,17 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { TableRoutingModule } from '../table/table-routing.module';
-
+import { BookRoomComponent } from './book-room/book-room.component';
+import {MatFormFieldModule} from '@angular/material/form-field'; 
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
     RoomsComponent,
-    AddRoomsComponent
+    AddRoomsComponent,
+    BookRoomComponent
   ],
   imports: [
     CommonModule,
@@ -28,12 +33,16 @@ import { TableRoutingModule } from '../table/table-routing.module';
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
+    MatFormFieldModule,
     MatInputModule,
     ComponentsModule,
     DialogModule,
     FormsModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatCheckboxModule
   ]
 })
 export class RoomsModule { }

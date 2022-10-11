@@ -1,0 +1,63 @@
+<section>
+    <h1>Room Booking</h1>
+    <form>
+        <mat-form-field appearance="outline">
+            <mat-label>Guest Name</mat-label>
+            <input matInput placeholder="Guest Name">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>No Of Persons</mat-label>
+            <input matInput type="number" placeholder="No Of Persons">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Guest Address</mat-label>
+            <input matInput placeholder="Guest Address">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Mobile No</mat-label>
+            <input matInput type="number" placeholder="Mobile No">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Type Of Booking</mat-label>
+            <select matNativeControl required>
+              <option value="online">Online</option>
+              <option value="hotel">Hotel</option>
+            </select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Payment Mode</mat-label>
+            <select matNativeControl required>
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+            </select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input matInput placeholder="Amount">
+            <mat-icon type="number" matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Arrival Date</mat-label>
+            <input matInput [matDatepicker]="picker">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Departaure Date</mat-label>
+            <input matInput [matDatepicker]="picker">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Aadhaar No</mat-label>
+            <input matInput type="number" placeholder="Mobile No">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
+    </form>
+</section>
