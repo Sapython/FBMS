@@ -293,6 +293,10 @@ export class DatabaseService {
     return collectionData(collection(this.fs, 'business/accounts/' + this.dataProvider.currentProject?.projectId + '/tables/tables'), {idField:'id'});
   }
 
+  getTablePromise(){
+    return getDocs(collection(this.fs, 'business/accounts/' + this.dataProvider.currentProject?.projectId + '/tables/tables'));
+  }
+
   addTable(data:any){
     return addDoc(
       collection(
@@ -307,6 +311,10 @@ export class DatabaseService {
 
   getRooms(){
     return collectionData(query(collection(this.fs, 'business/accounts/' + this.dataProvider.currentProject?.projectId + '/rooms/rooms'),orderBy('tableNo')), {idField:'id'});
+  }
+  
+  getRoomsPromise(){
+    return getDocs(query(collection(this.fs, 'business/accounts/' + this.dataProvider.currentProject?.projectId + '/rooms/rooms'),orderBy('tableNo')))
   }
 
   addRoom(data:any){

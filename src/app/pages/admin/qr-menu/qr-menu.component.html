@@ -1,8 +1,31 @@
 <div class="topBar">
     <button mat-stroked-button (click)="getQrCode()" color="primary">Get QR Codes</button>
-    <button mat-stroked-button color="primary">Edit QR Menu Settings</button>
-    <button mat-stroked-button color="primary">Disable QR Menu</button>
+    <button mat-stroked-button (click)="editQrSettings()" color="primary">Edit QR Menu Settings</button>
+    <!-- <button mat-stroked-button color="primary">Disable QR Menu</button> -->
 </div>
 <section>
-    
+    <h1>QR Bills</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Sr. No.</th>
+                <th>Table</th>
+                <th>Bill</th>
+                <th>Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let bill of bills; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{bill.table}}</td>
+                <td>{{bill.bill}}</td>
+                <td>{{bill.time}}</td>
+                <td>
+                    <button mat-stroked-button color="primary" (click)="viewBill(bill)">View</button>
+                    <button mat-stroked-button color="primary" (click)="deleteBill(bill)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>

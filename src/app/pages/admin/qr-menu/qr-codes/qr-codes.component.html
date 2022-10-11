@@ -1,0 +1,12 @@
+<section>
+    <h2>Qr Codes</h2>
+    <div class="qrCodes">
+        <div *ngFor="let table of tables">
+            <span [id]="'qrCode' + table.tableNo" #span></span>
+            <p>{{table.name}}</p>
+            <button mat-stroked-button color="primary" (click)="download(span)">
+                Download
+            </button>
+        </div>
+    </div>
+</section>

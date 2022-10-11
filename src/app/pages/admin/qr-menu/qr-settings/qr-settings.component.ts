@@ -1,5 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { Component, OnInit } from '@angular/core';
+import { outputAst } from '@angular/compiler';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DataProvider } from 'src/app/providers/data.provider';
 import { AlertsAndNotificationsService } from 'src/app/services/alerts-and-notifications.service';
@@ -13,6 +14,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 export class QrSettingsComponent implements OnInit {
   imageFile:File | undefined;
   imageUrl:any;
+  @Output() close:EventEmitter<any> = new EventEmitter();
   constructor(private databaseService:DatabaseService,private dilaog:Dialog,private dataProvider:DataProvider,private alertify:AlertsAndNotificationsService) { }
   qrMenuConfig:FormGroup = new FormGroup({
     pageTitle:new FormControl('',[Validators.required]),
@@ -66,6 +68,5 @@ export class QrSettingsComponent implements OnInit {
       this.dataProvider.pageSetting.blur = false;
     })
   }
-
 
 }

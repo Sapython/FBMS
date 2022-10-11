@@ -9,11 +9,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { QrSettingsComponent } from './qr-settings/qr-settings.component'; 
+import { DialogModule } from '@angular/cdk/dialog';
+import { QrCodesComponent } from './qr-codes/qr-codes.component';
 
 @NgModule({
   declarations: [
     QrMenuComponent,
-    QrSettingsComponent
+    QrSettingsComponent,
+    QrCodesComponent
   ],
   imports: [
     CommonModule,
@@ -24,6 +27,7 @@ import { QrSettingsComponent } from './qr-settings/qr-settings.component';
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
+    DialogModule
   ]
 })
 export class QrMenuModule { }
