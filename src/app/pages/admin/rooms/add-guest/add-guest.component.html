@@ -1,0 +1,82 @@
+<section>
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Guest Name</mat-label>
+            <input matInput (input)="debounceSearch($event)" placeholder="Guest Name">
+        </mat-form-field>
+        <button mat-flat-button color="primary" (click)="addGuestMode=!addGuestMode">{{!addGuestMode ? 'Add' : 'Search'}} Guest</button>
+    </div>
+    <table *ngIf="guests.length > 0 && !addGuestMode">
+        <h2>Guest List</h2>
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Aadhaar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of guests; let i = index;">
+                <th>
+                    <button mat-icon-button (click)="close.emit(item)" color="primary"><mat-icon>check</mat-icon></button>
+                </th>
+                <td>{{item.name}}</td>
+                <td>{{item.phoneNumber}}</td>
+                <td>{{item.aadhaarNumber}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <h3>Add Guest</h3>
+    <form [formGroup]="guestForm" (ngSubmit)="addGuest()" *ngIf="addGuestMode">
+        <mat-form-field appearance="outline">
+            <mat-label>Guest Name</mat-label>
+            <input formControlName="name" matInput placeholder="Guest Name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input formControlName="email" type="email" matInput placeholder="Guest Name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input formControlName="phoneNumber" type="number" matInput placeholder="Guest Name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Age</mat-label>
+            <input formControlName="age" type="number" matInput placeholder="Age">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select placeholder="Gender" formControlName="gender">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="other">Other</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Address</mat-label>
+            <textarea formControlName="address" matInput placeholder="Guest Name"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Aadhaar Number</mat-label>
+            <input formControlName="aadhaarNumber" type="number" matInput placeholder="Guest Name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Pan Number</mat-label>
+            <input formControlName="panNumber" type="text" matInput placeholder="Guest Name">
+        </mat-form-field> 
+        <input (change)="setImage('aadhaar',$event)" formControlName="aadhaarImage" hidden type="file" #panImage >
+        <input (change)="setImage('pan',$event)" formControlName="panImage" hidden type="file" #aadhaarImage >
+        <button type="button" color="primary" mat-stroked-button (click)="aadhaarImage.click()">Aadhaar Image</button>
+        <button type="button" color="primary" mat-stroked-button (click)="panImage.click()">PAN Image</button>
+        <p></p>
+        <hr>
+        <hr>
+        <hr>
+        <div class="row">
+            <button mat-flat-button type="submit" color="primary">Submit</button>
+            <button mat-stroked-button (click)="close.emit()" type="button" color="primary">Cancel</button>
+        </div>
+    </form>
+</section>

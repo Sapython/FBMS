@@ -1,55 +1,43 @@
 <div class="top-buttons">
-    <div class="start-buttons">
-      <button (click)="viewBookedTables = !viewBookedTables" class="primary-button left-icon-button">
-        <mat-icon>king_bed</mat-icon>View
-        {{ viewBookedTables ? "all" : "booked" }} tables
+  <div class="end-buttons">
+    <div class="filter-buttons">
+      <button mat-flat-button color="primary" (click)="addTable()">
+        <mat-icon>king_bed</mat-icon> Room Guests
       </button>
-    </div>
-    <div class="end-buttons">
-      <div class="filter-buttons">
-        <button class="primary-button" (click)="addTable()">
-          <mat-icon>king_bed</mat-icon> Add Room
+      <button mat-flat-button color="primary" (click)="addTable()">
+        <mat-icon>king_bed</mat-icon> Add Room
+      </button>
+      <button mat-flat-button color="primary">
+        <mat-icon>filter_alt</mat-icon>
+      </button>
+      <div class="dropdown-container" id="calendar-dropdown">
+        <button mat-flat-button color="primary" (click)="showCalendar = true">
+          {{ selectedDate | date }}
         </button>
-        <span class="primary-button">
-          <mat-icon>filter_alt</mat-icon>
-        </span>
-        <div class="dropdown-container" id="calendar-dropdown">
-          <button class="primary-button" (click)="showCalendar = true">
-            {{ selectedDate | date }}
-          </button>
-          <div class="dropdown" *ngIf="showCalendar">
-            <mat-calendar [(selected)]="selectedDate" (selectedChange)="showCalendar = false"></mat-calendar>
-          </div>
+        <div class="dropdown" *ngIf="showCalendar">
+          <mat-calendar [(selected)]="selectedDate" (selectedChange)="showCalendar = false"></mat-calendar>
         </div>
-        <div class="dropdown-container" id="slots-dropdown">
-          <button class="primary-button" id="time-slot-button" (click)="showSlots = true">
-            {{ selectedSlot }}
-          </button>
-          <div class="dropdown" *ngIf="showSlots">
-            <mat-form-field appearance="fill">
-              <mat-label>Time Slot</mat-label>
-              <input type="text" matInput [matAutocomplete]="slots" />
-            </mat-form-field>
-            <mat-autocomplete #slots="matAutocomplete">
-              <mat-option *ngFor="let slot of timeSlots" [value]="slot" (click)="selectedSlot = slot">
-                {{ slot }}
-              </mat-option>
-            </mat-autocomplete>
-          </div>
+      </div>
+      <div class="dropdown-container" id="slots-dropdown">
+        <button mat-flat-button color="primary" id="time-slot-button" (click)="showSlots = true">
+          {{ selectedSlot }}
+        </button>
+        <div class="dropdown" *ngIf="showSlots">
+          <mat-form-field appearance="fill">
+            <mat-label>Time Slot</mat-label>
+            <input type="text" matInput [matAutocomplete]="slots" />
+          </mat-form-field>
+          <mat-autocomplete #slots="matAutocomplete">
+            <mat-option *ngFor="let slot of timeSlots" [value]="slot" (click)="selectedSlot = slot">
+              {{ slot }}
+            </mat-option>
+          </mat-autocomplete>
         </div>
       </div>
     </div>
   </div>
-  <div *ngIf="!viewBookedTables" class="table-cards">
-    <app-room-card [number]="table.tableNo" (book)="bookRoom(table)" [id]="table.id" [name]="table.name" [available]="!(table.booked ? table.booked  : false)" *ngFor="let table of rooms"></app-room-card>
-  </div>
-  <div *ngIf="viewBookedTables" class="table-cards">
-    <app-booked-table-card [number]="13" name="Rohit Sharma" slot="10AM-11AM" [guests]="1"></app-booked-table-card>
-    <app-booked-table-card [number]="18" name="Virat Kohli" slot="11AM-12PM" [guests]="2"></app-booked-table-card>
-    <app-booked-table-card [number]="13" name="Rohit Sharma" slot="10AM-11AM" [guests]="1"></app-booked-table-card>
-    <app-booked-table-card [number]="18" name="Virat Kohli" slot="11AM-12PM" [guests]="2"></app-booked-table-card>
-    <app-booked-table-card [number]="13" name="Rohit Sharma" slot="10AM-11AM" [guests]="1"></app-booked-table-card>
-    <app-booked-table-card [number]="18" name="Virat Kohli" slot="11AM-12PM" [guests]="2"></app-booked-table-card>
-    <app-booked-table-card [number]="13" name="Rohit Sharma" slot="10AM-11AM" [guests]="1"></app-booked-table-card>
-    <app-booked-table-card [number]="18" name="Virat Kohli" slot="11AM-12PM" [guests]="2"></app-booked-table-card>
-  </div>
+</div>
+<div class="table-cards">
+  <app-room-card (editRoom)="editRoom(table)" [number]="table.tableNo" (book)="bookRoom(table)" [id]="table.id" [name]="table.name"
+    [available]="!(table.roomBooked ? true  : false)" (seeBooking)="seeBooking(table)" *ngFor="let table of rooms"></app-room-card>
+</div>

@@ -15,6 +15,7 @@ export class DataProvider {
     spinner: false,
     messageType: 'Error',
   };
+  public guests: any[] = [];
   public currentProject:Project;
   public projects:any[] = []
   public overlayDismissed:Subject<boolean> = new Subject<boolean>();

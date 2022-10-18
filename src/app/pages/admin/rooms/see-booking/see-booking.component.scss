@@ -1,0 +1,22 @@
+section{
+    min-width: 40vw;
+    max-width: 80vw;
+    min-height: 50vh;
+    max-height: 90vh;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+    table{
+        td,th{
+            border:2px solid rgb(233, 233, 233);
+            padding:7px;
+        }
+    }
+    .row{
+        display: flex;
+        gap:20px;
+        justify-content: flex-end;
+    }
+}

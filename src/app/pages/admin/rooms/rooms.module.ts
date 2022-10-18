@@ -19,12 +19,18 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { GuestsComponent } from './guests/guests.component';
+import { AddGuestComponent } from './add-guest/add-guest.component';
+import {MatChipsModule} from '@angular/material/chips';
+import { SeeBookingComponent } from './see-booking/see-booking.component'; 
 @NgModule({
   declarations: [
     RoomsComponent,
     AddRoomsComponent,
-    BookRoomComponent
+    BookRoomComponent,
+    GuestsComponent,
+    AddGuestComponent,
+    SeeBookingComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +48,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatButtonModule,
     MatSelectModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatChipsModule
   ]
 })
 export class RoomsModule { }

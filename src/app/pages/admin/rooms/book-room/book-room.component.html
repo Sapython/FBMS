@@ -1,63 +1,86 @@
 <section>
     <h1>Room Booking</h1>
-    <form>
-        <mat-form-field appearance="outline">
-            <mat-label>Guest Name</mat-label>
-            <input matInput placeholder="Guest Name">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>No Of Persons</mat-label>
-            <input matInput type="number" placeholder="No Of Persons">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Guest Address</mat-label>
-            <input matInput placeholder="Guest Address">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Mobile No</mat-label>
-            <input matInput type="number" placeholder="Mobile No">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Type Of Booking</mat-label>
-            <select matNativeControl required>
-              <option value="online">Online</option>
-              <option value="hotel">Hotel</option>
-            </select>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Payment Mode</mat-label>
-            <select matNativeControl required>
-              <option value="online">Online</option>
-              <option value="offline">Offline</option>
-            </select>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Amount</mat-label>
-            <input matInput placeholder="Amount">
-            <mat-icon type="number" matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Arrival Date</mat-label>
-            <input matInput [matDatepicker]="picker">
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Departaure Date</mat-label>
-            <input matInput [matDatepicker]="picker">
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Aadhaar No</mat-label>
-            <input matInput type="number" placeholder="Mobile No">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
+    <form [formGroup]="bookRoomForm" (ngSubmit)="bookRoom()">
+        <button mat-stroked-button color="primary" (click)="addGuestModal()">Add Guest</button>
+        <table *ngIf="guestList.length > 0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>Aadhaar</th>
+                    <th>PAN</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of guestList;let i = index;">
+                    <td>{{item.name}}</td>
+                    <td>{{item.phoneNumber}}</td>
+                    <td>{{item.address}}</td>
+                    <td>{{item.aadhaarNumber}}</td>
+                    <td>{{item.panNumber}}</td>
+                    <td><button mat-icon-button color="primary" (click)="removeGuest(i)"><mat-icon>close</mat-icon></button></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+        <div class="services">
+            <h2>Room Services</h2>
+            <ol>
+                <li *ngFor="let item of room.services">
+                    {{item}}
+                </li>
+            </ol>
+        </div>
+        <div class="grid">
+            <mat-form-field appearance="outline">
+                <mat-label>Type Of Booking</mat-label>
+                <mat-select formControlName="typeOfBooking" required #userType>
+                    <mat-option value="online">Online</mat-option>
+                    <mat-option value="hotel">Hotel</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Payment Mode</mat-label>
+                <mat-select formControlName="modeOfPayment" #paymentMode required>
+                    <mat-option value="online">Online</mat-option>
+                    <mat-option value="offline">Offline</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" *ngIf="userType.value=='online'">
+                <mat-label>Incoming Platform</mat-label>
+                <input formControlName="incomingPlatform" matInput placeholder="Incoming Platform">
+                <mat-hint>Trivago, Goibibo, OYO</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline" *ngIf="paymentMode.value=='online'">
+                <mat-label>Transaction Id</mat-label>
+                <input formControlName="transactionId" matInput placeholder="Transaction Id">
+                <mat-hint>Id For The Transaction</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Amount</mat-label>
+                <input formControlName="amount" matInput placeholder="Amount">
+                <mat-hint>&#8377;{{room.roomPrice}}</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Arrival Date</mat-label>
+                <input formControlName="arrivalDate" matInput [matDatepicker]="picker">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Departure Date</mat-label>
+                <input formControlName="departureDate" matInput [matDatepicker]="pickerDep">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="pickerDep"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDep></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="row end">
+            <button color="primary" (click)="cancel.emit()" type="button" mat-stroked-button>Cancel</button>
+            <button color="primary" type="submit" mat-flat-button>Book Room</button>
+        </div>
     </form>
 </section>

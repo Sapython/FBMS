@@ -4,11 +4,15 @@
         <h4>Room {{ number }}</h4>
         <p class="status">{{ available ? "Available" : "Booked" }}</p>
         <div class="row">
-            <button mat-icon-button (click)="delete()"><mat-icon>delete</mat-icon></button>
+            <button mat-icon-button color="primary" (click)="delete()"><mat-icon>delete</mat-icon></button>
+            <button mat-icon-button (click)="editRoom.emit()"><mat-icon>edit</mat-icon></button>
             <mat-icon>king_bed</mat-icon>
         </div>
     </div>
-    <button mat-stroked-button color="primary" (click)="book.emit()">
+    <button *ngIf="available" mat-stroked-button color="primary" (click)="book.emit()">
         Book Room
+    </button>
+    <button *ngIf="!available" mat-flat-button (click)="seeBooking.emit()">
+        See Booking
     </button>
 </div>

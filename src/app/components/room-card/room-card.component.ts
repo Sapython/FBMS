@@ -13,8 +13,10 @@ export class RoomCardComponent implements OnInit {
   @Input() available: boolean  = false;
   @Input() name: any;
   @Input() id: string;
+  @Output() editRoom = new EventEmitter();
 
   @Output() book:EventEmitter<any> = new EventEmitter<any>();
+  @Output() seeBooking:EventEmitter<any> = new EventEmitter<any>();
   constructor(
     private databaseService: DatabaseService,
     private dataProvider: DataProvider,

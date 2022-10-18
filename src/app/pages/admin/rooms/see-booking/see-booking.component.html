@@ -1,0 +1,139 @@
+<section>
+    <h3>Room No {{room.room.tableNo}}</h3>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>
+                Room No
+            </td>
+            <td>
+                {{room.room.tableNo}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Room Price
+            </td>
+            <td>
+                {{room.room.roomPrice}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Room Services
+            </td>
+            <td>
+                <span *ngFor="let item of room.room.services">{{item}}, </span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Room Max Occupancy
+            </td>
+            <td>
+                {{room.room.maxOccupancy}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Arrival Date
+            </td>
+            <td>
+                {{room.arrivalDate.toDate() | date}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Departure Date
+            </td>
+            <td>
+                {{room.departureDate.toDate() | date}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Payment Mode
+            </td>
+            <td>
+                {{room.modeOfPayment}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Incoming Platform
+            </td>
+            <td>
+                {{room.incomingPlatform}}
+            </td>
+        </tr>
+        <tr *ngIf="room.transactionId">
+            <td>
+                Transaction Id
+            </td>
+            <td>
+                {{room.transactionId}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Type Of Booking
+            </td>
+            <td>
+                {{room.typeOfBooking}}
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <h4>Guests</h4>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Aadhaar</th>
+            <th>Pan</th>
+        </tr>
+        <tr *ngFor="let guest of room.guests">
+            <td>
+                {{guest.name | titlecase}}
+            </td>
+            <td>
+                {{guest.email}}
+            </td>
+            <td>
+                {{guest.address}}
+            </td>
+            <td>
+                {{guest.phoneNumber}}
+            </td>
+            <td>
+                {{guest.aadhaarNumber}}
+            </td>
+            <td>
+                {{guest.panNumber}}
+            </td>
+        </tr>
+    </table>
+    <hr *ngIf="continueBill">
+    <form [formGroup]="continueForm" *ngIf="continueBill" (ngSubmit)="submit()">
+        <h3>Continue Bill</h3>
+        <mat-form-field appearance="outline">
+            <mat-label>Departure Date</mat-label>
+            <input formControlName="departureDate" matInput [matDatepicker]="pickerDep">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="pickerDep"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDep></mat-datepicker>
+        </mat-form-field>
+        <button mat-flat-button color="primary" [disabled]="!continueForm.valid" type="submit">Submit</button>
+    </form>
+    <hr>
+    <div class="row">
+        <button mat-stroked-button color="primary" (click)="close.emit()">Close</button>
+        <button mat-flat-button color="primary" (click)="checkoutBill()">Checkout</button>
+        <button mat-flat-button color="primary" (click)="continueBill = true">Continue</button>
+    </div>
+</section>

@@ -1,29 +1,63 @@
 <main>
-    <form [formGroup]="roomForm" (ngSubmit)="addRoom()">
-        <div class="header">
+    <section>
+        <div class="container">
             <h1>{{title}}</h1>
-        </div>
-        <hr>
-        <div class="fields">
-            <div class="basicDetails">
-                <div class="mainData">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Room Name</mat-label>
-                        <input formControlName="name" matInput placeholder="Room Name">
-                    </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Room No</mat-label>
-                        <input formControlName="tableNo" type="number" matInput placeholder="Room Number">
-                    </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Max Occupancy</mat-label>
-                        <input formControlName="maxOccupancy" matInput placeholder="Max Occupancy">
-                    </mat-form-field>
+            <form [formGroup]="roomForm" (ngSubmit)="addRoom()">
+                <div class="basicDetails">
+                    <div [class]="files.length==0 ? 'dropZone' : 'dropZone grid'" DropZone (onFileDropped)="addFile($event)">
+                        <div class="group" *ngIf="files.length == 0">
+                            <mat-icon>image</mat-icon>
+                            <p>Add-Photo</p>
+                        </div>
+                        <div id="image" *ngFor="let file of files;let i = index">
+                            <i (click)="removeFile(i)" class="fa-solid fa-xmark"></i>
+                            <img [src]="file.type=='preloaded' ? file.onlineUrl : file.url " matBadgeColor="warn" matBadge="X" width="100px">
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Room Name</mat-label>
+                            <input formControlName="name" matInput placeholder="Room Name">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Room No</mat-label>
+                            <input formControlName="tableNo" type="number" matInput placeholder="Room Number">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Max Occupancy</mat-label>
+                            <input formControlName="maxOccupancy" matInput placeholder="Max Occupancy">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Room Price</mat-label>
+                            <input formControlName="roomPrice" matInput placeholder="Max Occupancy">
+                        </mat-form-field>
+                        <mat-form-field class="example-chip-list" appearance="outline">
+                            <mat-label>Available Services</mat-label>
+                            <mat-chip-list #chipList aria-label="Fruit selection">
+                                <mat-chip *ngFor="let service of filteredServices" (removed)="remove(service)">
+                                    {{service}}
+                                    <button matChipRemove>
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+                                </mat-chip>
+                                <input placeholder="New fruit..." #servicesInput [formControl]="servicesCtrl"
+                                    [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)">
+                            </mat-chip-list>
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                <mat-option *ngFor="let service of searchResults.length>0 ? searchResults : services"
+                                    [value]="service">
+                                    {{service}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
                 </div>
-            </div>
+                <div class="actions">
+                    <button type="button" (click)="closeModal.emit()" mat-stroked-button color="primary">Cancel</button>
+                    <button type="submit" mat-raised-button color="primary">{{this.title}}</button>
+                </div>
+            </form>
         </div>
-        <div class="actions">
-            <button type="submit" mat-raised-button color="primary" [disabled]="!roomForm.valid">{{title}}</button>
-        </div>
-    </form>
+    </section>
 </main>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataProvider } from './providers/data.provider';
 import { AuthenticationService } from './services/authentication.service';
+import { RoomBillService } from './services/room-bill.service';
 
 declare var introJs:any;
 
@@ -13,7 +14,7 @@ declare var introJs:any;
 export class AppComponent implements OnInit {
   title = 'FBMS';
   route:string = '';
-  constructor(public dataProvider: DataProvider,private authService:AuthenticationService,private router:Router) {
+  constructor(public dataProvider: DataProvider,private authService:AuthenticationService,private router:Router,private roomBill:RoomBillService) {
     // this.dataProvider.pageSetting.blur = true;
     this.authService.user.subscribe((data:any)=>{
       console.log('user.subscribe',data)

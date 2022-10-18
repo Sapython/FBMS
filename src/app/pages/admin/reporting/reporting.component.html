@@ -26,6 +26,7 @@
             <span>Cancelled Bills: <b>{{cancelledBills.length}}</b></span>
             <span>Discounted Bills: <b>{{discountedBills.length}}</b></span>
             <span>Discount Cost: <b>{{toFixed(totalDiscountCost)}}</b></span>
+            <button mat-flat-button color="primary" (click)="exportSummary()">Export Summary</button>
         </div>
         <section>
             <div class="report">
@@ -98,7 +99,7 @@
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
-                            <td>{{bill.subTotal}}</td>
+                            <td>{{bill.subtotal}}</td>
                             <td>{{bill.billNo}}</td>
                         </tr>
                     </tbody>

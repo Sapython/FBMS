@@ -16,6 +16,7 @@ import {
   collectionData,
   orderBy,
   collectionSnapshots,
+  docData,
 } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { SubCategory, Discount, Tax } from '../pages/admin/menu/menu.component';
@@ -328,7 +329,84 @@ export class DatabaseService {
       data
     );
   }
+
+  updateRoom(data:any, id:string){
+    return updateDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms/' + id
+      ),
+      data
+    );
+  }
   
+  async bookGuestRoom(roomId:string, data:any){
+    const res = await addDoc(
+      collection(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms/' + roomId + '/guests'
+
+      ),
+      data
+    )
+    return updateDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms/' + roomId
+      ),
+      {roomBooked:true,roomBookingId:res.id}
+    );
+  }
+
+  getRoomBooking(roomId:string,bookingId:string){
+    return getDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms/' + roomId + '/guests/' + bookingId
+      )
+    );
+  }
+
+  updateRoomBooking(roomId:string,bookingId:string,data:any){
+    return updateDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +  
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms/' + roomId + '/guests/' + bookingId
+      ),
+      data
+    );
+  }
+
+  async checkOutRoom(roomId:string,bookingId:string){
+    await updateDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms/' + roomId + '/guests/' + bookingId
+      ),
+      {checkedOut:true}
+    );
+    return updateDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +  
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/rooms/' + roomId
+      ),
+      {roomBooked:false,roomBookingId:'',checkedOutBill:arrayUnion(bookingId)}
+    );
+  }
 
   bookRoom(roomId:string){
     return updateDoc(
@@ -624,6 +702,29 @@ export class DatabaseService {
         'business/accounts/' +
           this.dataProvider.currentProject?.projectId +
           '/qrSettings'
+      )
+    );
+  }
+
+  addGuest(data:any){
+    return addDoc(
+      collection(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/guests'
+      ),
+      data
+    );
+  }
+
+  getGuests(){
+    return collectionSnapshots(
+      collection(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/rooms/guests'
       )
     );
   }

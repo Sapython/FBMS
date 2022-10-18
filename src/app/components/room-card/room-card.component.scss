@@ -33,7 +33,6 @@
         mat-icon:nth-child(1) {
             width: 25px;
             height: 25px;
-            color: #eb4034;
         }
         mat-icon:nth-child(2) {
             font-size: 50px !important;
@@ -45,10 +44,15 @@
     &.booked {
         background-color: var(--primary-color);
 
-        h3,
+        h3,h4,
         p,
         mat-icon {
-            color: var(--primary-contrast-color);
+            color: white;
+        }
+        button ::ng-deep{
+            .mat-button-wrapper{
+                color: var(--primary-color);
+            }
         }
     }
 }

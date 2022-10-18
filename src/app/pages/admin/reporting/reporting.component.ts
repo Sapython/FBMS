@@ -97,10 +97,18 @@ export class ReportingComponent implements OnInit {
                   })
                   console.log(disc,subtotal)
                   this.totalDiscountCost += disc
-                  bills.push({...doc.data(),discount:disc,afterDisc:subtotal-disc});
-                  this.discountedBills.push({...doc.data(),discount:disc,afterDisc:subtotal-disc});
+                  bills.push({...doc.data(),discount:disc,afterDisc:subtotal-disc,subtotal:subtotal});
+                  this.discountedBills.push({...doc.data(),discount:disc,afterDisc:subtotal-disc,subtotal:subtotal});
                 } else {
-                  bills.push(doc.data());
+                  let subtotal = 0;
+                  doc.data()['kots'].forEach((kot:any)=>{
+                    if (kot['cancelled']==false){
+                      kot.products.forEach((product:any) => {
+                        subtotal += product.shopPrice * product.quantity;
+                      });
+                    }
+                  })
+                  bills.push({...doc.data(),subtotal:subtotal});
                 }
               }
             })
@@ -114,7 +122,6 @@ export class ReportingComponent implements OnInit {
                   const grandTotal = Number(bill['grandTotal']);
                   console.log("grandTotal",bill['grandTotal'],bill['billNo'])
                   if(bill['isNonChargeable'] || bill['grandTotal']==0){
-                    this.ncBills.push(bill)
                     let total = 0;
                     bill['kots'].forEach((kot:any) => {
                       if (kot.cancelled == false && kot.finalized){
@@ -123,6 +130,7 @@ export class ReportingComponent implements OnInit {
                         })
                       }
                     })
+                    this.ncBills.push({...bill,subtotal:total})
                     this.totalNonChargableSales += total
                     this.totalSales += grandTotal
                   } else {
@@ -201,6 +209,19 @@ export class ReportingComponent implements OnInit {
       }
     });
   }
+  exportSummary(){
+    var doc:any = new jsPDF();
+    doc.text('Sales Report', 10, 10);
+    doc.text('Date: '+this.range.value.start?.toLocaleString()+' to '+this.range.value.end?.toLocaleString(), 10, 20);
+    doc.text('Total Sales: '+this.totalSales, 10, 30);
+    doc.text('Total Chargable Sales: '+this.totalChargableSales, 10, 40);
+    doc.text('Total Non Chargable Sales: '+this.totalNonChargableSales, 10, 50);
+    doc.text('Total Discount: '+this.totalDiscountCost, 10, 60);
+    doc.text('Total Completed Kots: '+this.completedKots, 10, 70);
+    doc.text('Total Cancelled Kots: '+this.cancelledKots, 10, 80);
+    doc.text('Total New Customers: '+this.newCustomers, 10, 90);
+    doc.save('SalesReport.pdf');
+  }
   exportSales() {
     var doc:any = new jsPDF();
     doc.autoTable({
@@ -250,7 +271,7 @@ export class ReportingComponent implements OnInit {
       body: this.ncBills.map((bill) => [
         bill.billNo,
         bill.kotTokens.join(','),
-        bill.subTotal,
+        bill.subtotal,
         bill.id,
       ]),
     });
@@ -320,7 +341,6 @@ export class ReportingComponent implements OnInit {
       ]),
     });
   }
-
   calculateGrandTotal(bill:any){
     let subtotal = 0;
     bill['kots'].forEach((kot:any) => {
