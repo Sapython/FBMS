@@ -395,7 +395,7 @@ export class DatabaseService {
           this.dataProvider.currentProject?.projectId +
           '/rooms/rooms/' + roomId + '/guests/' + bookingId
       ),
-      {checkedOut:true}
+      {checkedOut:true,checkoutDate:new Date()}
     );
     return updateDoc(
       doc(

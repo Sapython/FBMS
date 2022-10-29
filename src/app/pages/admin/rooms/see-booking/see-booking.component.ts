@@ -52,7 +52,17 @@ export class SeeBookingComponent implements OnInit {
         this.dataProvider.pageSetting.blur = false;
       })
     } else {
-      this.alertify.presentToast("Room can only be checked out after the departure date")
+      if (confirm("The departure date is not yet reached. Do you want to still checkout?")){
+        this.dataProvider.pageSetting.blur = true;
+        this.databaseService.checkOutRoom(this.room.room.id,this.room.id).then((data:any)=>{
+          this.alertify.presentToast("Room checked out successfully")
+          this.close.emit()
+        }).catch((err:any)=>{
+          this.alertify.presentToast(err.message)
+        }).finally(()=>{
+          this.dataProvider.pageSetting.blur = false;
+        })
+      }
     }
   }
 }

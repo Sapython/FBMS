@@ -17,7 +17,10 @@ export class ReportingComponent implements OnInit {
   saleWiseReport: any[] = [];
   ncBills: any[] = [];
   incompleteBills: any[] = [];
-
+  upiBills: any[] = [];
+  cardBills: any[] = [];
+  cashBills: any[] = [];
+  otherBills: any[] = [];
   totalReports: any;
   totalSales: number = 0;
   totalNonChargableSales: number = 0
@@ -31,6 +34,11 @@ export class ReportingComponent implements OnInit {
   completedKots:number = 0;
   customers:any[] = []
   loadedAllData:boolean = false;
+  kotTokenStart: string = '';
+  kotTokenEnd: string = '';
+  billTokenEnd: string = '';
+  billTokenStart: string = '';
+
   range = new FormGroup({
     start: new FormControl<Date | null>(null, [Validators.required]),
     end: new FormControl<Date | null>(null, [Validators.required]),
@@ -117,6 +125,11 @@ export class ReportingComponent implements OnInit {
               return bills.findIndex(b => b.billNo == bill.billNo) == index
             })
             bills.forEach((bill) => {
+              if (!this.billTokenStart){
+                this.billTokenStart = bill.billNo
+                this.kotTokenStart = bill.kots[0].tokenNo
+              }
+              this.billTokenEnd = bill.billNo 
               if (bill['completed'] == true) {
                 if (!this.bills.find((b) => b.id == bill.id)) {
                   const grandTotal = Number(bill['grandTotal']);
@@ -129,11 +142,21 @@ export class ReportingComponent implements OnInit {
                           total += item.quantity * item.shopPrice
                         })
                       }
+                      this.kotTokenEnd = kot.tokenNo
                     })
                     this.ncBills.push({...bill,subtotal:total})
                     this.totalNonChargableSales += total
                     this.totalSales += grandTotal
                   } else {
+                    if (bill['paymentType'] == 'upi'){
+                      this.upiBills.push(bill)
+                    } else if (bill['paymentType'] == 'card'){
+                      this.cardBills.push(bill)
+                    } else if (bill['paymentType'] == 'cash'){
+                      this.cashBills.push(bill)
+                    } else {
+                      this.otherBills.push(bill)
+                    }
                     this.bills.push({...bill,grandTotal:grandTotal});
                     this.totalSales += grandTotal
                     this.totalChargableSales += grandTotal
@@ -147,12 +170,14 @@ export class ReportingComponent implements OnInit {
                     } else {
                       this.completedKots++
                     }
+                    this.kotTokenEnd = kot.tokenNo
                   })
                 }
                 if (bill['customerInfo']['name'] || bill['customerInfo']['email'] || bill['customerInfo']['phoneNumber'] || bill['customerInfo']['address']){
                   this.newCustomers += 1
                   this.customers.push(bill['customerInfo'])
                 }
+
               } else {
                 this.incompleteBills.push(bill);
               }
@@ -220,6 +245,8 @@ export class ReportingComponent implements OnInit {
     doc.text('Total Completed Kots: '+this.completedKots, 10, 70);
     doc.text('Total Cancelled Kots: '+this.cancelledKots, 10, 80);
     doc.text('Total New Customers: '+this.newCustomers, 10, 90);
+    doc.text('KOT Token No: Start '+this.kotTokenStart+' End: '+this.kotTokenEnd, 10, 100);
+    doc.text('Bill Token No: Start '+this.billTokenStart+' End: '+this.billTokenEnd, 10, 110);
     doc.save('SalesReport.pdf');
   }
   exportSales() {
@@ -235,6 +262,7 @@ export class ReportingComponent implements OnInit {
         ]
       ]
     })
+    // finals
     doc.autoTable({
       head: [['Name','Price','No. Of Bills','Total Quantity', 'Total Price']],
       body: this.allDishes.map((item) => [
@@ -264,6 +292,78 @@ export class ReportingComponent implements OnInit {
     })
     doc.save('Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
+  exportUpiBills(){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Bill Number','Kots','Grand Total','Bill No.']],
+      body: this.upiBills.map((bill) => [
+        bill.billNo,
+        bill.kotTokens.join(','),
+        bill.grandTotal,
+        bill.billNo,
+      ]),
+    });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.upiBills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
+    doc.save('UPI Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
+  }
+
+  exportCardBills(){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Bill Number','Kots','Grand Total','Bill No.']],
+      body: this.cardBills.map((bill) => [
+        bill.billNo,
+        bill.kotTokens.join(','),
+        bill.grandTotal,
+        bill.billNo,
+      ]),
+    });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.cardBills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
+    doc.save('Card Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
+  }
+
+  exportCashBills(){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Bill Number','Kots','Grand Total','Bill No.']],
+      body: this.cashBills.map((bill) => [
+        bill.billNo,
+        bill.kotTokens.join(','),
+        bill.grandTotal,
+        bill.billNo,
+      ]),
+    });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.cashBills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
+    doc.save('Cash Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
+  }
+
+  exportOtherBills(){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Bill Number','Kots','Grand Total','Bill No.']],
+      body: this.otherBills.map((bill) => [
+        bill.billNo,
+        bill.kotTokens.join(','),
+        bill.grandTotal,
+        bill.billNo,
+      ]),
+    });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.otherBills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
+    doc.save('Other Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
+  }
+
   exportAllNonChargableBills(){
     var doc:any = new jsPDF();
     doc.autoTable({
@@ -275,6 +375,11 @@ export class ReportingComponent implements OnInit {
         bill.id,
       ]),
     });
+    // finals
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.ncBills.reduce((a,b)=>a+b.subtotal,0)]]
+    })
     doc.save('All Non Chargable Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
   exportCancelledKots(){
@@ -288,6 +393,10 @@ export class ReportingComponent implements OnInit {
         item.quantity * item.shopPrice,
       ]),
     });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.cancelledKotItems.reduce((a,b)=>a+b.shopPrice,0)]]
+    })
     doc.save('All Cancelled Kot Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
   exportCustomers(){
@@ -301,6 +410,11 @@ export class ReportingComponent implements OnInit {
         customer.address,
       ]),
     });
+    // finals
+    doc.autoTable({
+      head: [['Total Number']],
+      body: [[this.customers.length]]
+    })
     doc.save('All Customers Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
   exportIncompleteBills(){
@@ -314,6 +428,10 @@ export class ReportingComponent implements OnInit {
         bill.billNo,
       ]),
     });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.incompleteBills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
     doc.save('All Incomplete Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
   exportCancelledBills(){
@@ -327,6 +445,11 @@ export class ReportingComponent implements OnInit {
         bill.billNo,
       ]),
     });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.cancelledBills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
+    doc.save('All Cancelled Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
   exportDiscountedBills(){
     var doc:any = new jsPDF();
@@ -340,6 +463,11 @@ export class ReportingComponent implements OnInit {
         bill.billNo,
       ]),
     });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.discountedBills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
+    doc.save('All Discounted Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
   calculateGrandTotal(bill:any){
     let subtotal = 0;
@@ -367,4 +495,5 @@ export class ReportingComponent implements OnInit {
     let total = subtotal + cgst + sgst
     return [total,subtotal]
   }
+  
 }

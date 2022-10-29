@@ -1,0 +1,26 @@
+<main>
+    <mat-form-field appearance="outline">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date">
+            <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+    </mat-form-field>
+    <ng-container>
+        <div class="counters">
+            <h3>Overview</h3>
+            <p></p>
+            <span>Total Bookings: <b>{{totalBookings}}</b></span>
+            <span>Total New Guests: <b>{{totalNewGuests}}</b></span>
+            <span>Total Booking Cost: <b>{{totalBookingCost}}</b></span>
+            <button mat-flat-button color="primary" >Export Summary</button>
+        </div>
+        <section>
+        </section>
+    </ng-container>
+</main>

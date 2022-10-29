@@ -21,6 +21,8 @@
             <span>Cancelled KOTs: <b>{{cancelledKots}}</b></span>
             <span>New Customers: <b>{{newCustomers}}</b></span>
             <span>Completed KOTs: <b>{{completedKots}}</b></span>
+            <span>KOT Token No: Start <b>{{kotTokenStart}}</b> End: <b>{{kotTokenEnd}}</b></span>
+            <span>Bill Token No: Start <b>{{billTokenStart}}</b> End: <b>{{billTokenEnd}}</b></span>
             <span>Non Chargeable Sales: <b>{{toFixed(totalNonChargableSales)}}</b></span>
             <span>Chargeable Sales: <b>{{toFixed(totalChargableSales)}}</b></span>
             <span>Cancelled Bills: <b>{{cancelledBills.length}}</b></span>
@@ -101,6 +103,118 @@
                             </td>
                             <td>{{bill.subtotal}}</td>
                             <td>{{bill.billNo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>UPI Bills from {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportUpiBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Kots</th>
+                            <th>Applied Disc</th>
+                            <th>id</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bill of upiBills">
+                            <td>{{bill.billNo}}</td>
+                            <td>
+                                <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
+                            </td>
+                            <td>{{bill.discount || 0}}</td>
+                            <td>{{bill.id}}</td>
+                            <td>{{bill.grandTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>Card Bills from {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportCardBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Kots</th>
+                            <th>Applied Disc</th>
+                            <th>id</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bill of cardBills">
+                            <td>{{bill.billNo}}</td>
+                            <td>
+                                <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
+                            </td>
+                            <td>{{bill.discount || 0}}</td>
+                            <td>{{bill.id}}</td>
+                            <td>{{bill.grandTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>Cash Bills from {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportCashBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Kots</th>
+                            <th>Applied Disc</th>
+                            <th>id</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bill of cashBills">
+                            <td>{{bill.billNo}}</td>
+                            <td>
+                                <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
+                            </td>
+                            <td>{{bill.discount || 0}}</td>
+                            <td>{{bill.id}}</td>
+                            <td>{{bill.grandTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>Other Payment Method Bills from {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportOtherBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Kots</th>
+                            <th>Applied Disc</th>
+                            <th>id</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bill of otherBills">
+                            <td>{{bill.billNo}}</td>
+                            <td>
+                                <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
+                            </td>
+                            <td>{{bill.discount || 0}}</td>
+                            <td>{{bill.id}}</td>
+                            <td>{{bill.grandTotal}}</td>
                         </tr>
                     </tbody>
                 </table>
