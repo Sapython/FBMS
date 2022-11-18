@@ -7,6 +7,8 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { slot, timeSlots } from 'src/app/structures/time-slot.structure';
 import { AddRoomsComponent } from './add-rooms/add-rooms.component';
 import { BookRoomComponent } from './book-room/book-room.component';
+import { GuestsComponent } from './guests/guests.component';
+import { RoomSettingsComponent } from './room-settings/room-settings.component';
 import { SeeBookingComponent } from './see-booking/see-booking.component';
 
 @Component({
@@ -137,5 +139,19 @@ export class RoomsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.guestsSubscription.unsubscribe();
+  }
+
+  seeGuests(){
+    const inst = this.dialog.open(GuestsComponent)
+    inst.componentInstance?.close.subscribe(()=>{
+      inst.close();
+    })
+  }
+
+  openRoomSettings(){
+    const inst  = this.dialog.open(RoomSettingsComponent)
+    inst.componentInstance?.cancel.subscribe(()=>{
+      inst.close();
+    })
   }
 }

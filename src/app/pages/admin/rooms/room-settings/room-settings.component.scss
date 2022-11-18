@@ -1,0 +1,33 @@
+section{
+    background-color: white;
+    padding:20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+    // width: 60vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    form{
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        .grid{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap:20px;
+        }
+        .list{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+    }
+}
+.row{
+    display: flex;
+    gap:20px;
+    align-items: center;
+    justify-content: flex-start;
+}
+.end{
+    justify-content: flex-end;
+}

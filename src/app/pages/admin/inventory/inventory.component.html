@@ -1,170 +1,317 @@
 <div class="actions">
-    <button mat-flat-button *ngIf="!isActionActive" (click)="ngOnInit()" color="primary">
-        <mat-icon>restart_alt</mat-icon>
-        <span>&nbsp;&nbsp;Refresh</span>
+  <button
+    mat-flat-button
+    *ngIf="!isActionActive"
+    (click)="ngOnInit()"
+    color="primary"
+  >
+    <mat-icon>restart_alt</mat-icon>
+    <span>&nbsp;&nbsp;Refresh</span>
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    *ngIf="categories.length > 0 && !isActionActive"
+    (click)="compareOpeningClosingBalance()"
+  >
+    <mat-icon>compare_arrows</mat-icon>
+    <span>&nbsp;&nbsp;Set Issued/See History</span>
+  </button>
+  <ng-container
+    *ngIf="
+      categories.length > 0 && isActionActive && currrentAction == 'quantity'
+    "
+  >
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="
+        isActionActive = false;
+        currrentAction = '';
+        updateStockItems = false;
+        ngOnInit()
+      "
+    >
+      <mat-icon>cancel</mat-icon>
+      <span>&nbsp;&nbsp;Cancel</span>
     </button>
-    <button mat-flat-button color="primary" *ngIf="categories.length>0 && !isActionActive" (click)="compareOpeningClosingBalance()">
-        <mat-icon>compare_arrows</mat-icon>
-        <span>&nbsp;&nbsp;Set Issued/See History</span>
+    <button mat-flat-button color="primary" (click)="updateStockQuantities()">
+      <mat-icon>save</mat-icon>
+      <span>&nbsp;&nbsp;Save</span>
     </button>
-    <ng-container  *ngIf="categories.length>0 && isActionActive && currrentAction=='quantity'">
-        <button mat-stroked-button color="primary" (click)="isActionActive=false;currrentAction='';updateStockItems=false; ngOnInit()">
-            <mat-icon>cancel</mat-icon>
-            <span>&nbsp;&nbsp;Cancel</span>
-        </button>
-        <button mat-flat-button color="primary" (click)="updateStockQuantities()">
-            <mat-icon>save</mat-icon>
-            <span>&nbsp;&nbsp;Save</span>
-        </button>
-    </ng-container>
-    <ng-container  *ngIf="categories.length>0 && isActionActive && currrentAction=='purchase'">
-        <button mat-stroked-button color="primary" (click)="isActionActive=false;currrentAction='';purchaseMode=false; ngOnInit()">
-            <mat-icon>cancel</mat-icon>
-            <span>&nbsp;&nbsp;Cancel</span>
-        </button>
-        <button mat-flat-button color="primary" (click)="completePurchase()">
-            <mat-icon>save</mat-icon>
-            <span>&nbsp;&nbsp;Save</span>
-        </button>
-    </ng-container>
-    <button mat-flat-button color="primary" *ngIf="categories.length>0 && !isActionActive" (click)="completePurchase()">
-        <mat-icon>compare_arrows</mat-icon>
-        <span>&nbsp;&nbsp;{{purchaseMode ? 'Save Purchases' : 'Set Purchases'}}</span>
+  </ng-container>
+  <ng-container
+    *ngIf="
+      categories.length > 0 && isActionActive && currrentAction == 'purchase'
+    "
+  >
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="
+        isActionActive = false;
+        currrentAction = '';
+        purchaseMode = false;
+        ngOnInit()
+      "
+    >
+      <mat-icon>cancel</mat-icon>
+      <span>&nbsp;&nbsp;Cancel</span>
     </button>
-    <button mat-flat-button color="primary" *ngIf="categories.length>0 && !isActionActive" (click)="updateStockQuantities()">
-        <mat-icon>sync</mat-icon>
-        <span>&nbsp;&nbsp;Update Stock</span>
+    <button mat-flat-button color="primary" (click)="completePurchase()">
+      <mat-icon>save</mat-icon>
+      <span>&nbsp;&nbsp;Save</span>
     </button>
-    <!-- <button mat-flat-button *ngIf="isActionActive" color="primary" *ngIf="categories.length>0">
+  </ng-container>
+  <button
+    mat-flat-button
+    color="primary"
+    *ngIf="categories.length > 0 && !isActionActive"
+    (click)="completePurchase()"
+  >
+    <mat-icon>compare_arrows</mat-icon>
+    <span
+      >&nbsp;&nbsp;{{ purchaseMode ? "Save Purchases" : "Set Purchases" }}</span
+    >
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    *ngIf="categories.length > 0 && !isActionActive"
+    (click)="updateStockQuantities()"
+  >
+    <mat-icon>sync</mat-icon>
+    <span>&nbsp;&nbsp;Update Stock</span>
+  </button>
+  <!-- <button mat-flat-button *ngIf="isActionActive" color="primary" *ngIf="categories.length>0">
         <mat-icon>remove</mat-icon>
         <span>&nbsp;&nbsp;Remove Items</span>
     </button> -->
-    <button mat-flat-button color="primary" (click)="addNewItem()" *ngIf="categories.length>0 && !isActionActive">
-        <mat-icon>add</mat-icon>
-        <span>&nbsp;&nbsp;Add Item</span>
-    </button>
-    <button mat-flat-button *ngIf="!isActionActive" color="primary" (click)="addCategory()">
-        <mat-icon>add</mat-icon>
-        <span>&nbsp;&nbsp;Add Category</span>
-    </button>
-    <!-- <button mat-flat-button *ngIf="isActionActive" color="primary">
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="addNewItem()"
+    *ngIf="categories.length > 0 && !isActionActive"
+  >
+    <mat-icon>add</mat-icon>
+    <span>&nbsp;&nbsp;Add Item</span>
+  </button>
+  <button
+    mat-flat-button
+    *ngIf="!isActionActive"
+    color="primary"
+    (click)="addCategory()"
+  >
+    <mat-icon>add</mat-icon>
+    <span>&nbsp;&nbsp;Add Category</span>
+  </button>
+  <!-- <button mat-flat-button *ngIf="isActionActive" color="primary">
         <mat-icon>analytics</mat-icon>
         <span>&nbsp;&nbsp;Analytics</span>
     </button> -->
 </div>
-<mat-tab-group mat-align-tabs="start" (selectedTabChange)="setTab($event)" *ngIf="categories.length>0">
-    <mat-tab [label]="category" *ngFor="let category of categories">
-        <div class="row">
-            <div class="titleBadge">Total Stock Value For This Category: <b> &#8377;{{categoryWisePrices[category]}}</b></div>
-            <button mat-flat-button (click)="exportReport(category)" color="primary">Export Pdf</button>
-        </div>
-        <div class="body">
-            <table [cellSpacing]="0">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Item</th>
-                        <th>Unit</th>
-                        <th>Quantity</th>
-                        <th>Rate/Unit</th>
-                        <th>Gross Value</th>
-                        <th *ngIf="updateStockItems">Update</th>
-                        <th *ngIf="!isActionActive">Actions</th>
-                        <ng-container *ngIf="purchaseMode">
-                            <th>New Quantity</th>
-                            <th>New Rate</th>
-                        </ng-container>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of this.getIngredients(category);let i = index" (click)="changeOcurred()">
-                        <td>
-                            <div class="row">
-                                <i class="fa-solid fa-circle-check" *ngIf="item.checked"
-                                    (click)="item.checked=false"></i>
-                                <i class="fa-regular fa-circle" *ngIf="!item.checked" (click)="item.checked=true"></i>
-                                <p>{{i+1}}</p>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row">
-                                <img [src]="item.images[0]">
-                                <p>{{item.name}}</p>
-                            </div>
-                        </td>
-                        <td>
-                            <p>{{item.unit}}</p>
-                        </td>
-                        <td>
-                            <div class="row">
-                                <span>{{roundOff(item.quantity)}}</span>
-                                <div *ngIf="!isActionActive"
-                                    [class]="item.quantity < (item.warningThreshold ? item.warningThreshold : 20) ? (item.quantity < (item.errorThreshold ? item.errorThreshold : 5) ? 'error' : 'warning') : ''">
-                                    <ng-container
-                                        *ngIf="item.quantity < (item.errorThreshold ? item.errorThreshold : 5)">
-                                        <span>DANGER</span> Very low stock
-                                    </ng-container>
-                                    <ng-container
-                                        *ngIf="item.quantity < (item.warningThreshold ? item.warningThreshold : 20) && item.quantity >= (item.errorThreshold ? item.errorThreshold : 5)">
-                                        <span>WARNING</span> Low stock.
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <p>&#8377;{{roundOff(item.ratePerUnit)}}</p>
-                        </td>
-                        <td>
-                            <p>&#8377;{{roundOff(item.finalPrice ? item.finalPrice : item.ratePerUnit * item.quantity)}}</p>
-                        </td>
-                        <td class="align-center" *ngIf="!isActionActive || updateStockItems">
-                            <ng-container *ngIf="!isActionActive">
-                                <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="edit" (click)="editItem(item)">
-                                    <mat-icon>edit</mat-icon>
-                                </button>
-                                <!-- <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="copy" (click)="duplicateItem(item)">
-                                    <mat-icon>content_copy</mat-icon>
-                                </button> -->
-                                    <!-- <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="insights">
-                                        <mat-icon>insights</mat-icon>
-                                    </button> -->
-                                <button [tabIndex]="purchaseMode ? -1 : 1" mat-icon-button class="delete" (click)="deleteItem(item.id || '')">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
-                            </ng-container>
-                            <ng-container *ngIf="updateStockItems && item.ratePerUnit !=0">
-                                <button mat-icon-button color="primary" (click)="addQuantity(i,category)">
-                                    <mat-icon>add</mat-icon>
-                                </button>
-                                <input class="quantityInput" type="number" [(ngModel)]="item.newQuantity">
-                                <button mat-icon-button color="primary" (click)="removeQuantity(i,category)">
-                                    <mat-icon>remove</mat-icon>
-                                </button>
-                            </ng-container>
-                        </td>
-                        <ng-container *ngIf="purchaseMode">
-                            <td>
-                                <div class="uk-flex">
-                                    <input class="quantityInput" #quantity (input)="item.newQuantity < 0 ? item.newQuantity = 0 : {}" type="number" min="0" [(ngModel)]="item.newQuantity">
-                                    <p>{{item.unit}}</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="uk-flex">
-                                    <p>&#8377;</p>
-                                    <input class="quantityInput" #rate (input)="item.newRatePerUnit < 0 ? item.newRatePerUnit = 0 : {}" type="number" min="0" [(ngModel)]="item.newRatePerUnit">
-                                </div>
-                            </td>
-                        </ng-container>
-                    </tr>
-                    <h3 *ngIf="this.getIngredients(category).length==0">No ingredients in this category.</h3>
-                </tbody>
-            </table>
-            <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-                (page)="pageEvent = $event" aria-label="Select page">
-            </mat-paginator>
-        </div>
-    </mat-tab>
+<mat-tab-group
+  mat-align-tabs="start"
+  (selectedTabChange)="setTab($event)"
+  *ngIf="categories.length > 0"
+>
+  <mat-tab [label]="category" *ngFor="let category of categories">
+    <div class="row">
+      <div class="titleBadge">
+        Total Stock Value For This Category:
+        <b> &#8377;{{ categoryWisePrices[category] }}</b>
+      </div>
+      <button mat-flat-button (click)="exportReport(category)" color="primary">
+        Export Pdf
+      </button>
+    </div>
+    <div class="body">
+      <table [cellSpacing]="0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item <button color="primary" mat-icon-button (click)="naturalSortBy('name')"><mat-icon>sort</mat-icon></button> </th>
+            <th>Unit <button color="primary" mat-icon-button (click)="naturalSortBy('unit')"><mat-icon>sort</mat-icon></button> </th>
+            <th>Quantity <button color="primary" mat-icon-button (click)="naturalSortBy('quantity')"><mat-icon>sort</mat-icon></button> </th>
+            <th>Rate/Unit <button color="primary" mat-icon-button (click)="naturalSortBy('ratePerUnit')"><mat-icon>sort</mat-icon></button> </th>
+            <th>Gross Value <button color="primary" mat-icon-button (click)="naturalSortBy('grossValue')"><mat-icon>sort</mat-icon></button> </th>
+            <th *ngIf="updateStockItems">Update</th>
+            <th *ngIf="!isActionActive">Actions</th>
+            <ng-container *ngIf="purchaseMode">
+              <th>New Quantity</th>
+              <th>New Rate</th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of this.getIngredients(category); let i = index"
+            (click)="changeOcurred()"
+          >
+            <td>
+              <div class="row">
+                <i
+                  class="fa-solid fa-circle-check"
+                  *ngIf="item.checked"
+                  (click)="item.checked = false"
+                ></i>
+                <i
+                  class="fa-regular fa-circle"
+                  *ngIf="!item.checked"
+                  (click)="item.checked = true"
+                ></i>
+                <p>{{ i + 1 }}</p>
+              </div>
+            </td>
+            <td>
+              <div class="row">
+                <img [src]="item.images[0]" />
+                <p>{{ item.name }}</p>
+              </div>
+            </td>
+            <td>
+              <p>{{ item.unit }}</p>
+            </td>
+            <td>
+              <div class="row">
+                <span>{{ roundOff(item.quantity) }}</span>
+                <div
+                  *ngIf="!isActionActive"
+                  [class]="
+                    item.quantity <
+                    (item.warningThreshold ? item.warningThreshold : 20)
+                      ? item.quantity <
+                        (item.errorThreshold ? item.errorThreshold : 5)
+                        ? 'error'
+                        : 'warning'
+                      : ''
+                  "
+                >
+                  <ng-container
+                    *ngIf="
+                      item.quantity <
+                      (item.errorThreshold ? item.errorThreshold : 5)
+                    "
+                  >
+                    <span>DANGER</span> Very low stock
+                  </ng-container>
+                  <ng-container
+                    *ngIf="
+                      item.quantity <
+                        (item.warningThreshold ? item.warningThreshold : 20) &&
+                      item.quantity >=
+                        (item.errorThreshold ? item.errorThreshold : 5)
+                    "
+                  >
+                    <span>WARNING</span> Low stock.
+                  </ng-container>
+                </div>
+              </div>
+            </td>
+            <td>
+              <p>&#8377;{{ roundOff(item.ratePerUnit) }}</p>
+            </td>
+            <td>
+              <p>
+                &#8377;{{
+                  roundOff(
+                    item.finalPrice
+                      ? item.finalPrice
+                      : item.ratePerUnit * item.quantity
+                  )
+                }}
+              </p>
+            </td>
+            <td
+              class="align-center"
+              *ngIf="!isActionActive || updateStockItems"
+            >
+              <ng-container *ngIf="!isActionActive">
+                <button
+                  [tabIndex]="purchaseMode ? -1 : 1"
+                  mat-icon-button
+                  class="edit"
+                  (click)="editItem(item)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  [tabIndex]="purchaseMode ? -1 : 1"
+                  mat-icon-button
+                  class="delete"
+                  (click)="deleteItem(item.id || '')"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="updateStockItems && item.ratePerUnit != 0">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="addQuantity(i, category)"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+                <input
+                  class="quantityInput"
+                  type="number"
+                  [(ngModel)]="item.newQuantity"
+                />
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="removeQuantity(i, category)"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </ng-container>
+            </td>
+            <ng-container *ngIf="purchaseMode">
+              <td>
+                <div class="uk-flex">
+                  <input
+                    class="quantityInput"
+                    #quantity
+                    (input)="item.newQuantity < 0 ? (item.newQuantity = 0) : {}"
+                    type="number"
+                    min="0"
+                    [(ngModel)]="item.newQuantity"
+                  />
+                  <p>{{ item.unit }}</p>
+                </div>
+              </td>
+              <td>
+                <div class="uk-flex">
+                  <p>&#8377;</p>
+                  <input
+                    class="quantityInput"
+                    #rate
+                    (input)="
+                      item.newRatePerUnit < 0 ? (item.newRatePerUnit = 0) : {}
+                    "
+                    type="number"
+                    min="0"
+                    [(ngModel)]="item.newRatePerUnit"
+                  />
+                </div>
+              </td>
+            </ng-container>
+          </tr>
+          <h3 *ngIf="this.getIngredients(category).length == 0">
+            No ingredients in this category.
+          </h3>
+        </tbody>
+      </table>
+      <mat-paginator
+        [length]="length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="pageEvent = $event"
+        aria-label="Select page"
+      >
+      </mat-paginator>
+    </div>
+  </mat-tab>
 </mat-tab-group>
 
-<p *ngIf="categories.length==0">Oops no category found please add one</p>
+<p *ngIf="categories.length == 0">Oops no category found please add one</p>

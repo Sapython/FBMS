@@ -1,7 +1,7 @@
 <div class="top-buttons">
   <div class="end-buttons">
     <div class="filter-buttons">
-      <button mat-flat-button color="primary" (click)="addTable()">
+      <button mat-flat-button color="primary" (click)="seeGuests()">
         <mat-icon>king_bed</mat-icon> Room Guests
       </button>
       <button mat-flat-button color="primary" (click)="addTable()">
@@ -9,6 +9,9 @@
       </button>
       <button mat-flat-button color="primary">
         <mat-icon>filter_alt</mat-icon>
+      </button>
+      <button mat-flat-button color="primary" (click)="openRoomSettings()">
+        Room Settings
       </button>
       <div class="dropdown-container" id="calendar-dropdown">
         <button mat-flat-button color="primary" (click)="showCalendar = true">

@@ -1,1 +1,27 @@
-<p>guests works!</p>
+<section>
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Guest Name</mat-label>
+            <input matInput (input)="debounceSearch($event)" placeholder="Guest Name">
+        </mat-form-field>
+    </div>
+    <h2>Guest List</h2>
+    <table *ngIf="guests.length > 0">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Aadhaar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of guests; let i = index;">
+                <td>{{item.name}}</td>
+                <td>{{item.phoneNumber}}</td>
+                <td>{{item.aadhaarNumber}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+</section>

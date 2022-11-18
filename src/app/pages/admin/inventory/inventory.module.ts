@@ -22,6 +22,7 @@ import { MatDatepickerModule, MatDateSelectionModel } from '@angular/material/da
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MatCardModule} from '@angular/material/card'; 
 import {MatTableModule} from '@angular/material/table'; 
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {MatTableModule} from '@angular/material/table';
     MatDatepickerModule,
     MatNativeDateModule,
     MatCardModule,
-    MatTableModule
+    MatTableModule,
+    MatSortModule
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }

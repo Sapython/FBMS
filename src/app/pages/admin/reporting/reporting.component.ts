@@ -21,6 +21,8 @@ export class ReportingComponent implements OnInit {
   cardBills: any[] = [];
   cashBills: any[] = [];
   otherBills: any[] = [];
+  restaurantBills:any[] = []
+  roomBills:any[] = []
   totalReports: any;
   totalSales: number = 0;
   totalNonChargableSales: number = 0
@@ -33,6 +35,7 @@ export class ReportingComponent implements OnInit {
   cancelledKotItems:any[] = []
   completedKots:number = 0;
   customers:any[] = []
+  wastedItems:any[] = []
   loadedAllData:boolean = false;
   kotTokenStart: string = '';
   kotTokenEnd: string = '';
@@ -125,6 +128,12 @@ export class ReportingComponent implements OnInit {
               return bills.findIndex(b => b.billNo == bill.billNo) == index
             })
             bills.forEach((bill) => {
+              console.log("BULL",bill)
+              if (bill.table?.type=='room'){
+                this.roomBills.push(bill)
+              } else if (bill.table?.type=='table'){
+                this.restaurantBills.push(bill)
+              }
               if (!this.billTokenStart){
                 this.billTokenStart = bill.billNo
                 this.kotTokenStart = bill.kots[0].tokenNo
@@ -228,6 +237,34 @@ export class ReportingComponent implements OnInit {
                   dish.shopPrice * dish.quantity;
               }
             });
+            this.wastedItems = []
+            this.cancelledBills.forEach((bill) => {
+              bill.kots.forEach((kot:any)=>{
+                kot.products.forEach((item:any)=>{
+                  // no duplicates
+                  let index = this.wastedItems.findIndex((i:any)=>i.id==item.id)
+                  if(index==-1){
+                    this.wastedItems.push(item)
+                  } else {
+                    this.wastedItems[index].quantity += item.quantity
+                  }
+                })
+              })
+            })
+            this.ncBills.forEach((bill) => {
+              bill.kots.forEach((kot:any)=>{
+                kot.products.forEach((item:any)=>{
+                  // no duplicates
+                  let index = this.wastedItems.findIndex((i:any)=>i.id==item.id)
+                  if(index==-1){
+                    this.wastedItems.push(item)
+                  } else {
+                    this.wastedItems[index].quantity += item.quantity
+                  }
+                })
+              })
+            })
+            console.log("this.wastedItems",this.wastedItems)
             // sort allDishes in alphabetical order
             this.loadedAllData = true;
           });
@@ -362,6 +399,42 @@ export class ReportingComponent implements OnInit {
       body: [[this.otherBills.reduce((a,b)=>a+b.grandTotal,0)]]
     })
     doc.save('Other Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
+  }
+  
+  exportRoomBills(){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Bill Number','Kots','Grand Total','Bill No.']],
+      body: this.roomBills.map((bill) => [
+        bill.billNo,
+        bill.kotTokens.join(','),
+        bill.grandTotal,
+        bill.billNo,
+      ]),
+    });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.roomBills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
+    doc.save('Room Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
+  }
+
+  exportRestaurantBills(){
+    var doc:any = new jsPDF();
+    doc.autoTable({
+      head: [['Bill Number','Kots','Grand Total','Bill No.']],
+      body: this.restaurantBills.map((bill) => [
+        bill.billNo,
+        bill.kotTokens.join(','),
+        bill.grandTotal,
+        bill.billNo,
+      ]),
+    });
+    doc.autoTable({
+      head: [['Total']],
+      body: [[this.restaurantBills.reduce((a,b)=>a+b.grandTotal,0)]]
+    })
+    doc.save('Restaurant Bills Report '+ this.range.value.start?.toDateString() +'- '+ this.range.value.start?.toDateString() +'.pdf');
   }
 
   exportAllNonChargableBills(){

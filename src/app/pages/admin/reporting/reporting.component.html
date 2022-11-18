@@ -70,7 +70,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of bills">
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
@@ -97,12 +97,12 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of ncBills">
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
                             <td>{{bill.subtotal}}</td>
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -124,7 +124,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of upiBills">
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
@@ -152,7 +152,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of cardBills">
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
@@ -180,7 +180,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of cashBills">
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
@@ -208,7 +208,63 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of otherBills">
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
+                            <td>
+                                <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
+                            </td>
+                            <td>{{bill.discount || 0}}</td>
+                            <td>{{bill.id}}</td>
+                            <td>{{bill.grandTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>Room Bills from {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportRoomBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Kots</th>
+                            <th>Applied Disc</th>
+                            <th>id</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bill of roomBills">
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
+                            <td>
+                                <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
+                            </td>
+                            <td>{{bill.discount || 0}}</td>
+                            <td>{{bill.id}}</td>
+                            <td>{{bill.grandTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>Restaurant Bills from {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportRestaurantBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Kots</th>
+                            <th>Applied Disc</th>
+                            <th>id</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bill of restaurantBills">
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
@@ -286,7 +342,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of incompleteBills">
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
@@ -310,7 +366,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of cancelledBills">
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
@@ -334,12 +390,34 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of discountedBills">
-                            <td>{{bill.billNo}}</td>
+                            <td> {{bill.isNonChargeable ? 'NC -' :''}} {{bill.billNo}}</td>
                             <td>
                                 <ng-container *ngFor="let kot of bill.kotTokens">{{kot}},</ng-container>
                             </td>
                             <td>{{bill.discount || 0}}</td>
                             <td>{{bill.grandTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report">
+                <div class="row">
+                    <h2>Total Wastage {{range.value.start | date}} to {{range.value.end | date}}</h2>
+                    <button mat-flat-button (click)="exportDiscountedBills()" color="primary">Export</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of wastedItems">
+                            <td>{{item.dishName | titlecase}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>{{item.costPrice || 0}}</td>
                         </tr>
                     </tbody>
                 </table>

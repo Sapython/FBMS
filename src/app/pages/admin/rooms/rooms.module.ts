@@ -22,7 +22,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GuestsComponent } from './guests/guests.component';
 import { AddGuestComponent } from './add-guest/add-guest.component';
 import {MatChipsModule} from '@angular/material/chips';
-import { SeeBookingComponent } from './see-booking/see-booking.component'; 
+import { SeeBookingComponent } from './see-booking/see-booking.component';
+import { RoomSettingsComponent } from './room-settings/room-settings.component'; 
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
+
 @NgModule({
   declarations: [
     RoomsComponent,
@@ -30,7 +34,8 @@ import { SeeBookingComponent } from './see-booking/see-booking.component';
     BookRoomComponent,
     GuestsComponent,
     AddGuestComponent,
-    SeeBookingComponent
+    SeeBookingComponent,
+    RoomSettingsComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +54,8 @@ import { SeeBookingComponent } from './see-booking/see-booking.component';
     MatSelectModule,
     MatRadioModule,
     MatCheckboxModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSlideToggleModule
   ]
 })
 export class RoomsModule { }

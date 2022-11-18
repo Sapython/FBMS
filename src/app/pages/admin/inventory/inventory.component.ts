@@ -7,10 +7,15 @@ import { AddNewItemComponent } from './add-new-item/add-new-item.component';
 import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
 import { UpdateStockComponent } from './update-stock/update-stock.component';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-
+import { MatSort, Sort } from '@angular/material/sort';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import {LiveAnnouncer} from '@angular/cdk/a11y';
+
+
+
+const ELEMENT_DATA: any[] = [
+];
 
 @Component({
   selector: 'app-inventory',
@@ -27,7 +32,8 @@ export class InventoryComponent implements OnInit, AfterViewInit {
     private dialogModule: Dialog,
     private databaseService: DatabaseService,
     private alertify: AlertsAndNotificationsService,
-    private dataProvider: DataProvider
+    private dataProvider: DataProvider,
+    private _liveAnnouncer: LiveAnnouncer
   ) {}
   length: number = this.allMaterials.length;
   pageSize: number = 10;
@@ -40,11 +46,24 @@ export class InventoryComponent implements OnInit, AfterViewInit {
   currrentAction: 'quantity' | 'purchase' | '' = '';
   categoryWisePrices: any = {};
   currentUpdateAction: 'quantity' | 'purchase' | 'balance' | 'addItem' | 'updateItem'| 'duplicateItem' | 'deleteItem' | '' = '';
-  dataSource = new MatTableDataSource(this.allMaterials);
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  dataSource = new MatTableDataSource(ELEMENT_DATA);
   @ViewChild(MatSort) sort: MatSort;
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+  }
+
+  announceSortChange(sortState: any) {
+    // This example uses English messages. If your application supports
+    // multiple language, you would internationalize these strings.
+    // Furthermore, you can customize the message to add additional
+    // details about the values being sorted.
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
   }
 
   ngOnInit(): void {
@@ -503,6 +522,35 @@ export class InventoryComponent implements OnInit, AfterViewInit {
       return value.toFixed(2);
     } catch (error) {
       return Number(value);
+    }
+  }
+
+
+  naturalSortBy(type:'name'|'unit'|'quantity'|'ratePerUnit'|'grossValue') {
+    if (type == 'name') {
+      this.allMaterials.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
+    }
+    if (type == 'unit') {
+      this.allMaterials.sort((a, b) => {
+        return a.unit.localeCompare(b.unit);
+      });
+    }
+    if (type == 'quantity') {
+      this.allMaterials.sort((a, b) => {
+        return a.quantity - b.quantity;
+      });
+    }
+    if (type == 'ratePerUnit') {
+      this.allMaterials.sort((a, b) => {
+        return a.ratePerUnit - b.ratePerUnit;
+      });
+    }
+    if (type == 'grossValue') {
+      this.allMaterials.sort((a, b) => {
+        return (a.finalPrice ? a.finalPrice : a.ratePerUnit * a.quantity) - (b.finalPrice ? b.finalPrice : b.ratePerUnit * b.quantity) ;
+      });
     }
   }
 }
