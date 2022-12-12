@@ -1,0 +1,37 @@
+<section>
+  <h1>Settings</h1>
+  <mat-card>
+    <form [formGroup]="settingForm" (ngSubmit)="submit()">
+      <div class="row">
+        <p>Clear KOT token number period</p>
+        <mat-form-field appearance="outline">
+          <mat-label>Period</mat-label>
+          <mat-select formControlName="kotTokenRefreshTime">
+            <mat-option value="daily">Daily</mat-option>
+            <mat-option value="weekly">Weekly</mat-option>
+            <mat-option value="monthly">Monthly</mat-option>
+            <mat-option value="yearly">Yearly</mat-option>
+            <mat-option value="never">Never</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <p>Clear Bill token number period</p>
+        <mat-form-field appearance="outline">
+          <mat-label>Period</mat-label>
+          <mat-select formControlName="billTokenRefreshTime">
+            <mat-option value="daily">Daily</mat-option>
+            <mat-option value="weekly">Weekly</mat-option>
+            <mat-option value="monthly">Monthly</mat-option>
+            <mat-option value="yearly">Yearly</mat-option>
+            <mat-option value="never">Never</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <button mat-stroked-button color="primary" type="button">Cancel</button>
+        <button mat-flat-button color="primary" type="submit">Submit</button>
+      </div>
+    </form>
+  </mat-card>
+</section>

@@ -728,4 +728,28 @@ export class DatabaseService {
       )
     );
   }
+
+
+  saveSettings(data:any){
+    return setDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/settings'
+      ),
+      data
+    );
+  }
+
+  getSettings(){
+    return getDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/settings'
+      )
+    );
+  }
 }
