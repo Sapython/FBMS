@@ -1,0 +1,28 @@
+<main>
+    <form [formGroup]="newUserForm" (ngSubmit)="submit()">
+        <mat-form-field>
+            <input matInput placeholder="Name" formControlName="name">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Email" formControlName="email">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select placeholder="Role" formControlName="role">
+                <mat-option *ngFor="let role of accessLevels" [value]="role">
+                    {{ role }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="password" placeholder="Password" formControlName="password">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword">
+        </mat-form-field>
+        <div></div>
+        <div class="row">
+            <button mat-flat-button color="primary" type="submit">Create</button>
+            <button mat-stroked-button color="primary" (click)="closeModal()">Cancel</button>
+        </div>
+    </form>
+</main>

@@ -1,5 +1,5 @@
 table {
-  // width: ;
+  width: 100%;
   font-size: 16px;
   max-height: 600px;
   overflow-y: scroll;
@@ -115,10 +115,16 @@ table {
     }
   }
 }
-main{
+// main{
+//   display: flex;
+//   flex-direction: column;
+//   gap:20px;
+// }
+.column{
   display: flex;
   flex-direction: column;
   gap:20px;
+  width: 100%;
 }
 .counters {
   background-color: white;
@@ -140,9 +146,7 @@ main{
 
 section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
-
   .report {
     background-color: white;
     padding: 20px;
@@ -154,5 +158,13 @@ section {
       align-items: center;
       justify-content: space-between;
     }
+  }
+}
+main{
+  display: flex;
+  flex-wrap: wrap;
+  gap:20px;
+  mat-card{
+    max-width:300px;
   }
 }

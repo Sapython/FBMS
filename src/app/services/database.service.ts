@@ -752,4 +752,27 @@ export class DatabaseService {
       )
     );
   }
+
+  saveVariables(data:any){
+    return setDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/variables'
+      ),
+      data
+    );
+  }
+
+  getVariables(){
+    return getDoc(
+      doc(
+        this.fs,
+        'business/accounts/' +
+          this.dataProvider.currentProject?.projectId +
+          '/variables'
+      )
+    );
+  }
 }

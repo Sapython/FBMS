@@ -83,6 +83,8 @@ const routes: Routes = [
       { path: 'qrmenu', loadChildren: () => import('./qr-menu/qr-menu.module').then(m => m.QrMenuModule) },
       { path: 'roomReports', loadChildren: () => import('./room-reporting/room-reporting.module').then(m => m.RoomReportingModule) },
       { path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule) },
+      { path: 'permissions', loadChildren: () => import('./permissions/permissions.module').then(m => m.PermissionsModule) },
+      { path: 'variables', loadChildren: () => import('./variables/variables.module').then(m => m.VariablesModule) },
     ],
   },
 ];

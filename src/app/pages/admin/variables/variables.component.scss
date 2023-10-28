@@ -1,0 +1,14 @@
+.row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:20px;
+}
+form{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+}
+mat-card{
+    padding:20px;
+}

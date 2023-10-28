@@ -1,0 +1,92 @@
+@keyframes popUp {
+    0% {
+        transform: translateY(500%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+main {
+    height: fit-content;
+    min-height: 70vh;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    animation: popUp .5s cubic-bezier(0.33, 1, 0.68, 1);
+    padding: 20px;
+    .container {
+        max-height: calc(70vh - 100px);
+        overflow-y: auto;
+        background-color: white;
+        .row{
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+            .heading{
+                font-size: 20px;
+                font-weight: 600;
+            }
+            .badge{
+                border:2px solid var(--primary-color);
+                color:var(--primary-color);
+                padding:5px;
+                border-radius: 16px;
+            }
+        }
+        table {
+            padding:20px;
+            display: block;
+            .item {
+                min-width: 250px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                img {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                }
+
+                p {
+                    padding: 0 10px;
+                    font-size: 15px;
+                    font-weight: 500;
+                    color: rgb(75, 75, 75);
+                    text-align: start;
+                }
+            }
+
+            td {
+                text-align: center;
+                input {
+                    width: 60px;
+                    padding: 5px;
+                    border-radius: 6px;
+                    box-shadow: 2px 1px 10px rgba(0, 0, 0, 0.1);
+                }
+            }
+            th{
+                position: sticky;
+                top: 0; /* Don't forget this, required for the stickiness */
+                background: white;
+                font-size: 20px;
+                padding:20px;
+            }
+        }
+    }
+
+    .uk-flex {
+        width: 100%;
+    }
+}
+.buttons{
+    margin-top: 40px;
+    width: 100%;
+    display:flex;
+    justify-content: flex-end;
+    column-gap: 20px;
+}

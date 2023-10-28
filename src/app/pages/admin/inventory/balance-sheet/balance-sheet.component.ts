@@ -1,6 +1,7 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { elementAt } from 'rxjs';
 import { DataProvider } from 'src/app/providers/data.provider';
 import { AlertsAndNotificationsService } from 'src/app/services/alerts-and-notifications.service';
 import { DatabaseService } from 'src/app/services/database.service';
@@ -18,7 +19,7 @@ export class BalanceSheetComponent implements OnInit {
   dates: string[] = [];
   constructor(
     @Inject(DIALOG_DATA)
-    public items: { type: 'rawMaterials' | 'consumables'; items: StockItem[] },
+    public items: { type: 'rawMaterials' | 'consumables'; items: any[] },
     private databaseService: DatabaseService,
     private alertify: AlertsAndNotificationsService,
     private dataProvider: DataProvider
@@ -30,306 +31,86 @@ export class BalanceSheetComponent implements OnInit {
   stockSheetFinalPrices: any[] = [];
   purchaseSheet: any[] = [];
   stockSheet: any[] = [];
-  itemsCopy: StockItem[] = [];
+  itemsCopy: any[] = [];
   addTodaySheet: boolean = false;
   showHistory: boolean = true;
   totalSectionPrices: number[] = [];
-  searchProgress:number = 0.0;
+  searchProgress: number = 0.0;
+  title: string = "Today's Sheet";
+  sortedItems: any[] = [];
   range = new FormGroup({
     start: new FormControl<Date | null>(null, [Validators.required]),
     end: new FormControl<Date | null>(null, [Validators.required]),
   });
-  getKey(item: any) {  
-    return Object.keys(item);
-  }
+
   ngOnInit(): void {
+    let items: any[] = [];
+    this.items.items.forEach((element: any) => {
+      items.push({
+        ...element,
+        closingFixed: Number(element.closingBalance.toFixed(2)),
+      });
+    });
+    this.items.items = items;
     this.itemsCopy = JSON.parse(JSON.stringify(this.items.items));
     console.log(this.items);
-    this.range.valueChanges.subscribe((value) => {
-      console.log(value);
-      this.showHistory = true;
-      this.setValue(value);
-    });
-  }
-  addItems(item: any[], key: string) {
-    // sum items and return value
-    let sum = 0;
-    item.forEach((element: any) => {
-      sum += element[key];
-    });
-    return sum;
-  }
-  getFinalPrice(index: string, sheet: any[]) {
-    console.log('SHEET', sheet);
-    if (sheet && sheet.length > 0) {
-      let total = 0;
-      console.log(sheet);
-      const foundItem = sheet.find((element: any) => {
-        console.log('dateText', element, element.dateText);
-        return true;
-      });
-      console.log('foundItem', foundItem);
-      foundItem.history.forEach((element: any) => {
-        total += element.sectionPrice;
-      });
-    }
-    return 0;
-  }
-  setValue(value: any) {
-    if (value.start && value.end) {
-      if (value.start?.getTime() == value.end?.getTime()) {
-        value.end?.setHours(24);
-      }
-      if (value.start && value.end) {
-        this.sheet = [];
-        this.stockSheet = [];
-        this.purchaseSheet = [];
-        this.dataProvider.pageSetting.blur = true;
-        Promise.all([
-          this.getBalanceSheet(value),
-          this.getPurchaseHistory(value),
-          this.getStockHistory(value),
-          this.getFinalValuehistory(value)
-        ]).then((values) => {
-          this.alertify.presentToast("Fetched all history")
-        }).catch((err) => {
-          this.alertify.presentToast("Error fetching history")
-        }).finally(() => {
-          this.dataProvider.pageSetting.blur = false;
+    // get today's date
+    var today = new Date();
+    // today.setDate(today.getDate() +15);
+    today.setMonth(3);
+    console.log(today);
+    this.databaseService.getSettings().then((settings:any) => {
+      if (settings) {
+        console.log("Passed",settings.data()['updateRateThresold'])
+        let quarterMonths = [3, 6, 9, 12];
+        if (quarterMonths.includes(today.getMonth())) {
+          this.title = "This quarter's Sheet";
+          this.items.items.forEach((element: any) => {
+            if (element.updatePeriod == 'Quarterly') {
+              this.sortedItems.push(element);
+            } else if (element.ratePerUnit > settings.data()['updateRateThresold']) {
+              this.sortedItems.push(element);
+            } else if (element.updatePeriod == 'Daily') {
+              this.sortedItems.push(element);
+            }
+          });
+        } else if (
+          (today.getMonth() != 1 &&
+            (today.getDate() == 30 || today.getDate() == 31)) ||
+          (today.getMonth() == 1 &&
+            (today.getDate() == 28 || today.getDate() == 29))
+        ) {
+          this.title = "This month's Sheet";
+          this.items.items.forEach((element: any) => {
+            if (element.updatePeriod == 'Monthly') {
+              this.sortedItems.push(element);
+            } else if (element.ratePerUnit >  settings.data()['updateRateThresold']) {
+              this.sortedItems.push(element);
+            } else if (element.updatePeriod == 'Daily') {
+              this.sortedItems.push(element);
+            }
+          });
+        } else if (today.getDay() == 6 || today.getDay() == 0) {
+          this.title = "This year's Sheet";
+          this.items.items.forEach((element: any) => {
+            if (element.updatePeriod == 'Yearly') {
+              this.sortedItems.push(element);
+            } else if (element.ratePerUnit >  settings.data()['updateRateThresold']) {
+              this.sortedItems.push(element);
+            } else if (element.updatePeriod == 'Daily') {
+              this.sortedItems.push(element);
+            }
+          });
+        }
+        this.items.items.forEach((element: any) => {
+          if(element.updatePeriod == 'Daily'){
+            this.sortedItems.push(element);
+          } else if (element.ratePerUnit >  settings.data()['updateRateThresold']) {
+            this.sortedItems.push(element);
+          }
         })
       }
-    }
-  }
-
-  async getFinalValuehistory(value: any) {
-    const docs = await this.databaseService.getFinalValueHistory(
-      value.start,
-      value.end
-    );
-    let allDateWiseData: any = {};
-    let counter = 0;
-    docs.forEach((element: any) => {
-      if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-        allDateWiseData[element.data().date.toDate().toDateString()].items.push(
-          element.data()
-        );
-      } else {
-        allDateWiseData[element.data().date.toDate().toDateString()] = {
-          items: [element.data()],
-          date: element.data().date.toDate(),
-        };
-      }
     });
-    this.finalValueSheet = Object.values(allDateWiseData);
-  }
-
-  async getStockHistory(value: { start: Date; end: Date }) {
-    function sumStockItems(item: any[]) {
-      let sum = 0;
-      item.forEach((element: any) => {
-        sum +=
-          (element.newQuantity + element.quantity) * element.newRatePerUnit;
-      });
-      return sum;
-    }
-    const docs = await this.databaseService.getStockHistory(
-      value.start,
-      value.end
-    );
-    let allDateWiseData: any = {};
-    let counter = 0;
-    for (let item of docs.docs) {
-      const element: any = item;
-      const res = await this.databaseService.getStockHistoryIngredients(
-        element.data().items,
-        element.id
-      );
-      if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-        allDateWiseData[
-          element.data().date.toDate().toDateString()
-        ].history.push({
-          items: res,
-          id: element.id,
-          date: element.data().date.toDate(),
-          sectionPrice: sumStockItems(res),
-        });
-      } else {
-        allDateWiseData[element.data().date.toDate().toDateString()] = {
-          history: [
-            {
-              items: res,
-              id: element.id,
-              date: element.data().date.toDate(),
-              sectionPrice: sumStockItems(res),
-            },
-          ],
-          date: element.data().date.toDate(),
-          active: element.id,
-          sectionPrice: this.addItems(res, 'finalPrice'),
-        };
-      }
-      counter++;
-    }
-    this.stockSheet = Object.values(allDateWiseData);
-    console.log(this.stockSheet);
-    this.stockSheetFinalPrices = [];
-    this.stockSheet.forEach((element: any) => {
-      console.log('element.history', element.history);
-      let finalPrice = 0;
-      element.history.forEach((history: any) => {
-        finalPrice += history.sectionPrice;
-      });
-      console.log(finalPrice);
-      this.stockSheetFinalPrices.push(finalPrice);
-    });
-  }
-
-  async getPurchaseHistory(value: { start: Date; end: Date }) {
-    function addPurchaseItems(item: any[]) {
-      console.log('BIS', item);
-      let sum = 0;
-      item.forEach((element: any) => {
-        sum += element.newQuantity * element.newRatePerUnit;
-      });
-      return sum;
-    }
-    const docs = await this.databaseService.getPurchasesHistory(
-      value.start,
-      value.end
-    );
-    let allDateWiseData: any = {};
-    let counter = 0;
-    for (let item of docs.docs) {
-      const element: any = item;
-      const res = await this.databaseService.getPurchaseHistoryIngredients(
-        element.data().items,
-        element.id
-      );
-      if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-        allDateWiseData[
-          element.data().date.toDate().toDateString()
-        ].history.push({
-          items: res,
-          id: element.id,
-          date: element.data().date.toDate(),
-          sectionPrice: addPurchaseItems(res),
-        });
-      } else {
-        allDateWiseData[element.data().date.toDate().toDateString()] = {
-          history: [
-            {
-              items: res,
-              id: element.id,
-              date: element.data().date.toDate(),
-              sectionPrice: addPurchaseItems(res),
-            },
-          ],
-          date: element.data().date.toDate(),
-          active: element.id,
-          sectionPrice: this.addItems(res, 'finalPrice'),
-        };
-      }
-      counter++;
-    }
-
-    this.purchaseSheet = Object.values(allDateWiseData);
-    console.log(this.purchaseSheet);
-    this.purchaseSheetsFinalPrices = [];
-    this.purchaseSheet.forEach((element: any) => {
-      console.log('element.history', element.history);
-      let finalPrice = 0;
-      element.history.forEach((history: any) => {
-        finalPrice += history.sectionPrice;
-      });
-      console.log(finalPrice);
-      this.purchaseSheetsFinalPrices.push(finalPrice);
-    });
-  }
-
-  async getBalanceSheet(value: { start: Date; end: Date }) {
-    function addBalanceHistoryValue(item: any[], key: string) {
-      // console.log("BIS",item)
-      let sum = 0;
-      item.forEach((element: any) => {
-        sum +=
-          (element.openingBalance - element.closingBalance) *
-          element.newRatePerUnit;
-      });
-      return sum;
-    }
-    const docs = await this.databaseService.getBalanceHitory(
-      value.start,
-      value.end
-    );
-    let counter = 0;
-    let allDateWiseData: any = {};
-    let allPrices: number = 0;
-    for (let item of docs.docs) {
-      const element: any = item;
-      const res = await this.databaseService.getBalanceHistoryIngredients(
-        element.data().items,
-        element.id
-      );
-      if (allDateWiseData[element.data().date.toDate().toDateString()]) {
-        allDateWiseData[
-          element.data().date.toDate().toDateString()
-        ].history.push({
-          items: res,
-          id: element.id,
-          date: element.data().date.toDate(),
-          sectionPrice: addBalanceHistoryValue(res, 'finalPrice'),
-        });
-      } else {
-        console.log(res);
-        allDateWiseData[element.data().date.toDate().toDateString()] = {
-          history: [
-            {
-              items: res,
-              id: element.id,
-              date: element.data().date.toDate(),
-              sectionPrice: addBalanceHistoryValue(res, 'finalPrice'),
-            },
-          ],
-          date: element.data().date.toDate(),
-          dateText: element.data().date.toDate().toDateString(),
-          active: element.id,
-        };
-        allPrices += this.addItems(res, 'finalPrice');
-      }
-      counter++;
-    }
-    this.sheet = Object.values(allDateWiseData);
-    this.sheetsFinalPrices = [];
-    this.sheet.forEach((element: any) => {
-      console.log('element.history', element.history);
-      let finalPrice = 0;
-      element.history.forEach((history: any) => {
-        finalPrice += history.sectionPrice;
-      });
-      console.log(finalPrice);
-      this.sheetsFinalPrices.push(finalPrice);
-    });
-    console.log(this.sheet);
-  }
-
-  addQuantity(index: number) {
-    if (this.items.type == 'consumables') {
-      this.items.items[index].quantity++;
-    } else {
-      this.items.items[index].quantity++;
-    }
-  }
-
-  removeQuantity(index: number) {
-    if (this.items.type == 'consumables') {
-      if (this.items.items[index].quantity > 0) {
-        this.items.items[index].quantity--;
-      }
-    } else {
-      if (this.items.items[index].quantity > 0) {
-        this.items.items[index].quantity--;
-      }
-    }
   }
 
   roundOff(value: number) {
@@ -343,70 +124,37 @@ export class BalanceSheetComponent implements OnInit {
   saveTodaySheet(items: any[]) {
     // console.log(items);
     let differenceArray: any[] = [];
-    let itemDifferenceArray: any[] = [];
     // find the difference between the two arrays using quantity or issued
     items.forEach((mainIngredient: any) => {
-      const forSheet = this.itemsCopy.find((element: any) => {
-        return element.id == mainIngredient.id && mainIngredient.used > 0;
-      });
-      if (forSheet) {
-        forSheet.closingBalance =
-          JSON.parse(
-            JSON.stringify(
-              (mainIngredient.openingBalance || 0) - (mainIngredient.used || 0)
-            )
-          ) || 0;
-        mainIngredient.openingBalance = JSON.parse(
-          JSON.stringify(forSheet.closingBalance)
-        );
-        mainIngredient.quantity = mainIngredient.openingBalance;
-        itemDifferenceArray.push(mainIngredient);
-        differenceArray.push(forSheet);
-      }
-    });
-    console.log('DIFFS', differenceArray, itemDifferenceArray);
-    const allIds: string[] = [];
-    differenceArray.forEach((item: any) => {
-      allIds.push(item.id);
-    });
-    const data = {
-      date: new Date(),
-      items: allIds,
-    };
-    this.dataProvider.pageSetting.blur = true;
-    if (differenceArray.length > 0) {
-      this.databaseService.getIngredients().then((docs) => {
-        this.itemsCopy = [];
-        docs.forEach((element: any) => {
-          this.itemsCopy.push({ ...element.data(), id: element.id });
-        });
-      });
-      Promise.all(
-        itemDifferenceArray.map((item) => {
-          return this.databaseService.updateIngredient(item, item.id);
-        })
-      )
-        .then(() => {
-          this.databaseService
-            .addBalanceHistory(data, differenceArray)
-            .then((res: any) => {
-              console.log(res);
-              this.addTodaySheet = false;
-              this.alertify.presentToast('Saved Successfully');
-            })
-            .catch((err: any) => {
-              console.log(err);
-              this.alertify.presentToast('Error Occured');
-            })
-            .finally(() => {
-              this.dataProvider.pageSetting.blur = false;
+      this.itemsCopy.forEach((element) => {
+        if (mainIngredient.id === element.id) {
+          if (mainIngredient.closingFixed !== element.closingFixed) {
+            differenceArray.push({
+              ...mainIngredient,
+              quantity: mainIngredient.closingFixed,
+              closingBalance: mainIngredient.closingFixed,
             });
+          }
+        }
+      });
+    });
+    console.log(differenceArray);
+    if (differenceArray.length > 0) {
+      let promisesArray: Promise<any>[] = [];
+      differenceArray.forEach((element) => {
+        promisesArray.push(
+          this.databaseService.updateIngredient(element, element.id)
+        );
+      });
+      Promise.all(promisesArray)
+        .then(() => {
+          this.alertify.presentToast('Opening Balance Updated Successfully');
+          this.saveOpeningBalance.emit(differenceArray);
         })
         .catch((err) => {
-          this.dataProvider.pageSetting.blur = false;
+          console.log(err);
+          this.alertify.presentToast('Error Updating Opening Balance');
         });
-    } else {
-      this.alertify.presentToast('No Items to Save');
     }
   }
 }

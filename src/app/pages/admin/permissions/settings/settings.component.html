@@ -1,0 +1,44 @@
+<main>
+  <div class="header">
+    <h1>Viraj Permissions Manager for {{ data.name }}</h1>
+  </div>
+  <div class="permissions">
+    <mat-form-field>
+      <mat-label>Access Level</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let level of accessLevels" [value]="level">
+          {{ level }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <section
+      *ngFor="let task of permissions; let i = index"
+      class="example-section"
+    >
+      <mat-checkbox
+        class="example-margin"
+        [checked]="task.allComplete"
+        [color]="task.color"
+        [indeterminate]="someComplete(i)"
+        (change)="setAll($event.checked, i)"
+      >
+        {{ task.name }}
+      </mat-checkbox>
+      <ul>
+        <li *ngFor="let subtask of task.subtasks">
+          <mat-checkbox
+            [(ngModel)]="subtask.completed"
+            [color]="subtask.color"
+            (ngModelChange)="updateAllComplete(i)"
+          >
+            {{ subtask.name }}
+          </mat-checkbox>
+        </li>
+      </ul>
+    </section>
+  </div>
+  <div class="row">
+    <button mat-flat-button color="primary">Save</button>
+    <button mat-stroked-button color="primary">Cancel</button>
+  </div>
+</main>

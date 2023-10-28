@@ -1,0 +1,44 @@
+ol{
+    list-style: none;
+    li{
+        display: block;
+        width: 95%;
+        height: 50px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #ccc;
+        padding: 10px;
+        display: flex;
+        box-shadow: 0 0 5px #ccc;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 10px;
+        img{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .name{
+            font-size: 19px;
+            color:rgb(67, 67, 67);
+        }
+        .email{
+            font-size: 16px;
+            color:var(--primary-color);
+        }
+        .role{
+            font-size: 18px;
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: var(--primary-color);
+            color:white;
+            border-radius: 20px;
+        }
+        .actions{
+            margin-right: 10px;
+        }
+        p{
+            margin:0px;
+        }
+    }
+}

@@ -23,6 +23,9 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MatCardModule} from '@angular/material/card'; 
 import {MatTableModule} from '@angular/material/table'; 
 import { MatSortModule } from '@angular/material/sort';
+import { SchedulerComponent } from './scheduler/scheduler.component';
+import { IssueSheetComponent } from './issue-sheet/issue-sheet.component';
+import { HistorySheetComponent } from './history-sheet/history-sheet.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import { MatSortModule } from '@angular/material/sort';
     UpdateStockComponent,
     AddNewItemComponent,
     AnalyticsComponent,
-    BalanceSheetComponent
+    BalanceSheetComponent,
+    SchedulerComponent,
+    IssueSheetComponent,
+    HistorySheetComponent
   ],
   imports: [
     CommonModule,

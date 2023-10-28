@@ -41,7 +41,7 @@ export class ReportingComponent implements OnInit {
   kotTokenEnd: string = '';
   billTokenEnd: string = '';
   billTokenStart: string = '';
-
+  mode:'itemWiseReport' | 'totalNonChargableBills'|'totalCancelledBills'|'totalNonChargableBillsOther'|'billWiseReport'|undefined;
   range = new FormGroup({
     start: new FormControl<Date | null>(null, [Validators.required]),
     end: new FormControl<Date | null>(null, [Validators.required]),
@@ -136,7 +136,9 @@ export class ReportingComponent implements OnInit {
               }
               if (!this.billTokenStart){
                 this.billTokenStart = bill.billNo
-                this.kotTokenStart = bill.kots[0].tokenNo
+                if (bill.kots.length>0){
+                  this.kotTokenStart = bill.kots[0].tokenNo
+                }
               }
               this.billTokenEnd = bill.billNo 
               if (bill['completed'] == true) {

@@ -1,0 +1,160 @@
+<main>
+    <div class="uk-flex uk-align-right uk-flex-between uk-flex-middle">
+        <mat-form-field appearance="outline">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Start date">
+                <input matEndDate formControlName="end" (change)="addTodaySheet=false" placeholder="End date">
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+
+            <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+    </div>
+    <mat-tab-group>
+        <mat-tab label="Balance History" *ngIf="sheet.length > 0">
+            <mat-tab-group>
+                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of sheet;let i = index">
+                    <p>Total Price Of The Day{{roundOff(sheetsFinalPrices[i])}}</p>
+                    <hr>
+                    <div class="container">
+                        <mat-card *ngFor="let sheets of dateKey.history">
+                            <div class="row"><div class="heading">Date: {{sheets.date | date:'h:mm a'}}</div> <div class="badge">Total Price: {{roundOff(sheets.sectionPrice)}}</div></div>
+                            <div class="container">
+                                <table>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Rate</th>
+                                        <th>OB</th>
+                                        <th>CB</th>
+                                        <th>Issued</th>
+                                        <th>Unit</th>
+                                    </tr>
+                                    <tr *ngFor="let item of sheets.items;let i = index" class="balanceItem">
+                                        <td>
+                                            <div class="item">
+                                                <img [src]="item?.images[0]">
+                                                <p class="name">{{item?.name}}</p>
+                                            </div>
+                                        </td>
+                                        <td>{{roundOff(item?.newRatePerUnit)}}</td>
+                                        <td>{{roundOff(item?.openingBalance)}}</td>
+                                        <td>{{roundOff(item?.closingBalance)}}</td>
+                                        <td>{{roundOff(item.openingBalance - item.closingBalance)}}</td>
+                                        <p class="unit">{{item?.unit}}</p>
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-card>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-tab>
+        <mat-tab label="Purchase History" *ngIf="purchaseSheet.length>0">
+            <mat-tab-group>
+                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of purchaseSheet;let i = index;">
+                    <p>Total Price Of The Day{{roundOff(purchaseSheetsFinalPrices[i])}}</p>
+                    <hr>
+                    <div class="container">
+                        <mat-card *ngFor="let sheets of dateKey.history">
+                            <div class="row"><div class="heading">Date: {{sheets.date | date:'h:mm a'}}</div> <div class="badge">Total Price: {{roundOff(sheets.sectionPrice)}}</div></div>
+                            <div class="container">
+                                <table>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Prev. Rt</th>
+                                        <th>Prev. Qty</th>
+                                        <th>Purchased Qty</th>
+                                        <th>Purchased Rt</th>
+                                        <th>Ttl Qty</th>
+                                        <th>Ttl Gross Val</th>
+                                        <th>New Rt.</th>
+                                        <th>Unit</th>
+                                    </tr>
+                                    <tr *ngFor="let item of sheets.items;let i = index" class="balanceItem">
+                                        <td>
+                                            <div class="item">
+                                                <img [src]="item?.images[0]">
+                                                <p class="name">{{item?.name}}</p>
+                                            </div>
+                                        </td>
+                                        <td>{{roundOff(item?.ratePerUnit)}}</td>
+                                        <td>{{roundOff(item?.quantity)}}</td>
+                                        <td>{{roundOff(item?.newQuantity)}}</td>
+                                        <td>{{roundOff(item?.newRatePerUnit)}}</td>
+                                        <td>{{roundOff(item?.newQuantity + item.quantity)}}</td>
+                                        <td>{{roundOff((item?.ratePerUnit * item.quantity) + (item.newRatePerUnit * item.newQuantity))}}</td>
+                                        <td>{{roundOff(item?.newRatePerUnit)}}</td>
+                                        <p class="unit">{{item?.unit}}</p>
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-card>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-tab>
+        <mat-tab label="Stock History" *ngIf="stockSheet.length>0">
+            <mat-tab-group>
+                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of stockSheet;let i = index">
+                    <p>Total Price Of The Day{{roundOff(stockSheetFinalPrices[i])}}</p>
+                    <hr>
+                    <div class="container">
+                        <mat-card *ngFor="let sheets of dateKey.history">
+                            <div class="row"><div class="heading">Date: {{sheets.date | date:'h:mm a'}}</div> <div class="badge">Total Price: {{roundOff(sheets.sectionPrice)}}</div></div>
+                            <div class="container">
+                                <table>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Old Qty</th>
+                                        <th>Update In Qty</th>
+                                        <th>New Qty</th>
+                                        <th>Unit</th>
+                                    </tr>
+                                    <tr *ngFor="let item of sheets.items;let i = index" class="balanceItem">
+                                        <td>
+                                            <div class="item">
+                                                <img [src]="item?.images[0]">
+                                                <p class="name">{{item?.name}}</p>
+                                            </div>
+                                        </td>
+                                        <td>{{roundOff(item?.quantity)}}</td>
+                                        <td>{{roundOff(item?.newQuantity)}}</td>
+                                        <td>{{roundOff(item?.newQuantity + item?.quantity)}}</td>
+                                        <p class="unit">{{item?.unit}}</p>
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-card>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-tab>
+        <mat-tab label="Prices History" *ngIf="stockSheet.length>0">
+            <mat-tab-group>
+                <mat-tab [label]="(dateKey.date | date:'mediumDate') || 'Error'" *ngFor="let dateKey of finalValueSheet;let i = index">
+                    <div class="container">
+                        <mat-card *ngFor="let sheets of dateKey.items">
+                            <div class="row"><div class="heading">Date: {{sheets.date.toDate() | date:'h:mm a'}}</div> <div class="badge">Action: {{sheets.action}}</div></div>
+                            <ol>
+                                <li *ngFor="let key of getKey(sheets.categoryWisePrices)">
+                                    {{key}}:&nbsp;&nbsp;<b>{{sheets.categoryWisePrices[key]}}</b>
+                                </li>
+                            </ol>
+                        </mat-card>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-tab>
+    </mat-tab-group>
+    <ng-container *ngIf="!(sheet.length >0 || purchaseSheet.length > 0) && range.valid">
+        <h4>No Balance Sheets or Purchase Sheet Found</h4>
+    </ng-container>
+    <ng-container *ngIf="!range.valid">
+        <h4>Select a date to check records.</h4>
+    </ng-container>
+    
+</main>

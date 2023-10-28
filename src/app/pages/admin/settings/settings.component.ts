@@ -14,7 +14,8 @@ export class SettingsComponent implements OnInit {
   constructor(private databaseService:DatabaseService,private alertify:AlertsAndNotificationsService,private dataProvider:DataProvider) { }
   settingForm:FormGroup = new FormGroup({
     kotTokenRefreshTime: new FormControl(''),
-    billTokenRefreshTime: new FormControl('')
+    billTokenRefreshTime: new FormControl(''),
+    updateRateThresold: new FormControl('')
   });
   ngOnInit(): void {
     this.databaseService.getSettings().then((res:any)=>{

@@ -1,0 +1,12 @@
+<button mat-stroked-button color="primary" (click)="createNewUser()">New User</button>
+<ol>
+    <li *ngFor="let user of users">
+        <img [src]="user.image">
+        <p class="name">{{user.name}}</p>
+        <p class="email">{{user.email}}</p>
+        <p class="role">{{user.role}}</p>
+        <div class="actions">
+            <button mat-icon-button (click)="openSettings(user)"><mat-icon>settings</mat-icon></button>
+        </div>
+    </li>
+</ol>

@@ -1,0 +1,11 @@
+<section>
+    <form>
+        <button mat-flat-button color="primary" (click)="addCondition()">Add Condition</button>
+        <ng-container *ngFor="let condition of conditions">
+            <mat-form-field>
+                <mat-label></mat-label>
+                <input matInput placeholder="Price Range" formControlName="name">
+            </mat-form-field>
+        </ng-container>
+    </form>
+</section>

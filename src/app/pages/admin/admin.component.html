@@ -2,90 +2,27 @@
 <div id="wrapper">
   <aside>
     <ul>
-      <li>
-        <button routerLink="/admin/dashboard" routerLinkActive="active">
-          <mat-icon aria-hidden>dashboard</mat-icon>Dashboard
+      <li *ngFor="let link of links">
+        <button *ngIf="!(link.subLinks?.length > 0)" [routerLink]="link.link" routerLinkActive="active">
+          <mat-icon aria-hidden>{{link.icon}}</mat-icon>{{link.title}}
+          <mat-icon *ngIf="link.subLinks?.length > 0 && !link.toggled">chevron_right</mat-icon>
+          <mat-icon *ngIf="link.subLinks?.length > 0 && link.toggled">expand_more</mat-icon>
         </button>
-      </li>
-      <li>
-        <button routerLink="/admin/inventory" routerLinkActive="active">
-          <mat-icon aria-hidden>inventory</mat-icon>Inventory
+        <button *ngIf="link.subLinks?.length > 0" (click)="link.toggled=!link.toggled" routerLinkActive="active">
+          <mat-icon aria-hidden>{{link.icon}}</mat-icon>{{link.title}}
+          <mat-icon *ngIf="link.subLinks?.length > 0 && !link.toggled">chevron_right</mat-icon>
+          <mat-icon *ngIf="link.subLinks?.length > 0 && link.toggled">expand_more</mat-icon>
         </button>
-      </li>
-      <li>
-        <button routerLink="/admin/tables" routerLinkActive="active">
-          <mat-icon aria-hidden>table_restaurant</mat-icon>Tables
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/rooms" routerLinkActive="active">
-          <mat-icon aria-hidden>king_bed</mat-icon>Rooms
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/menu" routerLinkActive="active">
-          <mat-icon aria-hidden>menu_book</mat-icon>Menu
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/reports" routerLinkActive="active">
-          <mat-icon aria-hidden>insights</mat-icon>Reports
-        </button>
-      </li>
-      <!-- <li>
-        <button routerLink="/admin/roomReports" routerLinkActive="active">
-          <mat-icon aria-hidden>insights</mat-icon>Room Reports
-        </button>
-      </li> -->
-      <li>
-        <button routerLink="/admin/qrmenu" routerLinkActive="active">
-          <mat-icon aria-hidden>qr_code</mat-icon>Qr Menu
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/orders" routerLinkActive="active">
-          <mat-icon aria-hidden>receipt_long</mat-icon>Orders
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/events" routerLinkActive="active">
-          <mat-icon aria-hidden>event</mat-icon>Events
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/billing" routerLinkActive="active">
-          <mat-icon aria-hidden>payments</mat-icon>Billing & Payment
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/customers" routerLinkActive="active">
-          <mat-icon aria-hidden>group</mat-icon>Customers
-        </button>
-      </li>
-      <!-- <li>
-        <button routerLink="/admin/hrms" routerLinkActive="active">
-          <mat-icon aria-hidden>badge</mat-icon>HRMS
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/vendors" routerLinkActive="active">
-          <mat-icon aria-hidden>storefront</mat-icon>Vendors
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/housekeeping" routerLinkActive="active">
-          <mat-icon aria-hidden>cleaning_services</mat-icon>Housekeeping
-        </button>
-      </li> -->
-      <li>
-        <button routerLink="/admin/feedback" routerLinkActive="active">
-          <mat-icon aria-hidden>reviews</mat-icon>Feedback & Reviews
-        </button>
-      </li>
-      <li>
-        <button routerLink="/admin/settings" routerLinkActive="active">
-          <mat-icon aria-hidden>settings</mat-icon>Settings
-        </button>
+        <ng-container *ngIf="link.toggled">
+          <ol class="sublink">
+            <li *ngFor="let subLink of link.subLinks">
+              <mat-icon>chevron_right</mat-icon>
+              <button [routerLink]="subLink.link" routerLinkActive="active">
+                <mat-icon aria-hidden>{{subLink.icon}}</mat-icon>{{subLink.title}}
+              </button>
+            </li>
+          </ol>
+        </ng-container>
       </li>
     </ul>
   </aside>

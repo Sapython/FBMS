@@ -11,8 +11,9 @@ import { MatSort, Sort } from '@angular/material/sort';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
-
-
+import { SchedulerComponent } from './scheduler/scheduler.component';
+import { IssueSheetComponent } from './issue-sheet/issue-sheet.component';
+import { HistorySheetComponent } from './history-sheet/history-sheet.component';
 
 const ELEMENT_DATA: any[] = [
 ];
@@ -124,7 +125,9 @@ export class InventoryComponent implements OnInit, AfterViewInit {
       this.alertify.presentToast('Category Name is Required');
     }
   }
+
   changeOcurred() {}
+
   setStockFinalValueHistory(action: 'quantity' | 'purchase' | 'balance' | 'addItem' | 'updateItem'| 'duplicateItem' | 'deleteItem' | '') {
     alert('Started stock history updating');
     setTimeout(() => {
@@ -516,6 +519,7 @@ export class InventoryComponent implements OnInit, AfterViewInit {
       console.log('updatePromises', updatePromises, differenceItems);
     }
   }
+
   roundOff(value: number) {
     try {
       1;
@@ -524,7 +528,6 @@ export class InventoryComponent implements OnInit, AfterViewInit {
       return Number(value);
     }
   }
-
 
   naturalSortBy(type:'name'|'unit'|'quantity'|'ratePerUnit'|'grossValue') {
     if (type == 'name') {
@@ -553,6 +556,38 @@ export class InventoryComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
+  openScheduler(){
+    const dialog = this.dialogModule.open(SchedulerComponent,{
+      data:this.allMaterials
+    })
+    dialog.closed.subscribe(()=>{
+      this.ngOnInit();
+    })
+  }
+
+  setIssued(){
+    const dialog = this.dialogModule.open(IssueSheetComponent,{
+      data: {
+        type: 'rawMaterials',
+        items: this.allMaterials,
+      },
+    })
+    dialog.closed.subscribe(()=>{
+      this.ngOnInit();
+    })
+  }
+  seeHistory(){
+    const dialog = this.dialogModule.open(HistorySheetComponent,{
+      data: {
+        type: 'rawMaterials',
+        items: this.allMaterials,
+      },
+    })
+    dialog.closed.subscribe(()=>{
+      this.ngOnInit();
+    })
+  }
 }
 
 export type StockItem = {
@@ -573,5 +608,6 @@ export type StockItem = {
   ratePerUnit: number;
   newQuantity: number;
   newRatePerUnit: number;
+  updatePeriod?:'Daily'|'Weekly'|'Monthly'|'Quarterly'|'Manually';
   finalPrice?: number;
 };

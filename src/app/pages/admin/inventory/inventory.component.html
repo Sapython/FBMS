@@ -12,10 +12,28 @@
     mat-flat-button
     color="primary"
     *ngIf="categories.length > 0 && !isActionActive"
-    (click)="compareOpeningClosingBalance()"
+    (click)="setIssued()"
   >
     <mat-icon>compare_arrows</mat-icon>
-    <span>&nbsp;&nbsp;Set Issued/See History</span>
+    <span>&nbsp;&nbsp;Set Issued</span>
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    *ngIf="categories.length > 0 && !isActionActive"
+    (click)="seeHistory()"
+  >
+    <mat-icon>history</mat-icon>
+    <span>&nbsp;&nbsp;See History</span>
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    *ngIf="categories.length > 0 && !isActionActive"
+    (click)="compareOpeningClosingBalance()"
+  >
+    <mat-icon>balance</mat-icon>
+    <span>&nbsp;&nbsp;Balancing Panel</span>
   </button>
   <ng-container
     *ngIf="
@@ -69,7 +87,7 @@
     *ngIf="categories.length > 0 && !isActionActive"
     (click)="completePurchase()"
   >
-    <mat-icon>compare_arrows</mat-icon>
+    <mat-icon>account_balance_wallet</mat-icon>
     <span
       >&nbsp;&nbsp;{{ purchaseMode ? "Save Purchases" : "Set Purchases" }}</span
     >
@@ -83,10 +101,6 @@
     <mat-icon>sync</mat-icon>
     <span>&nbsp;&nbsp;Update Stock</span>
   </button>
-  <!-- <button mat-flat-button *ngIf="isActionActive" color="primary" *ngIf="categories.length>0">
-        <mat-icon>remove</mat-icon>
-        <span>&nbsp;&nbsp;Remove Items</span>
-    </button> -->
   <button
     mat-flat-button
     color="primary"
@@ -105,10 +119,6 @@
     <mat-icon>add</mat-icon>
     <span>&nbsp;&nbsp;Add Category</span>
   </button>
-  <!-- <button mat-flat-button *ngIf="isActionActive" color="primary">
-        <mat-icon>analytics</mat-icon>
-        <span>&nbsp;&nbsp;Analytics</span>
-    </button> -->
 </div>
 <mat-tab-group
   mat-align-tabs="start"

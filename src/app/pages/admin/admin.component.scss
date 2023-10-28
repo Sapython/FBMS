@@ -1,3 +1,15 @@
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 #wrapper {
   display: flex;
   min-height: calc(100vh - 71px);
@@ -49,6 +61,14 @@
             width: 24px;
             height: 24px;
             color:rgb(50, 50, 50);
+          }
+        }
+        .sublink{
+          list-style: none;
+          li{
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.5s ease-in-out;
           }
         }
       }

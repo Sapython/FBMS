@@ -51,6 +51,13 @@ export class AddNewItemComponent implements OnInit {
     },
   ]
   categories:string[] = []
+  updatePeriods:string[] = [
+    'Daily',
+    'Weekly',
+    'Monthly',
+    'Quarterly',
+    'Manually'
+  ]
   stockItemForm:FormGroup = new FormGroup({
     name: new FormControl('',[Validators.required]),
     quantity: new FormControl('',[Validators.required]),
@@ -58,6 +65,7 @@ export class AddNewItemComponent implements OnInit {
     ratePerUnit: new FormControl('',[Validators.required]),
     images: new FormControl([]),
     category: new FormControl('',[Validators.required]),
+    updatePeriod: new FormControl('',[Validators.required]),
     warningThreshold: new FormControl('',[]),
     errorThreshold: new FormControl('',[]),
   })

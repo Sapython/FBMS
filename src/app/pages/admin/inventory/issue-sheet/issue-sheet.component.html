@@ -1,0 +1,50 @@
+<main>
+  <div class="container">
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>OB</th>
+        <th>CB</th>
+        <th>Issued</th>
+        <th>Unit</th>
+      </tr>
+      <tr *ngFor="let item of items.items; let i = index" class="balanceItem">
+        <td>
+          <div class="item">
+            <img [src]="item.images[0]" />
+            <p class="name">{{ item?.name }}</p>
+          </div>
+        </td>
+        <td>{{ roundOff(item?.ratePerUnit || 0) }}</td>
+        <td>
+          <p>{{ roundOff(item?.openingBalance || 0) }}</p>
+        </td>
+        <td>
+          <p>{{ roundOff((item?.openingBalance || 0) - (item?.used || 0)) }}</p>
+        </td>
+        <td>
+          <input
+            class="quantityInput"
+            step="0.1"
+            type="number"
+            (input)="
+              item.closingBalance =
+                (item.openingBalance || 0) - (item.used || 0)
+            "
+            [(ngModel)]="item.used"
+          />
+        </td>
+        <td>
+          <p class="unit">{{ item?.unit }}</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="buttons">
+    <button color="primary" mat-stroked-button>Cancel</button>
+    <button color="primary" mat-flat-button>Print</button>
+    <button color="primary" mat-flat-button>Save</button>
+    <button color="primary" mat-flat-button>Print & Save</button>
+  </div>
+</main>

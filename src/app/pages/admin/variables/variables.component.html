@@ -1,0 +1,39 @@
+<section>
+  <h1>Variables</h1>
+  <mat-card>
+    <form [formGroup]="variablesForm" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Teaspoon Size</mat-label>
+        <input type="number" matInput formControlName="teaspoonSize" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Tablespoon Size</mat-label>
+        <input type="number" matInput formControlName="tablespoonSize" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Cup Size</mat-label>
+        <input type="number" matInput formControlName="cupSize" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Pint Size</mat-label>
+        <input type="number" matInput formControlName="pintSize" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Quart Size</mat-label>
+        <input type="number" matInput formControlName="quartSize" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Gallon Size</mat-label>
+        <input type="number" matInput formControlName="gallonSize" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Ounce Size</mat-label>
+        <input type="number" matInput formControlName="ounceSize" />
+      </mat-form-field>
+      <div class="row">
+        <button mat-stroked-button color="primary" type="button">Cancel</button>
+        <button mat-flat-button color="primary" type="submit">Submit</button>
+      </div>
+    </form>
+  </mat-card>
+</section>

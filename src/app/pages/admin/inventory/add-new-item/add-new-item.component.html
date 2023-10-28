@@ -51,6 +51,14 @@
                         </p>
                         <p>
                             <mat-form-field appearance="fill">
+                                <mat-label>Update Period</mat-label>
+                                <mat-select formControlName="updatePeriod">
+                                    <mat-option [value]="category" *ngFor="let category of updatePeriods">{{category}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field appearance="fill">
                                 <mat-label>Final Value Calculated</mat-label>
                                 <input matInput [value]="finalValue(rate,quantity)" placeholder="0.00" disabled>
                             </mat-form-field>
